@@ -64,7 +64,6 @@ artifacts/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
-
 # StyleCop
 StyleCopReport.xml
 
@@ -97,6 +96,8 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+*.sql
+.vscode/
 
 # Chutzpah Test files
 _Chutzpah*

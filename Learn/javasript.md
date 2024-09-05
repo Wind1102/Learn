@@ -20,6 +20,9 @@
   - [Arrow function](#arrow-function)
   - [Arrays](#arrays)
   - [Arrays methods](#arrays-methods)
+- [Object](#object)
+  - [Object method](#object-method)
+  - [For loops](#for-loops)
 
 # Link to script file
 - you can use `<script>` tag in html file to write javascript 
@@ -152,4 +155,37 @@ switch (day) {
 - shift() -> remove first element of array
 - indexOf(element) -> return position of element in array ( begin from 0)
 - includes(value) -> return true if value in array, and opposite
-- 
+
+
+# Object 
+```js
+  const jonas = {
+    firstName: 'Jonas',   // property 
+    lastName : 'Scheman',
+    age : 2037-1991,
+    friends : ['Miacal','Peter'],
+  }
+  console.log(jonas.firstName); // Jonas
+  console.log(jonas['firstName']); // Jonas
+```
+- use dot `object.property_name` or use brackets `object['property_name']` to access to object property
+- use `object.property_name = value` or `object['property_name'] = value` to set property for object
+- use `delete object.property_name`  or `delete object['property_name']`  to delete property
+
+## Object method 
+```js
+  const jonas = {
+    firstName: 'Jonas',   // property 
+    lastName : 'Scheman',
+    age : 2037-1991,
+    friends : ['Miacal','Peter'],
+    caclAge : function(){
+      ......
+    }
+  }
+  jonas.calcAge();
+```
+
+## For loops 
+
+

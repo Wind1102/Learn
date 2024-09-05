@@ -21,6 +21,24 @@
   - [Reading Input](#reading-input)
   - [File Input and Output](#file-input-and-output)
 - [Block](#block)
+- [Loop](#loop)
+- [Big Integer](#big-integer)
+- [Array](#array)
+  - [for loop](#for-loop)
+  - [Array copying](#array-copying)
+  - [Command Line Arguments](#command-line-arguments)
+  - [Array Sorting](#array-sorting)
+  - [Multidimensional Array](#multidimensional-array)
+    - [Ragged Arrays](#ragged-arrays)
+- [Object and Class](#object-and-class)
+  - [Introduction Object Oriented Programming](#introduction-object-oriented-programming)
+    - [Class](#class)
+    - [Object](#object)
+    - [Identifying Classes](#identifying-classes)
+    - [Relationships between Classes](#relationships-between-classes)
+  - [Using Predefined Classes](#using-predefined-classes)
+    - [Objects and Object Variables](#objects-and-object-variables)
+
 
 # DATA TYPES
 ## Integer types
@@ -135,10 +153,111 @@ When two values are combined with a binary operator (such as n + f where n is an
 
 - To write a file -> construct a PrintWriter object
    ```java
-      PrintWriter out = new PrintWriter("MyFile.txt");
+      PrintWriter out = new PrintWriter("MyFile.txt"); //write to the file
+      FileWriter out = new FileWriter("Myfile.txt", true); //append to the file
    ```
 
 
 # Block
 - A Block or compound statement, consists a number of java statements. surrounded by a pair of braces.
 - Block define the scope of your variables 
+
+# Loop
+- for, while, break, continue,...
+
+# Big Integer 
+BigInteger add(BigInteger other) 
+BigInteger subtract(BigInteger other) 
+BigInteger multiply(BigInteger other) 
+BigInteger divide(BigInteger other) 
+BigInteger mod(BigInteger other) 
+BigInteger pow(int exponent) return the sum, difference, product, quotient, remainder, and power of this big integer and other.
+# Array
+
+Declare an array variable by specifying the `array type + [] + variable name` 
+   ```java
+      int[] a; or int a[];
+      int[] a = new int[100]; or var a = new int[100];
+      int[] price = {1,2,3,4};
+      var price = new arraytype[0]; or new arraytype[] {} // this is legal to have array with length 0
+      // notice the array with length 0 is not the same as null 
+   ```
+
+## for loop
+- `for {variable : collection} statement; `
+- Note: the loop variable of the for each loop traverses the element of array, not the index values 
+
+## Array copying 
+- you can copy an array variable into another, but both variable refers to the same array
+
+```java
+   int[] a = {1,2,3,4,5};
+   var b = a;
+   b[0]= 12; // a[0] = 12
+```
+
+- if you actually want to copy all values of one array to new array, we use the copyOf method of Array class;
+```java
+   int[] arraycopy = Arrays.copyOf(origin, origin.length);  
+```
+
+## Command Line Arguments 
+- ` java Main.java -g Hello World`  => args = ["-g","Hello", "World"];
+
+
+## Array Sorting
+- use sort method of Array class `Arrays.sort(a);`
+
+- ![Method of Array Class](./image/Screenshot%20from%202024-09-01%2017-24-21.png)
+
+## Multidimensional Array 
+- A “for each” loop does not automatically loop through all elements in a two-dimensional array. Instead, it loops through the rows, which are themselves one-dimensional arrays. To visit all elements of a two-dimensional array a, nest two loops
+
+### Ragged Arrays
+   - Java has no multidimensional arrays at all, only one-dimensional arrays. Multidimensional arrays are faked as “arrays of arrays.”
+```java
+   final int NMAX = 10;
+   int[][] odds = new int[NMAX + 1][]
+   for (int n = 0;n<=NMAX;n++){
+      odds[n] = new int[n+1];
+   }
+```
+
+# Object and Class 
+##  Introduction Object Oriented Programming 
+### Class
+- The bits of data in object are called its `instance field`.
+- And the producers that operate on the data are called its `method`.
+- Class can be built by extending other class. Java, in fact, comes with a "cosmic superclass" called Object. All other classes extends this class.
+- WHen you extends existing class, the new class have all properties and method of the class you extends. You then supply new methods and instance fields that apply to your new class only. => called `inheritance".
+
+
+### Object 
+To work with OOP, you should be able to identify three key characteristic of Object
+  - The Object's behavior - What can you do with this object, or what methods can you to apply it?
+  - The Object's state - how does the object react when you invoke those methods?
+  - The Object's identity - how is the Object distinguished from others that may have the same behavior and state
+
+- The behavior of an object is defined by the methods that you can call.
+- Each object stores information about what it currently looks like. This is the object’s state. An object’s state may change over time, but not spontaneously. A change in the state of an object must be a consequence of method calls. (If an object's state changed without a method call on that object, someone broke encapsulation.)
+- The state of an object does not completely describe it, because each object has a distinct identity. For example, in an order processing system, two orders are distinct even if they request identical items. Notice that the individual objects that are instances of a class always differ in their identity and usually differ in their state.
+- These key characteristics can influence each other. For example, the state of an object can influence its behavior. (If an order is “shipped” or “paid,” it may reject a method call that asks it to add or remove items. Conversely, if an order is “empty”—that is, no items have yet been ordered—it should not allow itself to be shipped.)
+
+
+### Identifying Classes
+### Relationships between Classes 
+
+The most common relationships between classes are 
+- Dependence ("uses-a"): A class depend another class, example Order depends Account because Order objects need to access Account objects to check for credit status
+- Aggregation("has-a"): for example, an Order object contains Item objects. Containment means that objects of class A contain objects of class B.
+- Inheritance("is-a"): For example, a RushOrder class inherits from an Order class. The specialized RushOrder class has special methods for priority handling and a different method for computing shipping charges, but its other methods, such as adding items and billing, are inherited from the Order class. In general, if class D extends class C, class D inherits methods from class C but has more capabilities
+
+
+## Using Predefined Classes 
+### Objects and Object Variables 
+- use `Constructors` to construct new instance. A constructor is a special method whose purpose is to construct and initialize objects.
+
+
+
+
+

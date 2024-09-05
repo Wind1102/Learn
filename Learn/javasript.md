@@ -11,6 +11,15 @@
   - [const](#const)
   - [var](#var)
 - [Falsy and Truly values](#falsy-and-truly-values)
+- [Operator](#operator)
+  - [Equality Operator == \& ===](#equality-operator---)
+  - [switch-case](#switch-case)
+- [Strict mode](#strict-mode)
+- [Functions](#functions)
+  - [Functions Declarations and Expression](#functions-declarations-and-expression)
+  - [Arrow function](#arrow-function)
+  - [Arrays](#arrays)
+  - [Arrays methods](#arrays-methods)
 
 # Link to script file
 - you can use `<script>` tag in html file to write javascript 
@@ -60,4 +69,87 @@ Use `type of` to check data type of value; (special type of null is object)
 
 # Falsy and Truly values  
 - five falsy values: 0, '', undefined, null, NaN.
+
+# Operator
+## Equality Operator == & ===
+```js
+  '18' == 18 // true
+  '18' === 18 // false
+
+```
+
+## switch-case 
+```js
+  const day = 'wednesday';
+switch (day) {
+    case 'monday':
+        console.log('Plan course structure');
+        console.log('Go to coding meetup');
+        break;
+    case 'tuesday':
+        console.log('Prepare theory videos');
+        break;
+    case 'wednesday':
+    case 'thursday':
+        console.log('Write code examples');  //-> fallthrough , code excuted until break or return;
+    case 'friday':
+        console.log('Record videos');
+        break;
+    case 'saturday':
+    case 'sunday':
+        console.log('Enjoy the weekend');
+        break;
+}
+```
+
+- if not stop when each case -> fallthrough 
+
+
+# Strict mode 
+
+- use `'use strict';` in beginning to active strict mode
+
+# Functions
+
+## Functions Declarations and Expression
+```js 
+    function calcAge1(birthYear){
+      return 2024 - birthYear;
+    } 
+
+    const age1 = calcAge1(1991);
+    const calcAge2 = function(birthYear){
+      return 2024 - birthYear;
+    }
+    const age2 = calcAge2(1991);
+```
+
+- The different is we can call function declarations before they are defined in the code.
+
+## Arrow function
+```js
+  const calcAge3 = birthYear => 2024 - birthYear;
+  const yearsUntilRetirement = (birthYear , firstName) => {
+    return .....
+  }
+```
+
+
+## Arrays 
+- declare and access to arrays 
+```js
+  const friends = ['123','1234','4444']; //declare
+  const years = new Array(1991,1992,1993); //declare
+  friends[1] = '1234'; // access
+  friends = [1,2] ;// error ->  because declare with const 
+
+```
+
+## Arrays methods
+- push() -> add element to the end of array
+- unshift() -> add element to begin of array
+- pop() -> remove last element of array
+- shift() -> remove first element of array
+- indexOf(element) -> return position of element in array ( begin from 0)
+- includes(value) -> return true if value in array, and opposite
 - 

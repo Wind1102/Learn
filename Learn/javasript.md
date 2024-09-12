@@ -1,6 +1,10 @@
 # Mục Lục
 
 - [Mục Lục](#mục-lục)
+- [JavaScript Engine](#javascript-engine)
+  - [Compilation](#compilation)
+  - [Interpretation](#interpretation)
+  - [Just in time(JIT) compilation](#just-in-timejit-compilation)
 - [Link to script file](#link-to-script-file)
 - [Naming variables](#naming-variables)
   - [Rule of Naming](#rule-of-naming)
@@ -24,6 +28,23 @@
   - [Object method](#object-method)
   - [For loops](#for-loops)
 - [DOM and Events Fundamentals](#dom-and-events-fundamentals)
+
+# JavaScript Engine
+- JS Engine include `call stack` and `heap`
+- `Call stack` is order funtion excute and `heap` save object 
+## Compilation 
+  Entire code is converted into machine code at one, and written to a binary file that can be executed by a computer
+- source -> portable file: machine code // compilation 
+- portable file -> Program running   // execution, can happen way after compilation
+
+## Interpretation
+Interpreter runs through the source code and executes it line by line
+- Source code -> Program running   // code execution line by line 
+
+## Just in time(JIT) compilation 
+Entire code is converted into machine code at one, then executed immediately 
+- source -> Machine code // compilation, not a portable file
+- Machine code -> Program running // happens immediately
 
 # Link to script file
 

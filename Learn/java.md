@@ -208,7 +208,7 @@ Declare an array variable by specifying the `array type + [] + variable name`
 ## Array Sorting
 - use sort method of Array class `Arrays.sort(a);`
 
-- ![Method of Array Class](./image/Screenshot%20from%202024-09-01%2017-24-21.png)
+- ![Method of Array Class](./image/array_java.png)
 
 ## Multidimensional Array 
 - A “for each” loop does not automatically loop through all elements in a two-dimensional array. Instead, it loops through the rows, which are themselves one-dimensional arrays. To visit all elements of a two-dimensional array a, nest two loops

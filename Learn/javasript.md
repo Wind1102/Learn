@@ -5,6 +5,13 @@
   - [Compilation](#compilation)
   - [Interpretation](#interpretation)
   - [Just in time(JIT) compilation](#just-in-timejit-compilation)
+- [Execution contexts amd the Call Stack](#execution-contexts-amd-the-call-stack)
+  - [Scope and The Scope chain](#scope-and-the-scope-chain)
+    - [Global scope](#global-scope)
+    - [Function scope](#function-scope)
+    - [Block scope](#block-scope)
+- [Hoisting and the TDZ (Temperal dead zone)](#hoisting-and-the-tdz-temperal-dead-zone)
+- [`this` keyword](#this-keyword)
 - [Link to script file](#link-to-script-file)
 - [Naming variables](#naming-variables)
   - [Rule of Naming](#rule-of-naming)
@@ -46,6 +53,53 @@ Entire code is converted into machine code at one, then executed immediately
 - source -> Machine code // compilation, not a portable file
 - Machine code -> Program running // happens immediately
 
+# Execution contexts amd the Call Stack
+What's inside execution contexts 
+- 1. Variable environment 
+  - let, const, var declaration 
+  - functions
+  - `argument object` 
+- 2. Scope chain 
+- 3. `this` key word
+Note: Arrow function don't have `this` keyword and `argument object`. Instead, they can use the argument objects object and the this keyword from their closest regular function parent 
+## Scope and The Scope chain 
+- Scoping -> Where can we access a certain variable and where not? 
+- Lexical scoping: scopping is controlled by replacement of functions and blocks in the code 
+- Scope: Space or environment on which a certain variable is declare(veriable environtment in case of functions). There is global scope, function scope, and block scope
+-  Scope of a variable: Region of our code where a certain variable can be accessed 
+-  Scope chain: Variable lookup in scope chain (scope has access to variable from all outer scopes, child can be access variable if it in scope of all parent..), only work upward not sideway
+-  Variable lookup: When variable is not in the current scope, the engine looks up the scope chain until it finds the variable it's looking for. This is called variable lookup;
+-  The scope chain is one-way street: a scope will never, ever have access to the variable of an inner scope
+-  the scope chain has nothing to do with the order in which functions were called. It does not affect the scope chain at all.
+
+![#scope-chain](./image/scope_chain.png) 
+
+### Global scope 
+- Out side of any function or block 
+- Variable declared in global scope are accessible everywhere
+### Function scope
+- variable can be accessible only inside function, not outside
+- also called local scope
+### Block scope
+- variable can be accessible only inside block (block scope)
+- However, this is only applies to let and const variables
+- Function are also block scoped (only in strict mode)
+
+
+
+# Hoisting and the TDZ (Temperal dead zone)
+- Hoisting: makes some types of variable accessible/useable in the code before they are actually declared. Variable lifted to the top of their scope 
+![#hoisting](./image/hoisting.png)
+
+# `this` keyword
+- this keyword/variable: Special variable that is create for every excution context(every function). Take the value of (point to) the "owner" of the function in which the this keyword is used.
+- this is not static. It depends on how the functionis called, and its value is only assigned when function is actually called
+  - method: this = < Object that is calling the method >
+  - Simple function call: this = undefine, only valid in strict mode, otherwise: window object // we call method normal and not as a method and so not attached to any object
+  - arrow function: this = < this is surrounding function (lexical this) >
+  - event listener: this = < DOM element that the handler is attached to >
+  
+![#this](./image/this.png)
 # Link to script file
 
 - you can use `<script>` tag in html file to write javascript
@@ -63,6 +117,7 @@ Entire code is converted into machine code at one, then executed immediately
 - variable name can't equals key word in JS
 - if variable is CONSTANT, write it UPPER CASE
 - variable name should be describe the value it hold
+
 
 # Value
 
@@ -97,6 +152,11 @@ Use `type of` to check data type of value; (special type of null is object)
 ## var
 
 - value of variable can be change
+- var don't have block scope
+- declarable with var, will create property on the global window object.
+
+
+
 
 # Falsy and Truly values
 

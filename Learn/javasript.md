@@ -16,6 +16,7 @@
 - [Link to script file](#link-to-script-file)
 - [Naming variables](#naming-variables)
   - [Rule of Naming](#rule-of-naming)
+- [Primitive vs Object](#primitive-vs-object)
 - [Value](#value)
   - [7 Primitive data type](#7-primitive-data-type)
 - [Declare Variable](#declare-variable)
@@ -30,6 +31,7 @@
 - [Functions](#functions)
   - [Functions Declarations and Expression](#functions-declarations-and-expression)
   - [Arrow function](#arrow-function)
+  - [regular function and arrow function](#regular-function-and-arrow-function)
   - [Arrays](#arrays)
   - [Arrays methods](#arrays-methods)
 - [Object](#object)
@@ -131,6 +133,7 @@ Note: Arrow function don't have `this` keyword and `argument object`. Instead, t
 - if variable is CONSTANT, write it UPPER CASE
 - variable name should be describe the value it hold
 
+# Primitive vs Object
 
 # Value
 
@@ -241,6 +244,11 @@ const age2 = calcAge2(1991);
     return .....
   }
 ```
+
+
+## regular function and arrow function
+- arrow function don't have parameter `arguments`
+
 
 ## Arrays
 

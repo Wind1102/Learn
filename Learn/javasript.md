@@ -12,6 +12,7 @@
     - [Block scope](#block-scope)
 - [Hoisting and the TDZ (Temperal dead zone)](#hoisting-and-the-tdz-temperal-dead-zone)
 - [`this` keyword](#this-keyword)
+- [Primitive vs Object (Primitives vs Reference types)](#primitive-vs-object-primitives-vs-reference-types)
 - [Link to script file](#link-to-script-file)
 - [Naming variables](#naming-variables)
   - [Rule of Naming](#rule-of-naming)
@@ -35,6 +36,11 @@
   - [Object method](#object-method)
   - [For loops](#for-loops)
 - [DOM and Events Fundamentals](#dom-and-events-fundamentals)
+- [Destructure](#destructure)
+  - [Destructure Array](#destructure-array)
+  - [Destructure Object](#destructure-object)
+- [Spread operator](#spread-operator)
+- [Rest Pattern and Parameter](#rest-pattern-and-parameter)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -100,6 +106,13 @@ Note: Arrow function don't have `this` keyword and `argument object`. Instead, t
   - event listener: this = < DOM element that the handler is attached to >
   
 ![#this](./image/this.png)
+
+# Primitive vs Object (Primitives vs Reference types)
+- Primitive types varibale save in call stack, Identifier point to address, which hold values of variable 
+- Object save in Heap, identifier point to address, which hold to address value of object in heap 
+
+![#primitive vs object](./image/primitive_reference.png)
+
 # Link to script file
 
 - you can use `<script>` tag in html file to write javascript
@@ -284,3 +297,192 @@ console.log(jonas["firstName"]); // Jonas
 ## For loops
 
 # DOM and Events Fundamentals
+
+
+# Destructure
+## Destructure Array 
+```js
+const books = [
+  {
+    title: 'Algorithms',
+    author: ['Robert Sedgewick', 'Kevin Wayne'],
+    publisher: 'Addison-Wesley Professional',
+    publicationDate: '2011-03-24',
+    edition: 4,
+    keywords: ['computer science', 'programming', 'algorithms', 'data structures', 'java', 'math', 'software', 'engineering'],
+    pages: 976,
+    format: 'hardcover',
+    ISBN: '9780321573513',
+    language: 'English',
+    programmingLanguage: 'Java',
+    onlineContent: true,
+    thirdParty: {
+      goodreads: {
+        rating: 4.41,
+        ratingsCount: 1733,
+        reviewsCount: 63,
+        fiveStarRatingCount: 976,
+        oneStarRatingCount: 13
+      }
+    },
+    highlighted: true
+  },
+  {
+    title: 'Structure and Interpretation of Computer Programs',
+    author: ['Harold Abelson', 'Gerald Jay Sussman', 'Julie Sussman (Contributor)'],
+    publisher: 'The MIT Press',
+    publicationDate: '2022-04-12',
+    edition: 2,
+    keywords: ['computer science', 'programming', 'javascript', 'software', 'engineering'],
+    pages: 640,
+    format: 'paperback',
+    ISBN: '9780262543231',
+    language: 'English',
+    programmingLanguage: 'JavaScript',
+    onlineContent: false,
+    thirdParty: {
+      goodreads: {
+        rating: 4.36,
+        ratingsCount: 14,
+        reviewsCount: 3,
+        fiveStarRatingCount: 8,
+        oneStarRatingCount: 0
+      }
+    },
+    highlighted: true
+  },
+  {
+    title: 'Computer Systems: A Programmer\'s Perspective',
+    author: ['Randal E. Bryant', 'David Richard O\'Hallaron'],
+    publisher: 'Prentice Hall',
+    publicationDate: '2002-01-01',
+    edition: 1,
+    keywords: ['computer science', 'computer systems', 'programming', 'software', 'C', 'engineering'],
+    pages: 978,
+    format: 'hardcover',
+    ISBN: '9780130340740',
+    language: 'English',
+    programmingLanguage: 'C',
+    onlineContent: false,
+    thirdParty: {
+      goodreads: {
+        rating: 4.44,
+        ratingsCount: 1010,
+        reviewsCount: 57,
+        fiveStarRatingCount: 638,
+        oneStarRatingCount: 16
+      }
+    },
+    highlighted: true
+  },
+  
+];
+
+
+//1.1
+const [firstBook, secondBook] = books;
+console.log(firstBook, secondBook);
+
+//1.2
+const [ , , thirdBook] = books;
+console.log(thirdBook);
+
+//1.3
+
+const ratings = [['rating', 4.19], ['ratingsCount', 144584]];
+const [[,rating], [,ratingsCount]] = ratings;
+console.log(rating, ratingsCount);
+
+//1.4
+const ratingStars = [63405, 1808];
+const [fiveStarRatings, oneStarRating,threeStarRatings] = [...ratingStars,0];
+console.log(fiveStarRatings, oneStarRating,threeStarRatings);
+```
+## Destructure Object 
+```js
+  const restaurant = {
+    name: 'Classico Italiano',
+    location: 'Via Angelo Tavanti 23, Firenze, Italy',
+    categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+    starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+    mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+    order : function (strartIndex , mainIndex){
+      return [this.starterMenu[strartIndex], this.mainMenu[mainIndex]];
+    },
+    
+    oderDelivery: function({startIndex, mainIndex, time, address}) {
+      console.log()
+    }
+
+    openingHours: {
+      thu: {
+        open: 12,
+        close: 22,
+      },
+      fri: {
+        open: 11,
+        close: 23,
+      },
+      sat: {
+        open: 0, // Open 24 hours
+        close: 24,
+      },
+    },
+  };
+
+  const {name , mainMenu, location} = restaurant;
+  console.log(name, mainMenu, location);
+  const {name: restaurantName, mainMenu: menu, location: loc} = restaurant;
+  console.log(restaurantName, menu, loc);
+
+  const {openingHours} = restaurant;
+  const {fri: {open, close} } = openingHours;
+  console.log(open, close);   //12,23
+
+  const obj = { 
+    a: 1,
+    b: 2,
+    c: 3
+  };
+  let a  =111;
+  let b = 999;
+  ({a,b} = obj);
+  console.log(a,b);  // a = 1,  b = 2 
+
+  const orderObj = {
+    startIndex: 2,
+    mainIndex: 2,
+    time: '22:30',
+    address: 'Via del Sole, 21'
+  };
+
+  restaurant.orderDelivery(orderObj);
+
+
+```
+
+# Spread operator 
+`...`
+
+```js
+  const arr = [1,2,3];
+  const newarr = [0,...arr];
+  console.log(newarray); // [0,1,2,3]
+```
+Iterables: arrays , strings, maps, sets, NOT object
+
+```js
+  const str = "minh Hieu";
+  const letter = [...str]; //['m','i','n','h',' ','H', 'i','e','u'];
+  const restaurant = {
+    name: 'Pizza',
+    location: "dong da",
+
+  }
+  const HieuPizza = {...restaurant, prize: '51'}
+  console.log(HieuPizza);
+```
+
+
+# Rest Pattern and Parameter
+ 

@@ -284,15 +284,49 @@
 // console.log(letter);
 // console.log(lt);
 
-const str = "minh Hieu";
-  const letter = [...str]; //['m','i','n','h',' ','H', 'i','e','u'];
-  const restaurant = {
-    name: 'Pizza',
-    location: "dong da",
+// const str = "minh Hieu";
+//   const letter = [...str]; //['m','i','n','h',' ','H', 'i','e','u'];
+//   const restaurant = {
+//     name: 'Pizza',
+//     location: "dong da",
 
-  }
-  const HieuPizza = {...restaurant, prize: '51'}
-  console.log(HieuPizza);
-  console.log(restaurant);
+//   }
+//   const HieuPizza = {...restaurant, prize: '51'}
+//   console.log(HieuPizza);
+//   console.log(restaurant);
   
+// const arr = [1,2,3,4,5];
+// const [a,b,...others] = arr;
+// console.log(others);
+
+// 'use strict';
+
+// let getNumber = undefined;
+// let guess = getNumber ?? 10;
+// console.log(guess);
+// const obj = null;
+// // const obj = {
+// //     // a: 1,
+// //     b: 2,
+// //     c: 3,
+// // };
+// const test = obj?.a;
+// console.log(test);
+
+const rest1 = {
+    name: 'Classico Italiano',
+    numGuests : 56,
+};
+const rest2 = {
+    name: 'MH',
+    owner: "Hieu",
+    numGuests : 20,
+};
+
+Object.assign(rest1, rest2.owner);
+console.log(rest1);
+console.log(rest2);
+
+
+
 

@@ -43,6 +43,8 @@
   - [Destructure Object](#destructure-object)
 - [Spread operator](#spread-operator)
 - [Rest Pattern and Parameter](#rest-pattern-and-parameter)
+- [optional chaining](#optional-chaining)
+- [Looping Object](#looping-object)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -494,3 +496,55 @@ Iterables: arrays , strings, maps, sets, NOT object
 
 # Rest Pattern and Parameter
  
+
+# optional chaining 
+- `?.`  
+
+```js
+  const restaurant = {
+    name: "MH",
+    open: {
+      fri : 6,
+    },
+    printName : function(){
+      console.log(this.name);
+    }
+  }
+  console.log(restaurant.haha.fri) // raise an error restaurant.haha is not define
+  console.log(restaurant.haha?.fri)  // not raise error
+
+
+```
+
+# Looping Object 
+```js
+  openingHours: {
+    thu: {
+      open: 12,
+      close: 22,
+    },
+    fri: {
+      open: 11,
+      close: 23,
+    },
+    sat: {
+      open: 0, // Open 24 hours
+      close: 24,
+    },
+  }
+  for(const day of Object.keys(openingHours)){
+    console.log(day);  // thu, fri, sat
+  }
+  for(const day of Object.values(openingHours)){
+    console.log(day);  // { open: 12, close: 22 }, { open: 11, close: 23 }, { open: 0, close: 24 }
+  }
+  for(const day of Object.entries(openingHours)){
+    console.log(day);  // thu, fri, sat
+  }
+  //[ 'thu', { open: 12, close: 22 } ]
+  // [ 'fri', { open: 11, close: 23 } ]
+  // [ 'sat', { open: 0, close: 24 } ]
+
+
+```
+

@@ -45,6 +45,7 @@
 - [Rest Pattern and Parameter](#rest-pattern-and-parameter)
 - [Nullish Operator ( `??` )](#nullish-operator---)
 - [Logical Assigment Operator](#logical-assigment-operator)
+- [Set](#set)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -520,3 +521,11 @@ Nullish value is `null` and `undefined`
   res1.numberGuest ??= 10; // equal res1.numberGuest = res1.numberGuest ?? 10
 ```
 
+
+# Set 
+
+```js 
+  const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
+  const orderSet1 = new Set([...orderSet]); // Spread inside an array
+  console.log(orderSet.size);
+```

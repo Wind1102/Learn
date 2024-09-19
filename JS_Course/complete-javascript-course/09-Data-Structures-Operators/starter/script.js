@@ -467,75 +467,100 @@
 
 
 
-const game = {
-    team1: 'Bayern Munich',
-    team2: 'Borrussia Dortmund',
-    players: [
-      [
-        'Neuer',
-        'Pavard',
-        'Martinez',
-        'Alaba',
-        'Davies',
-        'Kimmich',
-        'Goretzka',
-        'Coman',
-        'Muller',
-        'Gnarby',
-        'Lewandowski',
-      ],
-      [
-        'Burki',
-        'Schulz',
-        'Hummels',
-        'Akanji',
-        'Hakimi',
-        'Weigl',
-        'Witsel',
-        'Hazard',
-        'Brandt',
-        'Sancho',
-        'Gotze',
-      ],
-    ],
-    score: '4:0',
-    scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
-    date: 'Nov 9th, 2037',
-    odds: {
-      team1: 1.33,
-      x: 3.25,
-      team2: 6.5,
-    },
-    printGoals: function (...players){
-      // const allPlayer = [...this.players[0], ...this.players[1]] 
-      for (let i =0; i<players.length;i++){
-        const goal = this.scored.filter(player => player === players[i]).length;
-        console.log(`${players[i]}:${goal}`);
-      }
-    }
-  };
+// const game = {
+//     team1: 'Bayern Munich',
+//     team2: 'Borrussia Dortmund',
+//     players: [
+//       [
+//         'Neuer',
+//         'Pavard',
+//         'Martinez',
+//         'Alaba',
+//         'Davies',
+//         'Kimmich',
+//         'Goretzka',
+//         'Coman',
+//         'Muller',
+//         'Gnarby',
+//         'Lewandowski',
+//       ],
+//       [
+//         'Burki',
+//         'Schulz',
+//         'Hummels',
+//         'Akanji',
+//         'Hakimi',
+//         'Weigl',
+//         'Witsel',
+//         'Hazard',
+//         'Brandt',
+//         'Sancho',
+//         'Gotze',
+//       ],
+//     ],
+//     score: '4:0',
+//     scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+//     date: 'Nov 9th, 2037',
+//     odds: {
+//       team1: 1.33,
+//       x: 3.25,
+//       team2: 6.5,
+//     },
+//     printGoals: function (...players){
+//       // const allPlayer = [...this.players[0], ...this.players[1]] 
+//       for (let i =0; i<players.length;i++){
+//         const goal = this.scored.filter(player => player === players[i]).length;
+//         console.log(`${players[i]}:${goal}`);
+//       }
+//     }
+//   };
 
-for(const player of game.scored){
-  const goal = game.scored.filter(p => p === player).length;
-  console.log(`Goal ${goal}: ${player}`);
-}
+// for(const player of game.scored){
+//   const goal = game.scored.filter(p => p === player).length;
+//   console.log(`Goal ${goal}: ${player}`);
+// }
 
 
-function calAverage({team1, x:draw, team2}){
-  // console.log(team1, draw, team2);
-  return (team1 + draw + team2) / 3;
-}
+// function calAverage({team1, x:draw, team2}){
+//   // console.log(team1, draw, team2);
+//   return (team1 + draw + team2) / 3;
+// }
 
-console.log(calAverage(game.odds));
+// console.log(calAverage(game.odds));
 
-for(const [team,odd] of Object.entries(game.odds)){
+// for(const [team,odd] of Object.entries(game.odds)){
   
-  console.log(`Odd of victory ${game[team]?? 'draw'}: ${odd}`);
+//   console.log(`Odd of victory ${game[team]?? 'draw'}: ${odd}`);
 
-}
+// }
 
-const scorers = {};
-for(const player of game.scored){
-  scorers[player] = (scorers[player]?? 0) + 1;
-}
-console.log(scorers);
+// const scorers = {};
+// for(const player of game.scored){
+//   scorers[player] = (scorers[player]?? 0) + 1;
+// }
+// console.log(scorers);
+
+
+// const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
+// // console.log(orderSet);
+// const orderSet1 = new Set(...orderSet);
+// console.log(orderSet1);
+// console.log(...orderSet);
+
+
+const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
+const orderSet1 = new Set([...orderSet]); // Spread inside an array
+
+console.log(orderSet1); // Outputs: Set { 'Pasta', 'Pizza', 'Risotto' }
+console.log(orderSet.size);
+
+const a = [1,2,3,4]
+const b = a.unshift(1);
+console.log(b);
+console.log(a);
+
+const c = new Set ([1,2,3,4]);
+const d = [...c];
+console.log(d);
+console.log(c);
+console.log(c[1]);

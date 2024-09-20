@@ -46,6 +46,9 @@
 - [Nullish Operator ( `??` )](#nullish-operator---)
 - [Logical Assigment Operator](#logical-assigment-operator)
 - [Set](#set)
+- [Map](#map)
+- [Data Structure Overview](#data-structure-overview)
+  - [Source of data](#source-of-data)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -527,5 +530,34 @@ Nullish value is `null` and `undefined`
 ```js 
   const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
   const orderSet1 = new Set([...orderSet]); // Spread inside an array
-  console.log(orderSet.size);
+  console.log(orderSet.size);  //Pasta, Pizza, Risotto
 ```
+
+
+# Map 
+```js 
+  const rest = new Map();
+  rest.set('name', "MH");
+  rest.set(1,"Haha");
+  console.log(rest);
+  console.log(rest.set(2, "Hieu"));
+  console.log(rest.get(1));
+
+  const arr = [1,2];
+  rest.set(arr, "Test");
+  console.log(rest.get(arr));
+
+  rest.set(document.querySelector('h1'), 'Heading');
+  console.log(rest.get(document.querySelector('h1')));  // Heading 
+  console.log(rest.get('h1')); //undefine 
+  console.log(rest);
+```
+
+
+# Data Structure Overview 
+## Source of data 
+  - From the program itself: Data written directly in source code (eg. status message)
+  - From the UI: Data input from the user or data written in the Dom (eg. task in todo app)
+  - From external source: Data fetched for example from web API (eg recipe object)
+-> Simple list? -> using  Arrays or Sets
+-> Key/Value pair? -> using Objects or Maps

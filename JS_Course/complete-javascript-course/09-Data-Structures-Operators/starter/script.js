@@ -6,7 +6,6 @@
 
 // // // Data needed for first part of the section
 
-
 // // // // const books = [
 // // // //   {
 // // // //     title: 'Algorithms',
@@ -191,7 +190,6 @@
 // // // //   }
 // // // // ];
 
-
 // // // // //1.1
 // // // // const [firstBook, secondBook] = books;
 // // // // console.log(firstBook, secondBook);
@@ -210,7 +208,6 @@
 // // // // const ratingStars = [63405, 1808];
 // // // // const [fiveStarRatings, oneStarRating,threeStarRatings] = [...ratingStars,0];
 // // // // console.log(fiveStarRatings, oneStarRating,threeStarRatings);
-
 
 // // const restaurant = {
 // //   name: 'Classico Italiano',
@@ -258,8 +255,7 @@
 // // // // const {name: restaurantName, mainMenu: menu, location: loc} = restaurant;
 // // // // console.log(restaurantName, menu, loc);
 
-
-// // // // const obj = { 
+// // // // const obj = {
 // // // //   a: 1,
 // // // //   b: 2,
 // // // //   c: 3
@@ -267,12 +263,11 @@
 // // // // let a  =111;
 // // // // let b = 999;
 // // // // ({a,b} = obj);
-// // // // console.log(a,b); 
-
+// // // // console.log(a,b);
 
 // // // // const {openingHours} = restaurant;
 // // // // const {fri: {open, close} } = openingHours;
-// // // // console.log(open, close); 
+// // // // console.log(open, close);
 
 // // // const myName = "Minh Hieu";
 // // // const letter = [...myName];
@@ -294,7 +289,7 @@
 // // //   const HieuPizza = {...restaurant, prize: '51'}
 // // //   console.log(HieuPizza);
 // // //   console.log(restaurant);
-  
+
 // // // const arr = [1,2,3,4,5];
 // // // const [a,b,...others] = arr;
 // // // console.log(others);
@@ -326,8 +321,6 @@
 // // // Object.assign(rest1, rest2.owner);
 // // // console.log(rest1);
 // // // console.log(rest2);
-
-
 
 // // const game = {
 // //     team1: 'Bayern Munich',
@@ -369,7 +362,7 @@
 // //       team2: 6.5,
 // //     },
 // //     printGoals: function (...players){
-// //       // const allPlayer = [...this.players[0], ...this.players[1]] 
+// //       // const allPlayer = [...this.players[0], ...this.players[1]]
 // //       for (let i =0; i<players.length;i++){
 // //         const goal = this.scored.filter(player => player === players[i]).length;
 // //         console.log(`${players[i]}:${goal}`);
@@ -377,20 +370,19 @@
 // //     }
 // //   };
 
-
-// // // //1 
+// // // //1
 // // // const [players1, players2] = game.players;
 // // // console.log(players1, players2);
 
-// // // //2 
+// // // //2
 // // // const [gk,...fieldPlayers] = players1;
 // // // console.log(gk, fieldPlayers);
 
-// // // //3 
+// // // //3
 // // // const allPlayer = [...players1, ...players2];
 // // // console.log(allPlayer);
 
-// // // //4 
+// // // //4
 // // // players1Final = [...players1, 'Thiago', 'Coutinho', 'Perisic'];
 // // // console.log(players1Final);
 
@@ -401,15 +393,11 @@
 // // //6
 // // game.printGoals('Davies', 'Muller', 'Lewandowski', 'Gnarby');
 
-// // //7 
+// // //7
 
 // // const {team1, team2} = game.odds;
 // // team1 < team2 && console.log('Team 1 is more likely to win');
 // // team1 > team2 && console.log('Team 2 is more likely to win');
-
-
-
-
 
 // const restaurant = {
 //   name: 'Classico Italiano',
@@ -451,7 +439,6 @@
 // //   console.log(item);
 // // }
 
-
 // // const a = [1,2,3,4,5,6,7,8,9];
 // // console.log(a[10]?.toExponential(2) ?? 'No such element');
 
@@ -460,12 +447,7 @@
 // //   console.log(day);
 // // }
 
-
 // console.log(Object.entries(openingHours));
-
-
-
-
 
 // const game = {
 //     team1: 'Bayern Munich',
@@ -507,7 +489,7 @@
 //       team2: 6.5,
 //     },
 //     printGoals: function (...players){
-//       // const allPlayer = [...this.players[0], ...this.players[1]] 
+//       // const allPlayer = [...this.players[0], ...this.players[1]]
 //       for (let i =0; i<players.length;i++){
 //         const goal = this.scored.filter(player => player === players[i]).length;
 //         console.log(`${players[i]}:${goal}`);
@@ -520,7 +502,6 @@
 //   console.log(`Goal ${goal}: ${player}`);
 // }
 
-
 // function calAverage({team1, x:draw, team2}){
 //   // console.log(team1, draw, team2);
 //   return (team1 + draw + team2) / 3;
@@ -529,7 +510,7 @@
 // console.log(calAverage(game.odds));
 
 // for(const [team,odd] of Object.entries(game.odds)){
-  
+
 //   console.log(`Odd of victory ${game[team]?? 'draw'}: ${odd}`);
 
 // }
@@ -540,27 +521,51 @@
 // }
 // console.log(scorers);
 
-
 // const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
 // // console.log(orderSet);
 // const orderSet1 = new Set(...orderSet);
 // console.log(orderSet1);
 // console.log(...orderSet);
 
-
-const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
+const orderSet = new Set([
+  'Pasta',
+  'Pizza',
+  'Pizza',
+  'Risotto',
+  'Pasta',
+  'Pizza',
+]);
 const orderSet1 = new Set([...orderSet]); // Spread inside an array
 
-console.log(orderSet1); // Outputs: Set { 'Pasta', 'Pizza', 'Risotto' }
-console.log(orderSet.size);
+// console.log(orderSet1); // Outputs: Set { 'Pasta', 'Pizza', 'Risotto' }
+// console.log(orderSet.size);
 
-const a = [1,2,3,4]
-const b = a.unshift(1);
-console.log(b);
-console.log(a);
+// const a = [1, 2, 3, 4];
+// const b = a.unshift(1);
+// console.log(b);
+// console.log(a);
 
-const c = new Set ([1,2,3,4]);
-const d = [...c];
-console.log(d);
-console.log(c);
-console.log(c[1]);
+// const c = new Set ([1,2,3,4]);
+// const d = [...c];
+// console.log(d);
+// console.log(c);
+// console.log(c[1]);
+
+
+// const rest = new Map();
+//   rest.set('name', "MH");
+//   rest.set(1,"Haha");
+// console.log(rest);
+// console.log(rest.set(2, "Hieu"));
+// console.log(rest.get(1));
+
+// const arr = [1,2];
+// rest.set(arr, "Test");
+// console.log(rest.get(arr));
+
+// rest.set(document.querySelector('h1'), 'Heading');
+// console.log(rest.get(document.querySelector('h1')));
+// console.log(rest);
+
+console.log(orderSet);
+console.log(orderSet.has('Pizza'));

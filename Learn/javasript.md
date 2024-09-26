@@ -49,6 +49,7 @@
 - [Map](#map)
 - [Data Structure Overview](#data-structure-overview)
   - [Source of data](#source-of-data)
+- [Work with String](#work-with-string)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -561,3 +562,6 @@ Nullish value is `null` and `undefined`
   - From external source: Data fetched for example from web API (eg recipe object)
 -> Simple list? -> using  Arrays or Sets
 -> Key/Value pair? -> using Objects or Maps
+
+
+# Work with String

@@ -567,5 +567,56 @@ const orderSet1 = new Set([...orderSet]); // Spread inside an array
 // console.log(rest.get(document.querySelector('h1')));
 // console.log(rest);
 
-console.log(orderSet);
-console.log(orderSet.has('Pizza'));
+// console.log(orderSet);
+// console.log(orderSet.has('Pizza'));
+
+// const gameEvents = new Map([
+//   [17, '⚽️ GOAL'],
+//   [36, '🔁 Substitution'],
+//   [47, '⚽️ GOAL'],
+//   [61, '🔁 Substitution'],
+//   [64, '🔶 Yellow card'],
+//   [69, '🔴 Red card'],
+//   [70, '🔁 Substitution'],
+//   [72, '🔁 Substitution'],
+//   [76, '⚽️ GOAL'],
+//   [80, '⚽️ GOAL'],
+//   [92, '🔶 Yellow card'],
+  
+// ]);
+// const differentEvent =[...new Set([...gameEvents.values()])];
+// console.log(differentEvent);
+
+// gameEvents.delete(64);
+// console.log(gameEvents);
+
+
+// const time = [...gameEvents.keys()].pop();
+// console.log(time);
+// console.log(gameEvents);
+
+// const numEvents = [...gameEvents.keys()].filter(k => k<=90);
+// const average = 90/numEvents.length;
+// console.log(average);
+// console.log(numEvents);
+// console.log(gameEvents.entries());
+
+
+// for(const [min,events] of gameEvents.entries()){
+//   console.log(min<45? `[FIRST HALF] ${min}: ${events}` : `[SECOND HALF] ${min}: ${events}`);
+// }
+
+
+const airLine = "        Tap Air Portugal    "
+const plane = "A320";
+console.log(plane[0]);
+console.log(airLine.slice(4,8));
+console.log(airLine.indexOf('r'));
+console.log(airLine.lastIndexOf('r'));
+console.log(airLine.substring(10,16));
+console.log(airLine.includes('Portugal'));
+
+console.log(airLine.slice(0));
+const mH = new String("Test")
+console.log(mH);
+console.log(airLine.trim());

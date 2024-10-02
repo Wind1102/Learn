@@ -551,7 +551,6 @@ const orderSet1 = new Set([...orderSet]); // Spread inside an array
 // console.log(c);
 // console.log(c[1]);
 
-
 // const rest = new Map();
 //   rest.set('name', "MH");
 //   rest.set(1,"Haha");
@@ -582,14 +581,13 @@ const orderSet1 = new Set([...orderSet]); // Spread inside an array
 //   [76, '⚽️ GOAL'],
 //   [80, '⚽️ GOAL'],
 //   [92, '🔶 Yellow card'],
-  
+
 // ]);
 // const differentEvent =[...new Set([...gameEvents.values()])];
 // console.log(differentEvent);
 
 // gameEvents.delete(64);
 // console.log(gameEvents);
-
 
 // const time = [...gameEvents.keys()].pop();
 // console.log(time);
@@ -601,22 +599,89 @@ const orderSet1 = new Set([...orderSet]); // Spread inside an array
 // console.log(numEvents);
 // console.log(gameEvents.entries());
 
-
 // for(const [min,events] of gameEvents.entries()){
 //   console.log(min<45? `[FIRST HALF] ${min}: ${events}` : `[SECOND HALF] ${min}: ${events}`);
 // }
 
+// const airLine = "        Tap Air Portugal    "
+// const plane = "A320";
+// console.log(plane[0]);
+// console.log(airLine.slice(4,8));
+// console.log(airLine.indexOf('r'));
+// console.log(airLine.lastIndexOf('r'));
+// console.log(airLine.substring(10,16));
+// console.log(airLine.includes('Portugal'));
 
-const airLine = "        Tap Air Portugal    "
-const plane = "A320";
-console.log(plane[0]);
-console.log(airLine.slice(4,8));
-console.log(airLine.indexOf('r'));
-console.log(airLine.lastIndexOf('r'));
-console.log(airLine.substring(10,16));
-console.log(airLine.includes('Portugal'));
+// console.log(airLine.slice(0));
+// const mH = new String("Test")
+// console.log(mH);
+// console.log(airLine.trim());
 
-console.log(airLine.slice(0));
-const mH = new String("Test")
-console.log(mH);
-console.log(airLine.trim());
+// const testReplaceAll = "This is a test replace all test";
+// // console.log(testReplaceAll.replaceAll('test', 'TEST'));
+
+// console.log(testReplaceAll.includes(' i'));
+
+// console.log(testReplaceAll.indexOf(' i'));
+
+// console.log(testReplaceAll.split(' '));
+// for(let i of testReplaceAll.split(' ')){
+//   console.log(i);
+// }
+
+// const message = 'Go to gate 23!';
+// console.log(message.padStart(25, '+').padEnd(30, '+'));
+
+// const rp = message.repeat(5);
+// console.log(rp);
+// console.log(typeof rp);
+
+// const underScore = 'underscore_case';
+// const firstName = ' first_name';
+// const someVariable = 'Some_Variable';
+// const calculateAge = ' calculate_Age';
+// const delayDeparture = 'delayed_departure';
+
+// // console.log([underScore.split('_')[0], underScore.split('_')[1][0].toUpperCase(), underScore.split('_')[1].slice(1)].join(''));
+
+// // const indexOfLetterC = underScore.indexOf('c');
+// // console.log(indexOfLetterC);
+// // underScore[indexOfLetterC] = underScore[indexOfLetterC].toUpperCase();
+// // console.log(underScore[indexOfLetterC].toUpperCase());
+// // console.log(underScore[indexOfLetterC]);
+// // underScore.replace('_', ' ');
+// // console.log(underScore);
+
+// const camelCase = function (str){
+//     const [firstLetter,secondLetter] = str.trim().split('_');
+//     return [firstLetter.toLowerCase(), secondLetter[0].toUpperCase(), secondLetter.slice(1)].join('');
+// }
+
+// console.log(camelCase(underScore));
+// console.log(camelCase(firstName));
+// console.log(camelCase(someVariable));
+// console.log(camelCase(calculateAge));
+// console.log(camelCase(delayDeparture));
+
+
+// document.body.append(document.createElement('textarea'));
+// document.body.append(document.createElement('button'));
+
+// document.querySelector('button').addEventListener('click', function(){
+//   const text = document.querySelector('textarea').value;
+//   const rows = text.split('\n');
+//   for(const [i, row] of rows.entries()){
+//     const [first, second] = row.trim().toLowerCase().split('_');
+//     const output = [first, second[0].toUpperCase(), second.slice(1)].join('');
+//     console.log(`${output.padEnd(20,'+')}${'✅'.repeat(i+1)}`);
+//   }
+// });
+
+const flights = '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+const newFlights = flights.split('+');
+console.log(newFlights);
+for (const flight of newFlights){
+  const [type, from, to, time] = flight.split(';');
+  const output = `${type.startsWith('_Delayed') ? '🔴' : ''}${type.replaceAll('_', ' ')} from ${from.slice(0,3).toUpperCase()} to ${to.slice(0,3).toUpperCase()} (${time.replace(':', 'h')})`.padStart(45);
+  console.log(output);
+}

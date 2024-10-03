@@ -50,6 +50,8 @@
 - [Data Structure Overview](#data-structure-overview)
   - [Source of data](#source-of-data)
 - [Work with String](#work-with-string)
+- [Passing argument: Values vs Reference](#passing-argument-values-vs-reference)
+- [First Class and Higher-Order Functions](#first-class-and-higher-order-functions)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -565,3 +567,19 @@ Nullish value is `null` and `undefined`
 
 
 # Work with String
+
+
+
+# Passing argument: Values vs Reference
+
+- primitive type pass value
+- other pass reference
+
+# First Class and Higher-Order Functions
+- javascript treats functions as first-class citizens
+- This means that function are simply value 
+- Funtions are just another "type" of object
+- Store functions in variables or properties
+- Pass functions as arguments to other function
+- Return functions From functions
+- Call methods on functions

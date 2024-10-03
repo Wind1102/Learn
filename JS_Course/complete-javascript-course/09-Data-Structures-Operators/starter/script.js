@@ -6,7 +6,6 @@
 
 // // // Data needed for first part of the section
 
-
 // // // // const books = [
 // // // //   {
 // // // //     title: 'Algorithms',
@@ -191,7 +190,6 @@
 // // // //   }
 // // // // ];
 
-
 // // // // //1.1
 // // // // const [firstBook, secondBook] = books;
 // // // // console.log(firstBook, secondBook);
@@ -210,7 +208,6 @@
 // // // // const ratingStars = [63405, 1808];
 // // // // const [fiveStarRatings, oneStarRating,threeStarRatings] = [...ratingStars,0];
 // // // // console.log(fiveStarRatings, oneStarRating,threeStarRatings);
-
 
 // // const restaurant = {
 // //   name: 'Classico Italiano',
@@ -258,8 +255,7 @@
 // // // // const {name: restaurantName, mainMenu: menu, location: loc} = restaurant;
 // // // // console.log(restaurantName, menu, loc);
 
-
-// // // // const obj = { 
+// // // // const obj = {
 // // // //   a: 1,
 // // // //   b: 2,
 // // // //   c: 3
@@ -267,12 +263,11 @@
 // // // // let a  =111;
 // // // // let b = 999;
 // // // // ({a,b} = obj);
-// // // // console.log(a,b); 
-
+// // // // console.log(a,b);
 
 // // // // const {openingHours} = restaurant;
 // // // // const {fri: {open, close} } = openingHours;
-// // // // console.log(open, close); 
+// // // // console.log(open, close);
 
 // // // const myName = "Minh Hieu";
 // // // const letter = [...myName];
@@ -294,7 +289,7 @@
 // // //   const HieuPizza = {...restaurant, prize: '51'}
 // // //   console.log(HieuPizza);
 // // //   console.log(restaurant);
-  
+
 // // // const arr = [1,2,3,4,5];
 // // // const [a,b,...others] = arr;
 // // // console.log(others);
@@ -326,8 +321,6 @@
 // // // Object.assign(rest1, rest2.owner);
 // // // console.log(rest1);
 // // // console.log(rest2);
-
-
 
 // // const game = {
 // //     team1: 'Bayern Munich',
@@ -369,7 +362,7 @@
 // //       team2: 6.5,
 // //     },
 // //     printGoals: function (...players){
-// //       // const allPlayer = [...this.players[0], ...this.players[1]] 
+// //       // const allPlayer = [...this.players[0], ...this.players[1]]
 // //       for (let i =0; i<players.length;i++){
 // //         const goal = this.scored.filter(player => player === players[i]).length;
 // //         console.log(`${players[i]}:${goal}`);
@@ -377,20 +370,19 @@
 // //     }
 // //   };
 
-
-// // // //1 
+// // // //1
 // // // const [players1, players2] = game.players;
 // // // console.log(players1, players2);
 
-// // // //2 
+// // // //2
 // // // const [gk,...fieldPlayers] = players1;
 // // // console.log(gk, fieldPlayers);
 
-// // // //3 
+// // // //3
 // // // const allPlayer = [...players1, ...players2];
 // // // console.log(allPlayer);
 
-// // // //4 
+// // // //4
 // // // players1Final = [...players1, 'Thiago', 'Coutinho', 'Perisic'];
 // // // console.log(players1Final);
 
@@ -401,15 +393,11 @@
 // // //6
 // // game.printGoals('Davies', 'Muller', 'Lewandowski', 'Gnarby');
 
-// // //7 
+// // //7
 
 // // const {team1, team2} = game.odds;
 // // team1 < team2 && console.log('Team 1 is more likely to win');
 // // team1 > team2 && console.log('Team 2 is more likely to win');
-
-
-
-
 
 // const restaurant = {
 //   name: 'Classico Italiano',
@@ -451,7 +439,6 @@
 // //   console.log(item);
 // // }
 
-
 // // const a = [1,2,3,4,5,6,7,8,9];
 // // console.log(a[10]?.toExponential(2) ?? 'No such element');
 
@@ -460,12 +447,7 @@
 // //   console.log(day);
 // // }
 
-
 // console.log(Object.entries(openingHours));
-
-
-
-
 
 // const game = {
 //     team1: 'Bayern Munich',
@@ -507,7 +489,7 @@
 //       team2: 6.5,
 //     },
 //     printGoals: function (...players){
-//       // const allPlayer = [...this.players[0], ...this.players[1]] 
+//       // const allPlayer = [...this.players[0], ...this.players[1]]
 //       for (let i =0; i<players.length;i++){
 //         const goal = this.scored.filter(player => player === players[i]).length;
 //         console.log(`${players[i]}:${goal}`);
@@ -520,7 +502,6 @@
 //   console.log(`Goal ${goal}: ${player}`);
 // }
 
-
 // function calAverage({team1, x:draw, team2}){
 //   // console.log(team1, draw, team2);
 //   return (team1 + draw + team2) / 3;
@@ -529,7 +510,7 @@
 // console.log(calAverage(game.odds));
 
 // for(const [team,odd] of Object.entries(game.odds)){
-  
+
 //   console.log(`Odd of victory ${game[team]?? 'draw'}: ${odd}`);
 
 // }
@@ -540,27 +521,167 @@
 // }
 // console.log(scorers);
 
-
 // const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
 // // console.log(orderSet);
 // const orderSet1 = new Set(...orderSet);
 // console.log(orderSet1);
 // console.log(...orderSet);
 
-
-const orderSet = new Set(['Pasta', 'Pizza', 'Pizza', 'Risotto', 'Pasta', 'Pizza']);
+const orderSet = new Set([
+  'Pasta',
+  'Pizza',
+  'Pizza',
+  'Risotto',
+  'Pasta',
+  'Pizza',
+]);
 const orderSet1 = new Set([...orderSet]); // Spread inside an array
 
-console.log(orderSet1); // Outputs: Set { 'Pasta', 'Pizza', 'Risotto' }
-console.log(orderSet.size);
+// console.log(orderSet1); // Outputs: Set { 'Pasta', 'Pizza', 'Risotto' }
+// console.log(orderSet.size);
 
-const a = [1,2,3,4]
-const b = a.unshift(1);
-console.log(b);
-console.log(a);
+// const a = [1, 2, 3, 4];
+// const b = a.unshift(1);
+// console.log(b);
+// console.log(a);
 
-const c = new Set ([1,2,3,4]);
-const d = [...c];
-console.log(d);
-console.log(c);
-console.log(c[1]);
+// const c = new Set ([1,2,3,4]);
+// const d = [...c];
+// console.log(d);
+// console.log(c);
+// console.log(c[1]);
+
+// const rest = new Map();
+//   rest.set('name', "MH");
+//   rest.set(1,"Haha");
+// console.log(rest);
+// console.log(rest.set(2, "Hieu"));
+// console.log(rest.get(1));
+
+// const arr = [1,2];
+// rest.set(arr, "Test");
+// console.log(rest.get(arr));
+
+// rest.set(document.querySelector('h1'), 'Heading');
+// console.log(rest.get(document.querySelector('h1')));
+// console.log(rest);
+
+// console.log(orderSet);
+// console.log(orderSet.has('Pizza'));
+
+// const gameEvents = new Map([
+//   [17, '⚽️ GOAL'],
+//   [36, '🔁 Substitution'],
+//   [47, '⚽️ GOAL'],
+//   [61, '🔁 Substitution'],
+//   [64, '🔶 Yellow card'],
+//   [69, '🔴 Red card'],
+//   [70, '🔁 Substitution'],
+//   [72, '🔁 Substitution'],
+//   [76, '⚽️ GOAL'],
+//   [80, '⚽️ GOAL'],
+//   [92, '🔶 Yellow card'],
+
+// ]);
+// const differentEvent =[...new Set([...gameEvents.values()])];
+// console.log(differentEvent);
+
+// gameEvents.delete(64);
+// console.log(gameEvents);
+
+// const time = [...gameEvents.keys()].pop();
+// console.log(time);
+// console.log(gameEvents);
+
+// const numEvents = [...gameEvents.keys()].filter(k => k<=90);
+// const average = 90/numEvents.length;
+// console.log(average);
+// console.log(numEvents);
+// console.log(gameEvents.entries());
+
+// for(const [min,events] of gameEvents.entries()){
+//   console.log(min<45? `[FIRST HALF] ${min}: ${events}` : `[SECOND HALF] ${min}: ${events}`);
+// }
+
+// const airLine = "        Tap Air Portugal    "
+// const plane = "A320";
+// console.log(plane[0]);
+// console.log(airLine.slice(4,8));
+// console.log(airLine.indexOf('r'));
+// console.log(airLine.lastIndexOf('r'));
+// console.log(airLine.substring(10,16));
+// console.log(airLine.includes('Portugal'));
+
+// console.log(airLine.slice(0));
+// const mH = new String("Test")
+// console.log(mH);
+// console.log(airLine.trim());
+
+// const testReplaceAll = "This is a test replace all test";
+// // console.log(testReplaceAll.replaceAll('test', 'TEST'));
+
+// console.log(testReplaceAll.includes(' i'));
+
+// console.log(testReplaceAll.indexOf(' i'));
+
+// console.log(testReplaceAll.split(' '));
+// for(let i of testReplaceAll.split(' ')){
+//   console.log(i);
+// }
+
+// const message = 'Go to gate 23!';
+// console.log(message.padStart(25, '+').padEnd(30, '+'));
+
+// const rp = message.repeat(5);
+// console.log(rp);
+// console.log(typeof rp);
+
+// const underScore = 'underscore_case';
+// const firstName = ' first_name';
+// const someVariable = 'Some_Variable';
+// const calculateAge = ' calculate_Age';
+// const delayDeparture = 'delayed_departure';
+
+// // console.log([underScore.split('_')[0], underScore.split('_')[1][0].toUpperCase(), underScore.split('_')[1].slice(1)].join(''));
+
+// // const indexOfLetterC = underScore.indexOf('c');
+// // console.log(indexOfLetterC);
+// // underScore[indexOfLetterC] = underScore[indexOfLetterC].toUpperCase();
+// // console.log(underScore[indexOfLetterC].toUpperCase());
+// // console.log(underScore[indexOfLetterC]);
+// // underScore.replace('_', ' ');
+// // console.log(underScore);
+
+// const camelCase = function (str){
+//     const [firstLetter,secondLetter] = str.trim().split('_');
+//     return [firstLetter.toLowerCase(), secondLetter[0].toUpperCase(), secondLetter.slice(1)].join('');
+// }
+
+// console.log(camelCase(underScore));
+// console.log(camelCase(firstName));
+// console.log(camelCase(someVariable));
+// console.log(camelCase(calculateAge));
+// console.log(camelCase(delayDeparture));
+
+
+// document.body.append(document.createElement('textarea'));
+// document.body.append(document.createElement('button'));
+
+// document.querySelector('button').addEventListener('click', function(){
+//   const text = document.querySelector('textarea').value;
+//   const rows = text.split('\n');
+//   for(const [i, row] of rows.entries()){
+//     const [first, second] = row.trim().toLowerCase().split('_');
+//     const output = [first, second[0].toUpperCase(), second.slice(1)].join('');
+//     console.log(`${output.padEnd(20,'+')}${'✅'.repeat(i+1)}`);
+//   }
+// });
+
+const flights = '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+const newFlights = flights.split('+');
+console.log(newFlights);
+for (const flight of newFlights){
+  const [type, from, to, time] = flight.split(';');
+  const output = `${type.startsWith('_Delayed') ? '🔴' : ''}${type.replaceAll('_', ' ')} from ${from.slice(0,3).toUpperCase()} to ${to.slice(0,3).toUpperCase()} (${time.replace(':', 'h')})`.padStart(45);
+  console.log(output);
+}

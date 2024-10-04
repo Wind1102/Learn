@@ -52,6 +52,7 @@
 - [Work with String](#work-with-string)
 - [Passing argument: Values vs Reference](#passing-argument-values-vs-reference)
 - [First Class and Higher-Order Functions](#first-class-and-higher-order-functions)
+- [Abstract](#abstract)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -583,3 +584,7 @@ Nullish value is `null` and `undefined`
 - Pass functions as arguments to other function
 - Return functions From functions
 - Call methods on functions
+![#function](./image/function.png)
+
+
+# Abstract

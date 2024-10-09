@@ -87,34 +87,158 @@
 
 // greet("Hello")("Hieu");
 
-const lufthansa = {
-  airline: 'Lufthansa',
-  iataCode: 'LH',
-  bookings: [],
-  // book: function() {}
-  book(flightNum, name) {
-    console.log(
-      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
-    );
-    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
-  },
-};
+// const lufthansa = {
+//   airline: 'Lufthansa',
+//   iataCode: 'LH',
+//   bookings: [],
+//   // book: function() {}
+//   book(flightNum, name) {
+//     console.log(
+//       `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+//     );
+//     this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+//   },
+// };
 
-lufthansa.book(239, 'Jonas Schmedtmann');
-lufthansa.book(635, 'John Smith');
+// lufthansa.book(239, 'Jonas Schmedtmann');
+// lufthansa.book(635, 'John Smith');
 
-const eurowings = {
-  airline: 'Eurowings',
-  iataCode: 'EW',
-  bookings: [],
-};
+// const eurowings = {
+//   airline: 'Eurowings',
+//   iataCode: 'EW',
+//   bookings: [],
+// };
 
-const book = lufthansa.book;
+// const book = lufthansa.book;
 
-// book(23, 'Sarah Williams');
+// // book(23, 'Sarah Williams');
 
-book.call(eurowings, 23, 'Sarah Williams');
-console.log(eurowings);
+// book.call(eurowings, 23, 'Sarah Williams');
+// console.log(eurowings);
 
-book.call(lufthansa, 239, 'Mary Cooper');
-console.log(lufthansa);
+// book.call(lufthansa, 239, 'Mary Cooper');
+// console.log(lufthansa);
+
+
+// console.log(...eurowings);
+
+
+// const arr = [1,2,3];
+// const b_Arr = arr.push.apply(arr, [4,5,6]);
+// console.log(arr);
+// console.log(b_Arr);
+
+
+// arr.push.call(arr, [7,8,9]);
+// console.log(arr);
+// arr.push(10,11,12);
+// console.log(arr);
+
+// class Base {
+//   constructor(...args) {
+//     console.log(new.target === Base);
+//     console.log(args);
+//   }
+  
+//   abc () {
+//       console.log("test");
+//   }
+// }
+
+// // const BoundBase = Base.bind(null, 1, 2);
+
+// x = new Base(3, 4); // true, [1, 2, 3, 4]
+
+
+
+
+// class LateBloomer {
+//   constructor() {
+//     this.petalCount = Math.floor(Math.random() * 12) + 1;
+//   }
+//   bloom() {
+//     // Declare bloom after a delay of 1 second
+//     // setTimeout(this.declare.bind(this), 1000);
+//     setTimeout(
+//       this.declare
+//     , 1000);
+//   }
+//   declare() {
+//     console.log(`I am a beautiful flower with ${this.petalCount} petals!`);
+//   }
+// }
+
+// const flower = new LateBloomer();
+// flower.bloom();
+// After 1 second, calls 'flower.declare()'
+
+
+// class Base {
+//   static baseProp = "base";
+  
+// }
+
+// class Derived extends Base {
+//   derivedProp = "derived";
+//   x(){
+//     console.log("test");
+//   }
+// }
+
+// // const BoundDerived = Derived.bind(Base);
+// // console.log(typeof BoundDerived);
+// // const m = new BoundDerived();
+// // console.log(m.x());
+
+
+// // const x = function(){
+// //   y = 10;
+// //   this.haha = "abcd";
+// // }
+
+// // const k = new x();
+// // console.log(k.haha);
+
+// const y = new Derived();
+// y.x();
+// class d3 extends Derived{
+//   x(){
+//     console.log("test2");
+//   }
+// }
+// console.log(d3.prototype);
+
+
+class Base {
+  static baseProp = "base";
+  constructor(name) {
+      this.name = name;
+  }
+}
+
+//   greet() {
+//       console.log(`Hello, my name is ${this.name}`);
+//   }
+// }
+
+class Derived extends Base {
+  constructor(name, age) {
+      super(name); // Call the constructor of the base class
+      this.age = age;
+  }
+
+  info() {
+      console.log(`I am ${this.age} years old.`);
+  }
+}
+
+
+// const BoundDerived = Derived.bind(null, 'John');
+
+// const instance = new Derived(25); // 'John' is bound as the first argument
+// instance.greet(); // Outputs: Hello, my name is John
+// instance.info();  // Outputs: I am 25 years old.
+
+
+console.log(Base.prototype);
+console.log(Derived.prototype);

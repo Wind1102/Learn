@@ -52,7 +52,10 @@
 - [Work with String](#work-with-string)
 - [Passing argument: Values vs Reference](#passing-argument-values-vs-reference)
 - [First Class and Higher-Order Functions](#first-class-and-higher-order-functions)
-- [Abstract](#abstract)
+- [Call, Bind, Apply](#call-bind-apply)
+  - [Call](#call)
+  - [Apply](#apply)
+  - [bind](#bind)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -587,4 +590,30 @@ Nullish value is `null` and `undefined`
 ![#function](./image/function.png)
 
 
-# Abstract
+# Call, Bind, Apply
+## Call 
+```js
+  call(thisArg, arg1, ..., argN)
+  
+```
+- `thisArg`: The value to use as this when calling function. If the function is not in `strict mode` , `null`, `undefined` will be replace with the global object, and primitive values will be converted to object.
+- `arg1, arg2,..., argN`: Arguments for the function
+
+- Return value: The result of calling the function with the specified this value and arguments
+
+## Apply
+```js
+  apply(thisArg, argsArray)
+```
+
+- `thisArg`: the value of this provided for the call to function. If the function is not in `strict mode` , `null`, `undefined`, will be replaced with the global object, and primitive values will be converted to objects.
+- `argsArray`: An array-like object, specifying the arguments with which function should be called, or `null`, or `undefined` if no arguments should be provided to the function
+
+- Return value: The result of calling the function with the specified this value and arguments.
+
+
+## bind
+```js
+  bind(thisArg, arg1, ..., argN)
+```
+

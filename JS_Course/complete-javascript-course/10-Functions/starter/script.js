@@ -307,32 +307,101 @@
 
 
 
-const poll = {
-  question: 'What is your favourite programming language?',
-  options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
-  // This generates [0, 0, 0, 0]. More in the next section 😃
-  answers: new Array(4).fill(0),
-  registerNewAnswer: function (){
-    const answer = prompt(`${this.question}]\n ${this.options.join('\n')}`);
-    if(Number(answer)){
-      if (Number(answer) >= 0 && Number(answer) <= 3){
-        this.answers[Number(answer)]++;
-      }
-    }
-    this.displayResults();
-  },
-  displayResults: function (){
-    const type = prompt('which displays the poll results.');
-    if (type === 'string'){
-      console.log(`Poll results are ${this.answers.join(', ')}`);
-    }
-    else if (type === 'array'){
-      console.log(this.answers);
-    }
-  },
-};
+// const poll = {
+//   question: 'What is your favourite programming language?',
+//   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+//   // This generates [0, 0, 0, 0]. More in the next section 😃
+//   answers: new Array(4).fill(0),
+//   registerNewAnswer: function (){
+//     const answer = prompt(`${this.question}]\n ${this.options.join('\n')}`);
+//     if(Number(answer)){
+//       if (Number(answer) >= 0 && Number(answer) <= 3){
+//         this.answers[Number(answer)]++;
+//       }
+//     }
+//     this.displayResults();
+//   },
+//   displayResults: function (){
+//     const type = prompt('which displays the poll results.');
+//     if (type === 'string'){
+//       console.log(`Poll results are ${this.answers.join(', ')}`);
+//     }
+//     else if (type === 'array'){
+//       console.log(this.answers);
+//     }
+//   },
+// };
 
-const buttonAnswerPoll = document.querySelector('.poll');
-buttonAnswerPoll.addEventListener('click', poll.registerNewAnswer.bind(poll));
+// const buttonAnswerPoll = document.querySelector('.poll');
+// buttonAnswerPoll.addEventListener('click', poll.registerNewAnswer.bind(poll));
+// const obj =  {}
+// let passengerCount = 10;
+// const secureBooking = function(obj){
+//   let passengerCount = 0;
+//   function abc(obj){
+//     obj.test+=1;
+//   }
+//   return function(){
+//     abc(obj);
+//     passengerCount++;
+//     console.log(`${passengerCount} passengers`);
+//     console.log(obj.test);
+//   }
 
+// }
+
+// const booker = secureBooking({test:1});
+// booker();
+// booker();
+// booker();
+
+// console.dir(booker);
+
+
+
+
+// let f;
+
+// const g = function(){
+//   let a = 23;
+//   f = function(){
+//     a++;
+//     console.log(a*2);
+//   }
+// }
+
+
+// g();
+// f();
+// f();
+
+// const x = 5;
+
+// (function(){
+//   const header = document.querySelector('h1');
+//   header.style.color = 'red';
+//   const body = document.querySelector('body');
+//   body.addEventListener('click', function(){
+//     header.style.color = 'blue';
+//     console.log(x);
+//   });
+// })();
+
+
+function outer() {
+  let outerVariable = 'I am from outer function';
+  let x = 5;
+  function inner() {
+    console.log(outerVariable); // Has access to outerVariable
+    x+=1;
+    console.log(x);
+  }
+
+  return inner;
+}
+
+const innerFunction = outer(); 
+innerFunction(); // Logs: "I am from outer function"
+innerFunction(); // Logs: "I am from outer function"
+innerFunction(); // Logs: "I am from outer function"
 

@@ -56,6 +56,7 @@
   - [Call](#call)
   - [Apply](#apply)
   - [bind](#bind)
+- [Closure](#closure)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -616,4 +617,9 @@ Nullish value is `null` and `undefined`
 ```js
   bind(thisArg, arg1, ..., argN)
 ```
+
+ # Closure
+
+![#Closure](./image/closures.png)
+![#Closure_Summary](./image/clusure_summary.png)
 

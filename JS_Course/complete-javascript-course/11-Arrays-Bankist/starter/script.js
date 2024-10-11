@@ -74,12 +74,22 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
-let count = 0;
-movements.forEach((mov) =>{
-  if(mov > 0){
-    count += 1;
-    console.log(`You deposited ${mov}`);
-  }
-})
+// let count = 0;
+// movements.forEach((mov) =>{
+//   if(mov > 0){
+//     count += 1;
+//     console.log(`You deposited ${mov}`);
+//   }
+// })
 
-console.log(count);
+// console.log(count);
+
+
+// currencies.forEach((value,key, map) => {
+//   console.log(`${key}: ${value}`);
+//   console.log(map);
+// })
+
+
+
+console.log(currencies.get('USD'));

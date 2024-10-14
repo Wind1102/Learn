@@ -57,6 +57,7 @@
   - [Apply](#apply)
   - [bind](#bind)
 - [Closure](#closure)
+- [Data transform with map, filter and reduce](#data-transform-with-map-filter-and-reduce)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -622,4 +623,17 @@ Nullish value is `null` and `undefined`
 
 ![#Closure](./image/closures.png)
 ![#Closure_Summary](./image/clusure_summary.png)
+
+# Data transform with map, filter and reduce
+![#Map_Filter_Reduce](./image/Map_filter_reduce.png)
+```js
+    const arr  = [1,2,3,4,5];
+    const newArr = arr.map((val, i) => val*2)
+    const filterArr = arr.filter(val => val>1);
+    const reduceArr = arr.reduce((acc,val) => acc*val,1);
+    console.log(reduceArr); //120
+    console.log(filterArr); //[2,3,4,5]
+    console.log(arr); //[1,2,3,4,5]
+    console.log(newArr); //[2,4,6,8,10]
+```
 

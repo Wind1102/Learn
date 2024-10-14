@@ -251,3 +251,55 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+
+
+
+const future = new Date(2037,10,19,15,23);
+console.log(+future);
+
+const calcDaysPassed = (date1, date2) => (date1 - date2);
+
+const x = calcDaysPassed(new Date(2037,3,14), new Date(2037,3,4,10));
+console.log(x);
+
+
+const now = new Date()
+console.log(now);
+
+const options = {
+  hour : 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: '2-digit',
+  year: 'numeric',
+  weekday:'long'
+}
+const nowformat = Intl.DateTimeFormat('en-US', options).format(now);
+console.log(nowformat);
+
+// setTimeout(() => console.log("hello"),1000)
+// setInterval(()=> console.log(new Date()), 1000) 
+
+const startLogOutTimer = function(){
+  let time = 100;
+  setInterval(function(){
+    const min = String(Math.trunc(time/60)).padStart(2,0);
+    const second = time % 60;
+    labelTimer.textContent = `${min}:${second}`;
+    time -= 1;
+  },1000);
+  
+}
+
+startLogOutTimer()
+
+
+const add = function(){
+  let x = 0;
+  setInterval(function(){
+    x+= 1;
+    console.log(x);
+  },1000);
+}
+add();

@@ -57,6 +57,7 @@
   - [Apply](#apply)
   - [bind](#bind)
 - [Closure](#closure)
+- [find methods](#find-methods)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -623,3 +624,6 @@ Nullish value is `null` and `undefined`
 ![#Closure](./image/closures.png)
 ![#Closure_Summary](./image/clusure_summary.png)
 
+
+
+# find methods 

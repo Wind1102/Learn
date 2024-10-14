@@ -73,23 +73,55 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-/////////////////////////////////////////////////
-// let count = 0;
-// movements.forEach((mov) =>{
-//   if(mov > 0){
-//     count += 1;
-//     console.log(`You deposited ${mov}`);
-//   }
-// })
+containerApp.style.opacity = 1;
+ 
 
-// console.log(count);
+// Credentails
 
-
-// currencies.forEach((value,key, map) => {
-//   console.log(`${key}: ${value}`);
-//   console.log(map);
-// })
+// btnLogin.addEventListener('click', ev => {
+//   const userName = inputLoginUsername.textContent;
+//   console.log(userName);
+// });
 
 
 
-console.log(currencies.get('USD'));
+// Display Movements 
+
+const displayMovemetns = function(movements){
+  containerMovements.innerHTML = "";
+  movements.forEach((mov,i) => {
+      let date = new Date();
+      const type = mov>0?"deposit":"withdrawal"
+      const html = `
+          <div class="movements__row">
+            <div class="movements__type movements__type--${type}">${i+1} withdrawal</div>
+            <div class="movements__date">${date.toString().slice(8,25)}</div>
+            <div class="movements__value">${mov}</div>
+          </div>
+        `
+
+      containerMovements.insertAdjacentHTML("afterbegin",html);
+  });
+}
+
+displayMovemetns(account1.movements)
+
+
+const checkDogs = function(dogsJulia, dogsKate){
+  const dogJuliaCorrect = dogsJulia.slice(1,-2);
+  const dogKateCorrect = dogsKate.slice();
+  return [...dogJuliaCorrect,...dogKateCorrect];
+}
+const allDogCorrect = checkDogs([3,5,2,12,7],[4,1,15,8,3]);
+allDogCorrect.forEach((dog, i) => {
+  console.log(`Dog number ${i+1} is ${dog>=3?"an adult":"a puppy"}`);
+})
+
+const arr  = [1,2,3,4,5];
+const newArr = arr.map((val, i) => val*2)
+const filterArr = arr.filter(val => val>1);
+const reduceArr = arr.reduce((acc,val) => acc*val,1);
+console.log(reduceArr); //120
+console.log(filterArr); //[2,3,4,5]
+console.log(arr); //[1,2,3,4,5]
+console.log(newArr); //[2,4,6,8,10]

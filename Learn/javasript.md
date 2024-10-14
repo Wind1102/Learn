@@ -58,6 +58,7 @@
   - [bind](#bind)
 - [Closure](#closure)
 - [Data transform with map, filter and reduce](#data-transform-with-map-filter-and-reduce)
+- [find methods](#find-methods)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -637,3 +638,5 @@ Nullish value is `null` and `undefined`
     console.log(newArr); //[2,4,6,8,10]
 ```
 
+
+# find methods 

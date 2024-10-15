@@ -74,10 +74,8 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 containerApp.style.opacity = 1;
- 
 
 // Credentails
-
 
 // btnLogin.addEventListener('click', ev => {
 //   const userName = inputLoginUsername.textContent;
@@ -87,7 +85,6 @@ containerApp.style.opacity = 1;
 //   console.log(`${key}: ${value}`);
 //   console.log(map);
 // })
-
 
 // containerApp.style.opacity = 1;
 
@@ -196,54 +193,55 @@ disPlaySummary(account1);
 
 let currentAccount;
 
-const updateUI = function(currentAccount){
-    disPlaySummary(currentAccount);
-    displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-}
+const updateUI = function (currentAccount) {
+  disPlaySummary(currentAccount);
+  displayMovements(currentAccount.movements);
+  calcDisplayBalance(currentAccount.movements);
+};
 
+// Display Movements
 
-// Display Movements 
+const displayMovemetns = function (movements, sort = false) {
+  containerMovements.innerHTML = '';
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
-const displayMovemetns = function(movements){
-  containerMovements.innerHTML = "";
-  movements.forEach((mov,i) => {
-      let date = new Date();
-      const type = mov>0?"deposit":"withdrawal"
-      const html = `
+  movs.forEach((mov, i) => {
+    let date = new Date();
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
           <div class="movements__row">
-            <div class="movements__type movements__type--${type}">${i+1} withdrawal</div>
-            <div class="movements__date">${date.toString().slice(8,25)}</div>
+            <div class="movements__type movements__type--${type}">${
+      i + 1
+    } withdrawal</div>
+            <div class="movements__date">${date.toString().slice(8, 25)}</div>
             <div class="movements__value">${mov}</div>
           </div>
-        `
+        `;
 
-      containerMovements.insertAdjacentHTML("afterbegin",html);
+    containerMovements.insertAdjacentHTML('afterbegin', html);
   });
-}
+};
 
-displayMovemetns(account1.movements)
+displayMovemetns(account1.movements);
 
-
-const checkDogs = function(dogsJulia, dogsKate){
-  const dogJuliaCorrect = dogsJulia.slice(1,-2);
+const checkDogs = function (dogsJulia, dogsKate) {
+  const dogJuliaCorrect = dogsJulia.slice(1, -2);
   const dogKateCorrect = dogsKate.slice();
-  return [...dogJuliaCorrect,...dogKateCorrect];
-}
-const allDogCorrect = checkDogs([3,5,2,12,7],[4,1,15,8,3]);
+  return [...dogJuliaCorrect, ...dogKateCorrect];
+};
+const allDogCorrect = checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 allDogCorrect.forEach((dog, i) => {
-  console.log(`Dog number ${i+1} is ${dog>=3?"an adult":"a puppy"}`);
-})
+  console.log(`Dog number ${i + 1} is ${dog >= 3 ? 'an adult' : 'a puppy'}`);
+});
 
-const arr  = [1,2,3,4,5];
-const newArr = arr.map((val, i) => val*2)
-const filterArr = arr.filter(val => val>1);
-const reduceArr = arr.reduce((acc,val) => acc*val,1);
+const arr = [1, 2, 3, 4, 5];
+const newArr = arr.map((val, i) => val * 2);
+const filterArr = arr.filter(val => val > 1);
+const reduceArr = arr.reduce((acc, val) => acc * val, 1);
 console.log(reduceArr); //120
 console.log(filterArr); //[2,3,4,5]
 console.log(arr); //[1,2,3,4,5]
 console.log(newArr); //[2,4,6,8,10]
-
 
 btnLogin.addEventListener('click', function (ev) {
   ev.preventDefault();
@@ -256,7 +254,7 @@ btnLogin.addEventListener('click', function (ev) {
       currentAccount.owner.split(' ')[0]
     }`;
     updateUI(currentAccount);
-    // containerApp.style.opacity = 1;
+    containerApp.style.opacity = 1;
     console.log(inputLoginUsername.textContent);
     console.log(inputLoginUsername.value);
     inputLoginUsername.value = '';
@@ -270,10 +268,10 @@ const transferMoney = function (currentAccount, accountTo, amount) {
     (acc, cur) => acc + cur,
     0
   );
-  if (balanceCurAccount >= amount){
+  if (balanceCurAccount >= amount) {
     currentAccount.movements.push(-amount);
     accountTo.movements.push(amount);
-  }else{
+  } else {
     alert("you don't have enough money to transfer");
   }
 };
@@ -293,14 +291,127 @@ btnTransfer.addEventListener('click', function (ev) {
   }
 });
 
-btnClose.addEventListener('click', function(ev){
+btnClose.addEventListener('click', function (ev) {
   ev.preventDefault();
-  if(inputCloseUsername.value === currentAccount.username 
-    && Number(inputClosePin.value) === currentAccount.pin
-  ){
-    const indexAccount = accounts.findIndex((acc)=> acc.username === currentAccount.username)
-    accounts.splice(indexAccount,1);
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const indexAccount = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(indexAccount, 1);
     containerApp.style.opacity = 0;
   }
-})
+});
 
+// console.log(movements)
+// console.log(movements.includes(-130));
+
+// console.log(movements.some((mov)=> mov > 3100));
+
+// console.log(movements.every((mov)=> mov > -5000));
+
+// const arr1 = [[1,[2,3]],[4,5,6],[7,8,9],10,11];
+// console.log(arr1.flat(2));
+// console.log(movements.flatMap((val) => [val,val * 2]));
+
+// const allMovements = accounts.map((acc) => acc.movements);
+
+// const allMov = allMovements.flat();
+// console.log(allMov);
+
+// const allMov2 = accounts.flatMap((acc) => acc.movements);
+
+// const sortMovement = function(movements){
+//   movements.sort((a,b) => a-b);
+// };
+
+let sorted = false;
+btnSort.addEventListener('click', function (ev) {
+  // ev.preventDefault();
+  displayMovemetns(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+// const x = new Array(7);
+// x.fill(1,3,5);  //[empty x 3, 1, 1, empty x 2]
+
+// const y = Array.from({length: 7}, () => 1);
+// console.log(y); //[1,1,1,1,1,1,1]
+
+// const movmentsRow = Array.from(document.querySelectorAll('.movements__value'), el => el.textContent.replace('€',''));
+// console.log(movmentsRow);   //["200", "450", "-400", "3000", "-650", "-130", "70", "1300"]
+
+// const dogs = [
+//   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+//   { weight: 8, curFood: 200, owners: ['Matilda'] },
+//   { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+//   { weight: 32, curFood: 340, owners: ['Michael'] }
+// ];
+
+// dogs.forEach((dog)=>{
+//   const recommendFood = dog.weight**0.75*28;
+//   dog.recFood = Math.round(recommendFood);
+// })
+
+// console.log(dogs)
+
+// const findDog = function(owner,dogs){
+//   dogs.forEach((dog)=> {
+//     if(dog.owners.includes(owner)){
+//       const result = dog.curFood>dog.recFood?`too much`:`too little`;
+//       console.log(result);
+//     }
+//   });
+// };
+
+// const ownerDogEat = function(dogs){
+//   const ownerDogEatMuch = [];
+//   const ownerDogEatLittle = [];
+//   dogs.forEach((dog)=>{
+//     dog.curFood> dog.recFood?ownerDogEatMuch.push(dog.owners):ownerDogEatLittle.push(dog.owners);
+//   })
+//   return [ownerDogEatMuch.flat(),ownerDogEatLittle.flat()];
+// }
+// findDog('Sarah',dogs);
+// const [eatMuch,eatLittle] = ownerDogEat(dogs);
+// console.log(eatMuch,eatLittle);
+
+// console.log(`${eatLittle.join(' and ')}'s dogs eat too little!`)
+
+// const dogEatOkay = [];
+
+// console.log(dogs.some((dog)=>dog.curFood === dog.recFood))
+// console.log(dogs.some((dog) => {
+//     const eatOkay = dog.curFood < dog.recFood *1.1 && dog.curFood > dog.recFood*0.9;
+//     eatOkay?dogEatOkay.push(dog):null
+// }))
+// console.log(dogEatOkay);
+
+// const sortDogs = dogs.slice().sort((dog1,dog2) => dog1.recFood - dog2.recFood);
+// console.log(sortDogs);
+
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(val => val > 0)
+  .reduce((acc, cur) => acc + cur, 0);
+console.log(bankDepositSum);
+
+const numDeposit1000 = accounts
+  .flatMap(acc => acc.movements)
+  .filter(val => val >= 1000).length;
+
+console.log(numDeposit1000);
+
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      // cur > 0 ? (sums.deposite += cur) : (sums.withdrawal += cur);
+      sums[cur>0?'deposite':'withdrawal'] += cur;
+      return sums;
+    },
+    { deposite: 0, withdrawal: 0 }
+  );
+console.log(sums);

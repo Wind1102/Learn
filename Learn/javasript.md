@@ -32,7 +32,7 @@
   - [Functions Declarations and Expression](#functions-declarations-and-expression)
   - [Arrow function](#arrow-function)
   - [regular function and arrow function](#regular-function-and-arrow-function)
-  - [Arrays](#arrays)
+- [Arrays](#arrays)
   - [Arrays methods](#arrays-methods)
 - [Object](#object)
   - [Object method](#object-method)
@@ -58,7 +58,10 @@
   - [bind](#bind)
 - [Closure](#closure)
 - [Data transform with map, filter and reduce](#data-transform-with-map-filter-and-reduce)
-- [find methods](#find-methods)
+- [find,findIndex, some, every, flat methods](#findfindindex-some-every-flat-methods)
+- [Constructor Array](#constructor-array)
+- [Math, BigInt](#math-bigint)
+- [Date](#date)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -266,8 +269,8 @@ const age2 = calcAge2(1991);
 - arrow function don't have parameter `arguments`
 
 
-## Arrays
-
+# Arrays
+![#Array Method](./image/array_method.png)
 - declare and access to arrays
 
 ```js
@@ -638,5 +641,72 @@ Nullish value is `null` and `undefined`
     console.log(newArr); //[2,4,6,8,10]
 ```
 
+# find,findIndex, some, every, flat methods 
 
-# find methods 
+```js
+  const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+
+  console.log(movements.find((mov) => mov === 450)); // 450
+  console.log(movements.find((mov) => mov === 3100)); // undefined
+  console.log(movements.findIndex((mov) => mov === 450)); //1
+  console.log(movements.findIndex((mov) => mov === 3100)); // -1
+  console.log(movements.some((mov)=> mov > 3100)); // false
+  console.log(movements.some((mov)=> mov > 0));  //true
+  console.log(movements.every((mov)=> mov > -5000)); //true
+  console.log(movements.every((mov)=> mov > 0)); //false
+
+  const arr = [1,2,3,[4,5],[6,7,[8,9]], 10];
+  console.log(arr.flat(1));// [1,2,3,4,5,6,7,[8,9],10];
+  console.log(arr.flat(2)); // [1,2,3,4,5,6,7,8,9,10];
+  console.log(movements.flatMap((val) => [val,val * 2])); // [200,400,450,900,-400,-800,3000,6000,-650,-1300,-130,-260,70,140,1300,2600];
+  // flatMap <=> map + flat (one level);
+
+```
+
+# Constructor Array 
+```js 
+  const x = new Array(7);
+  x.fill(1,3,5);  //[empty x 3, 1, 1, empty x 2]
+
+  const y = Array.from({length: 7}, () => 1);
+  console.log(y); //[1,1,1,1,1,1,1]
+
+  const movmentsRow = Array.from(document.querySelectorAll('.movements__value'), el => el.textContent.replace('€',''));
+  console.log(movmentsRow);   //["200", "450", "-400", "3000", "-650", "-130", "70", "1300"]
+```
+
+
+# Math, BigInt
+
+```js
+  Math.round();  //  Returns a supplied numeric expression rounded to the nearest integer.
+  Math.floor(); // Returns the greatest integer less than or equal to its numeric argument
+  Math.trunc(); //Returns the integral part of the a numeric expression, x, removing any fractional digits. If x is already an integer, the result is x.
+  Math.ceil();  // Returns the smallest integer greater than or equal to its numeric argument.
+const y = Math.ceil()
+  const n = 1231n; // bigint
+  const m =  BigInt(3); //3n
+  const t =  BigInt(3.7); // 3n
+
+```
+
+# Date
+
+```js
+  const future = new Date(2037, 10, 19, 15, 23);
+  console.log(future);
+  console.log(future.getFullYear());  //20237
+  console.log(future.getMonth());   //10
+  console.log(future.getDate());  //19
+  console.log(future.getDay()); //4
+  console.log(future.getHours());  //15
+  console.log(future.getMinutes());//23
+  console.log(future.getSeconds()); //0
+  console.log(future.toISOString());
+  console.log(future.getTime());
+  console.log(new Date(2142256980000));
+  console.log(Date.now());
+  future.setFullYear(2040);
+  console.log(future);
+```

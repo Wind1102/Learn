@@ -62,6 +62,9 @@
 - [Constructor Array](#constructor-array)
 - [Math, BigInt](#math-bigint)
 - [Date](#date)
+- [find methods](#find-methods)
+  - [Format with Intl(Internationalization API)](#format-with-intlinternationalization-api)
+- [Timer: setTimeout and setInterval](#timer-settimeout-and-setinterval)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -710,3 +713,37 @@ const y = Math.ceil()
   future.setFullYear(2040);
   console.log(future);
 ```
+
+# find methods 
+
+
+
+
+
+
+
+
+## Format with Intl(Internationalization API)
+```js
+  const now = new Date()
+  console.log(now);  // Mon Oct 14 2024 22:05:17 GMT+0700 (Indochina Time)
+  const nowformat = Intl.DateTimeFormat('en-US').format(now);
+  // can use options
+  const nowformat = Intl.DateTimeFormat('en-US').format(now);
+  const options = {
+      hour : 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      weekday:'long'
+  }
+
+  console.log(nowformat);  //10/14/2024
+```
+
+
+# Timer: setTimeout and setInterval
+
+
+

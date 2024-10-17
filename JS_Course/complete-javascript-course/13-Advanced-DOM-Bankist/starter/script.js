@@ -39,15 +39,14 @@ message.classList.add('cookie-message');
 message.innerHTML =
   'we use cookied for improved functionality and analytics. <button class = "btn btn--close-cookie">Got it!</button>';
 
-const header = document.querySelector('.header')
+const header = document.querySelector('.header');
 header.append(message);
 
-
 const gotIT = document.querySelector('.btn--close-cookie');
-gotIT.addEventListener('click', (ev)=> {
+gotIT.addEventListener('click', ev => {
   message.remove();
   console.log(header);
-})
+});
 
 console.log(header);
 
@@ -64,21 +63,33 @@ console.log(header);
 // console.log(logo.className);
 // console.log(logo.dataset.versionNumber)
 
-
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const section2 = document.querySelector('#section--2');
 
-btnScrollTo.addEventListener('click',(ev)=>{
-  const s1coords = section1.getBoundingClientRect();
-  const s2coords = section2.getBoundingClientRect();
-  console.log(s1coords);
-  console.log(s2coords);
-  // window.scrollTo(s1coords.left + window.scrollX,s1coords.top + window.scrollY);
-  console.log(s2coords.top - s1coords.top);
-  // console.log(window.scrollX, window.scrollY);
-console.log(btnScrollTo.clientWidth, btnScrollTo.clientHeight);
+btnScrollTo.addEventListener('click', ev => {
+  // const s1coords = section1.getBoundingClientRect();
+
+  // window.scrollTo({
+  //   left: s1coords.left + window.scrollX,
+  //   top: s1coords.top + window.scrollY,
+  //   behavior: 'smooth',
+  // });
+  section1.scrollIntoView({behavior:'smooth'});
+});
 
 
+const h1 = document.querySelector('h1');
+h1.addEventListener('mouseenter', function(ev){
+  h1.style.backgroundColor = 'blue';
+  // section1.scrollIntoView({behavior:'smooth'});
 })
 
+h1.removeEventListener('mouseenter',(ev)=>{
+  h1.style.backgroundColor = 'blue';
+})
+
+
+
+const headerTitle = document.querySelector('.header_title')
+headerTitle.addEventListener('')

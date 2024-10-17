@@ -64,6 +64,7 @@
 - [Date](#date)
   - [Format with Intl(Internationalization API)](#format-with-intlinternationalization-api)
 - [Timer: setTimeout and setInterval](#timer-settimeout-and-setinterval)
+- [Type of Events and Event Handlers](#type-of-events-and-event-handlers)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -738,4 +739,6 @@ const y = Math.ceil()
 # Timer: setTimeout and setInterval
 
 
+
+# Type of Events and Event Handlers
 

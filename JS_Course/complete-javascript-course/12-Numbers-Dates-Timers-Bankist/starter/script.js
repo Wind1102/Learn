@@ -342,3 +342,4 @@ const add = function(){
 }
 add();
 
+document

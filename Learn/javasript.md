@@ -62,7 +62,6 @@
 - [Constructor Array](#constructor-array)
 - [Math, BigInt](#math-bigint)
 - [Date](#date)
-- [find methods](#find-methods)
   - [Format with Intl(Internationalization API)](#format-with-intlinternationalization-api)
 - [Timer: setTimeout and setInterval](#timer-settimeout-and-setinterval)
 
@@ -713,13 +712,6 @@ const y = Math.ceil()
   future.setFullYear(2040);
   console.log(future);
 ```
-
-# find methods 
-
-
-
-
-
 
 
 

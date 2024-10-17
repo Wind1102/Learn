@@ -41,4 +41,44 @@ message.innerHTML =
 
 const header = document.querySelector('.header')
 header.append(message);
-header.prepend(message.cloneNode(true));
+
+
+const gotIT = document.querySelector('.btn--close-cookie');
+gotIT.addEventListener('click', (ev)=> {
+  message.remove();
+  console.log(header);
+})
+
+console.log(header);
+
+// document.documentElement.style.setProperty()
+
+// const logo = document.querySelector('.nav__logo');
+// // console.log(logo.alt)
+// // console.log(logo.src);
+// // console.log(logo);
+// logo.classList.toggle('test')
+// console.log(logo.className);
+
+// console.log(logo.classList.contains('tes'));
+// console.log(logo.className);
+// console.log(logo.dataset.versionNumber)
+
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+const section2 = document.querySelector('#section--2');
+
+btnScrollTo.addEventListener('click',(ev)=>{
+  const s1coords = section1.getBoundingClientRect();
+  const s2coords = section2.getBoundingClientRect();
+  console.log(s1coords);
+  console.log(s2coords);
+  // window.scrollTo(s1coords.left + window.scrollX,s1coords.top + window.scrollY);
+  console.log(s2coords.top - s1coords.top);
+  // console.log(window.scrollX, window.scrollY);
+console.log(btnScrollTo.clientWidth, btnScrollTo.clientHeight);
+
+
+})
+

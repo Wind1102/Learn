@@ -64,7 +64,8 @@
 - [Date](#date)
   - [Format with Intl(Internationalization API)](#format-with-intlinternationalization-api)
 - [Timer: setTimeout and setInterval](#timer-settimeout-and-setinterval)
-- [Type of Events and Event Handlers](#type-of-events-and-event-handlers)
+- [Type of Events and Event Handlers: Event.preventDefault(), Events.stopPropagation](#type-of-events-and-event-handlers-eventpreventdefault-eventsstoppropagation)
+- [Event Delegation](#event-delegation)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -737,8 +738,38 @@ const y = Math.ceil()
 
 
 # Timer: setTimeout and setInterval
+- setTimeout() -> execute funtion after time (one time )
+- setInterval() -> execute funtion after every time (many time)
+
+
+# Type of Events and Event Handlers: Event.preventDefault(), Events.stopPropagation
+
+- ev.preventDefault() -> prevent action default of browse (example : click a link but not redirect to the link)
+- ev.stopPropagation() -> prevent bubling
+- Event propagation: bubling and capturing,capturing: root element -> target element, bubling: target element -> root element, but e.target is the same.
+```js
+  const h1 = document.querySelector('h1');
+  h1.addEventListener('click', function(ev){
+  this.style.backgroundColor = 'blue';
+
+    console.log(ev.target,ev.currentTarget);
+    // ev.currentTarget is h1
+  })
 
 
 
-# Type of Events and Event Handlers
+  const headerTitle = document.querySelector('.header__title')
+  headerTitle.addEventListener('click',function(ev){
+    this.style.backgroundColor = 'red';
+    console.log(ev.target,ev.currentTarget);
+  })
+  //ev.currentTarget is headerTitle
+
+// ev.target is the same. but ev.currentTarget is not same, 
+
+
+
+```
+# Event Delegation
+
 

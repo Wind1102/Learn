@@ -68,6 +68,12 @@
 - [Event Delegation (implement page navigation)](#event-delegation-implement-page-navigation)
 - [Dom Traversing](#dom-traversing)
 - [Passing arguments to Event Handler](#passing-arguments-to-event-handler)
+- [Defer and Async Script Loading](#defer-and-async-script-loading)
+- [OOP in JS](#oop-in-js)
+  - [ES6 Classes](#es6-classes)
+  - [Getter and Setter](#getter-and-setter)
+  - [Static Method](#static-method)
+  - [Object.create()](#objectcreate)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -822,6 +828,151 @@ Examples: nextSibling, previousSibling, nextElementSibling, previousElementSibli
 - querySelector and querySelectorAll: Select elements based on CSS selectors. 
 
 # Passing arguments to Event Handler
+```js
+  const handleEvent = function (ev) {
+    if (ev.target.classList.contains('nav__link')) {
+      const link = ev.target;
+      const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+      const logo = link.closest('.nav').querySelector('img');
+      siblings.forEach(el => {
+        if (el != link) {
+          el.style.opacity = this;
+        }
+      });
+      logo.style.opacity = this;
+    }
+  };
+
+  nav.addEventListener('mouseover', handleEvent.bind(0.3));
+  nav.addEventListener('mouseout', handleEvent.bind(1));
+```
+# Defer and Async Script Loading
+
+![#Defer and Async Script Loading](./image/async_defer_jsfile.png)
+![#Regular and Defer and Async](./image/regular_async_defer.png)
+
+
+# OOP in JS 
+- four fundamental principles of object oriented Programming
+  - Abstraction: Ignoring or hiding details that don't matter, allowing us to get an overview perspective of the thing we're implementing, instead of messing with the details that don't really matter to our implementation.
+  - Encapsulation: Keepong properties and methods private inside the class, so they are not accessible from outside from the class. Some methods can be exposed as a public interface(API)
+  - Inheritance: Making all properties and methods of a certain class avaiable to a child class, forming a hierarchical relationship between classes. This allow us to reuse common logic and to model real-world relationships. 
+  - Polymorphism: A child class can overwrite a method it inherited from a parent class.
+  ![#OOP in JS: Prototypes](./image/JS_OOP_prototype.png)
+
+```js 
+      'use strict';
+
+  const Person = function(firstName, birthYear){
+      console.log(this);
+      this.name = firstName;
+      this.birthYear = birthYear;
+  }   
+
+  const jonas = new Person('Jonas', 1991);
+  // 1. new {} is created
+  // 2. function is called, this = {}
+  // 3. {} linked to prototype 
+  // 4. function automatically return {} 
+```
+
+
+![# Prototypal Inheritance/Delegation](./image/prototypal_inheritance_delegation.png)
+![# Prototype chain](./image/prototype_chain.png)
+
+## ES6 Classes
+```js
+  class PersonCl {
+    constructor(firstName, birthYear){
+        this.firstName = firstName;
+        this.birthYear = birthYear;
+    }
+
+    calcAge(){
+        console.log(2024 - this.birthYear);
+    }
+}
+
+```
+## Getter and Setter
+
+```js 
+
+  class PersonCl {
+    constructor(fullName, birthYear){
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+    }
+    set fullName(name){
+        if(name !== 'Minh Hieu') alert('Not is MH')
+        this._fullName = name;
+    }
+
+    get fullName(){
+        return this._fullName
+    }
+
+    calcAge(){
+        console.log(2024 - this.birthYear);
+    }
+
+  }
+
+  const MH = new PersonCl('Minh Hieu', 2002);
+  console.log(MH.fullName);
+
+```
+
+
+## Static Method
+
+```js
+  class PersonCl {
+    constructor(fullName, birthYear){
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+    }
+    static sayHi(){
+        console.log("hi");
+    }
+}
+
+const MH = new PersonCl('Minh Hieu', 2002);
+console.log(MH.sayHi);
+console.log(PersonCl.sayHi());
+```
+
+
+## Object.create()
+
+```js
+  const PersonProto = {
+    name: "MHieu",
+    calcAge: function(){
+      return 2024 - this.birthYear;
+    }
+  }
+  const steven = Object.create(PersonProto);
+  steven.birthYear = 2002;
+  console.log(steven.__proto__);
+
+```
+
+-> create a object have prototype is the object passed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -65,7 +65,9 @@
   - [Format with Intl(Internationalization API)](#format-with-intlinternationalization-api)
 - [Timer: setTimeout and setInterval](#timer-settimeout-and-setinterval)
 - [Type of Events and Event Handlers: Event.preventDefault(), Events.stopPropagation](#type-of-events-and-event-handlers-eventpreventdefault-eventsstoppropagation)
-- [Event Delegation](#event-delegation)
+- [Event Delegation (implement page navigation)](#event-delegation-implement-page-navigation)
+- [Dom Traversing](#dom-traversing)
+- [Passing arguments to Event Handler](#passing-arguments-to-event-handler)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -770,6 +772,56 @@ const y = Math.ceil()
 
 
 ```
-# Event Delegation
+# Event Delegation (implement page navigation)
+```js
+
+tabsContainer.addEventListener('click', function(ev){
+  // if(ev.target.classList.contains('.operations__tab--1')){
+    
+  // }
+  const clicked = ev.target.closest('.operations__tab');
+  if(!clicked) return;
+
+  tab.forEach(t => {
+    t.classList.remove('operations__tab--active');
+  })
+  clicked.classList.add('operations__tab--active');
+  const tabActive = clicked.dataset.tab;
+  console.log(tabActive);
+  tabsContent.forEach(tabContent =>{
+    tabContent.classList.remove('operations__content--active');
+    if(tabContent.classList.contains(`operations__content--${tabActive}`)){
+      console.log('call');
+      tabContent.classList.add('operations__content--active');
+    }
+  });
+
+
+})
+
+```
+
+# Dom Traversing
+In DOM traversing, you can move in different directions:
+
+- Down the DOM tree (Child elements): Moving from a parent element to its children.
+
+Examples: firstChild, lastChild, children, querySelector
+- Up the DOM tree (Parent elements): Moving from a child element to its parent.
+
+Examples: parentNode, closest
+- Sideways in the DOM tree (Sibling elements): Moving between elements that share the same parent.
+
+Examples: nextSibling, previousSibling, nextElementSibling, previousElementSibling
+- Common methods and properties used for DOM traversal include:
+
+- parentNode: Returns the parent of the selected node.
+- children: Returns a collection of child elements.
+- firstChild and lastChild: Returns the first and last child of the element.
+- nextSibling and previousSibling: Navigate to the next or previous sibling in the DOM.
+- querySelector and querySelectorAll: Select elements based on CSS selectors. 
+
+# Passing arguments to Event Handler
+
 
 

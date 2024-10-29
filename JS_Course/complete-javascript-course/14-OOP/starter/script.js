@@ -104,7 +104,8 @@ console.log(PersonProto.name)
 // Practice 2
 
 class car {
-    constructor(speed){
+    constructor(make,speed){
+        this.make = make;
         this.speed = speed;
     }
     accelerate(){
@@ -124,10 +125,10 @@ class car {
 }
 
 
-const ford = new car(50);
-// console.log(ford.speedUS);
-ford.speedUS = 50;
-console.log(ford.speed);
+// const ford = new car(50);
+// // console.log(ford.speedUS);
+// ford.speedUS = 50;
+// console.log(ford.speed);
 
 
 const student = function(firstName, birthYear){
@@ -146,3 +147,21 @@ student.prototype = Object.create(Person.prototype)
 console.log(student.prototype);
 const x = new student("hieu",2002);
 console.log(x.calcAge());
+
+
+const EV = function(make,speed,charge){
+    car.call(this,make,speed);
+    this.charge = charge;
+}
+
+
+EV.prototype.chargeBattery = function(chargeTo){
+    this.charge = chargeTo;
+} 
+
+EV.prototype.prototype.accelerate = function(chargeTo){
+    this.speed += 20;
+    this.charge = this.charge--;
+} 
+
+

@@ -62,9 +62,9 @@ class PersonCl {
     constructor(fullName, birthYear){
         this.fullName = fullName;
         this.birthYear = birthYear;
+        this.test = 1;
     }
     set fullName(name){
-        if(name !== 'Minh Hieu') alert('Not is MH')
         this._fullName = name;
     }
 
@@ -89,7 +89,7 @@ console.log(PersonCl.sayHi());
 const PersonProto = {
     name: "MHieu",
     calcAge: function(){
-    return 2024 - this.birthYear;
+    return 5;
     }
 }
 
@@ -155,13 +155,67 @@ const EV = function(make,speed,charge){
 }
 
 
-EV.prototype.chargeBattery = function(chargeTo){
-    this.charge = chargeTo;
-} 
+class StudentCl extends PersonCl {
+    constructor(fullName, birthYear, course){
+        super(fullName, birthYear);
+        this.course = course;
+    }
+}
 
-EV.prototype.prototype.accelerate = function(chargeTo){
-    this.speed += 20;
-    this.charge = this.charge--;
-} 
+const StudentProto = Object.create(PersonProto);
+const jay = Object.create(StudentProto);
 
 
+
+// jay.testObject()
+
+
+class Account {
+    // 1) Public fields (instances)
+    locale = navigator.language;
+  
+    // 2) Private fields (instances)
+    #movements = [];
+    #pin;
+  
+    constructor(owner, currency, pin) {
+      this.owner = owner;
+      this.currency = currency;
+      this.#pin = pin;
+  
+      // Protected property
+      // this._movements = [];
+      // this.locale = navigator.language;
+  
+      console.log(`Thanks for opening an account, ${owner}`);
+    }
+  
+    // 3) Public methods
+  
+    // Public interface
+    getMovements() {
+      return this.#movements;
+    }
+  
+    deposit(val) {
+      this.#movements.push(val);
+      return this;
+    }
+  
+    withdraw(val) {
+      this.deposit(-val);
+      return this;
+    }
+  
+    requestLoan(val) {
+      // if (this.#approveLoan(val)) {
+      if (this._approveLoan(val)) {
+        this.deposit(val);
+        console.log(`Loan approved`);
+        return this;
+      }
+    }
+}
+
+
+// console.log(Account.#movements);

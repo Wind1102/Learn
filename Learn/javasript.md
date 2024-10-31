@@ -74,6 +74,9 @@
   - [Getter and Setter](#getter-and-setter)
   - [Static Method](#static-method)
   - [Object.create()](#objectcreate)
+  - [Inheritance](#inheritance)
+  - [Encapsulation](#encapsulation)
+  - [Summary](#summary)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -960,11 +963,60 @@ console.log(PersonCl.sayHi());
 
 -> create a object have prototype is the object passed
 
+## Inheritance 
+
+```js
+  const EV = function(make,speed,charge){
+    car.call(this,make,speed);
+    this.charge = charge;
+  }
 
 
+  class StudentCl extends PersonCl {
+    constructor(fullName, birthYear, course){
+        super(fullName, birthYear);
+        this.course = course;
+    }
+  }
+
+  const StudentProto = Object.create(PersonProto);
+  const jay = Object.create(StudentProto);
+```
+
+## Encapsulation
+
+```js
+  class Account {
+    // 1) Public fields (instances)
+    locale = navigator.language;
+  
+    // 2) Private fields (instances)
+    #movements = [];
+    #pin;
+  
+    constructor(owner, currency, pin) {
+      this.owner = owner;
+      this.currency = currency;
+      this.#pin = pin;
+  
+      // Protected property
+      // this._movements = [];
+      // this.locale = navigator.language;
+  
+      console.log(`Thanks for opening an account, ${owner}`);
+    }
+  }
+
+```
+
+- Public field
+- private field
+- public method
+- private method
 
 
-
+## Summary
+![#Class Summary](./image/class_summary.png)
 
 
 

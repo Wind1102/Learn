@@ -77,6 +77,11 @@
   - [Inheritance](#inheritance)
   - [Encapsulation](#encapsulation)
   - [Summary](#summary)
+- [Asynchoronus](#asynchoronus)
+- [Promise](#promise)
+- [Chaining Promises](#chaining-promises)
+- [Promise, resolve, reject, then, catch, finally](#promise-resolve-reject-then-catch-finally)
+- [async, await, try-catch](#async-await-try-catch)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -1019,9 +1024,20 @@ console.log(PersonCl.sayHi());
 ![#Class Summary](./image/class_summary.png)
 
 
+# Asynchoronus
 
 
+# Promise
+- An object that is used as a placeholder for the future result of an asynchronous operation
 
+# Chaining Promises
+
+# Promise, resolve, reject, then, catch, finally
+- execute parallel promises -> Promises.all()
+- promise.allSettled -> return value although get reject in one promise
+- Promise.race() -> return one promise  // tac dung khi setTimeout if fetch response watse time
+- Promise.any() -> not accept reject , return one of them promise 
+# async, await, try-catch
 
 
 

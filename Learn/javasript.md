@@ -82,6 +82,8 @@
 - [Chaining Promises](#chaining-promises)
 - [Promise, resolve, reject, then, catch, finally](#promise-resolve-reject-then-catch-finally)
 - [async, await, try-catch](#async-await-try-catch)
+- [Module, Tooling and Functional](#module-tooling-and-functional)
+  - [import, export](#import-export)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -1041,6 +1043,25 @@ console.log(PersonCl.sayHi());
 
 
 
+# Module, Tooling and Functional
 
 
+## import, export
+- import, export is use in top of code
+- Named export and default export
+- while import from named export must use {} 
+```js 
+  //named export
+  export { shippingCost, addToCart, totalprice, totalQuantity };
 
+  // default export
+  export default shippingCost;
+  
+  // import from named export 
+  import { shippingCost }
+
+  // import from default export 
+  import shippingCost;
+
+  import * as .... from ...
+```

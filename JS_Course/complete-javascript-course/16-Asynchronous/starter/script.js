@@ -173,4 +173,18 @@ const get3Country = async function(...countries){
     console.log(data);
 }
 
-get3Country('vietnam','usa','germany')
+get3Country('vietnam','usa','germany');
+
+
+const loadAll = function(imgArr){
+    return new Promise((resolve,reject) => {
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.addEventListener('load', function(){
+            resolve(img);
+        })
+        img.addEventListener('error', function(){
+            reject(new Error('not found'))
+        })    
+    })
+}

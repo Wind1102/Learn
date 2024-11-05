@@ -84,6 +84,7 @@
 - [async, await, try-catch](#async-await-try-catch)
 - [Module, Tooling and Functional](#module-tooling-and-functional)
   - [import, export](#import-export)
+- [Confing Babel and Polyfilling](#confing-babel-and-polyfilling)
 
 # JavaScript Engine
 - JS Engine include `call stack` and `heap`
@@ -1065,3 +1066,6 @@ console.log(PersonCl.sayHi());
 
   import * as .... from ...
 ```
+
+
+# Confing Babel and Polyfilling

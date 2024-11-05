@@ -1,5 +1,5 @@
-9595
-110/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/script.js1730803233009349829 0
+9596
+110/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/script.js1730804554064588635 0
 113/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/package.json1730804060458538400 0
 142/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/color-convert/conversions.js1730797496650307681 0
 127/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/color-convert1730797496666307534 1
@@ -2830,7 +2830,7 @@
 163/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@swc/helpers/_/_class_check_private_static_access1730797496946304971 1
 159/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/lib/utils/names.js1730797499308283432 0
 150/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/lib/utils1730797499350283051 1
-116/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.html1730804087891853021 0
+116/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.html1730804210182196036 0
 144/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/lib1730797499357282987 1
 183/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/optimizer-htmlnano/node_modules/svgo/plugins/removeDoctype.js1730797499397282623 0
 226/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node/node_modules/node-linux-x64/include/node/openssl/archs/linux-aarch64/asm_avx2/providers/common/include/prov1730802058576477485 1
@@ -3883,7 +3883,7 @@
 141/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/events/lib/index.js1730797499382282759 0
 159/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/cjs/data-patch.cjs1730797499031285950 0
 126/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/browserslist1730797496951304926 1
-100/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter1730802550538250119 1
+100/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter1730804483687929664 1
 160/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/lib/utils/string.js1730797499337283169 0
 159/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/caniuse-lite/data/features/css-crisp-edges.js1730797497045304066 0
 119/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/clone1730797496912305282 1
@@ -4667,7 +4667,7 @@
 143/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/css-select/lib/esm/types.d.ts1730797496934305081 0
 164/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/csso/node_modules/css-tree/cjs/tokenizer/types.cjs1730797499086285450 0
 164/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/utils/test/input/sourcemap/no-sourcemap.js1730797499351283041 0
-111/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/index.html1730804129195317008 0
+111/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/index.html1730804537951439047 0
 144/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/runtime-js/lib/helpers1730797498253293039 1
 140/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/lmdb/util/RangeIterable.js1730797497140303198 0
 214/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node/node_modules/node-linux-x64/include/node/openssl/archs/VC-WIN32/asm_avx2/include/openssl/x509.h1730802058895476011 0
@@ -5232,9 +5232,9 @@
 157/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/runtime-service-worker/package.json1730797498149293986 0
 150/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node-addon-api/napi-inl.deprecated.h1730797496727306976 0
 131/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/leaflet/README.md1730796653447915509 0
-127/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.392f8d7f.js.map1730804087895853066 0
+127/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.392f8d7f.js.map1730804171854784822 0
 154/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/caniuse-lite/data/features/pdf-viewer.js1730797497343301345 0
-123/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.392f8d7f.js1730804087891853021 0
+123/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist/index.392f8d7f.js1730804171849784769 0
 157/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/core/src/TargetDescriptor.schema.js1730797499554281196 0
 164/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/css-select/node_modules/entities/lib/decode.js.map1730797499106285269 0
 138/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/lodash-es/_createFlow.js1730796662639424961 0
@@ -5633,6 +5633,7 @@
 134/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/env-paths/index.d.ts1730797496632307845 0
 236/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node/node_modules/node-linux-x64/include/node/openssl/archs/linux64-s390x/asm_avx2/providers/common/include/prov/der_rsa.h1730802058566477531 0
 153/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/optimizer-htmlnano/package.json1730797498896287180 0
+116/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/shoppingCart.js1730804483687929664 0
 188/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/optimizer-htmlnano/node_modules/css-tree/lib/common/TokenStream.js1730797499488281796 0
 217/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node/node_modules/node-linux-x64/include/node/openssl/archs/linux-elf/no-asm/include/openssl/opensslv.h1730802058679477009 0
 197/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/optimizer-htmlnano/node_modules/css-tree/lib/syntax/node/DeclarationList.js1730797499418282432 0
@@ -6011,7 +6012,7 @@
 221/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/node/node_modules/node-linux-x64/include/node/openssl/archs/darwin64-x86_64-cc/no-asm/include/openssl/cmp.h1730802058404478279 0
 166/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/runtime-js/src/helpers/worker/wasm-loader.js1730797498256293012 0
 176/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/css-select/node_modules/domutils/lib/esm/manipulation.d.ts.map1730797499212284305 0
-105/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist1730804087896853077 1
+105/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/dist1730804171854784822 1
 130/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/lodash-es/xor.js1730796662694422052 0
 170/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@parcel/runtime-js/lib/helpers/browser/preload-loader.js1730797498255293021 0
 166/home/ubuntu/Desktop/Learn/JS_Course/complete-javascript-course/17-Modern-JS-Modules-Tooling/starter/node_modules/@swc/helpers/_/_iterable_to_array_limit/package.json1730797497087303682 0

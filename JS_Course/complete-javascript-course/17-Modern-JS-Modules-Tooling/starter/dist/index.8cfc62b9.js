@@ -585,6 +585,16 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"6rimH":[function(require,module,exports) {
 var _lodashEs = require("lodash-es");
+// import './shoppingCart.js';
+// import { shippingCost, totalprice } from './shoppingCart.js';
+// import {
+//   totalQuantity,
+//   totalprice as price,
+// } from './shoppingCart.js';
+// console.log('Importing Module');
+// console.log(shippingCost);
+// addToCart('bread', 5);
+var _shoppingCartJs = require("./shoppingCart.js");
 const arr = [];
 const state = {
     cart: [
@@ -603,8 +613,11 @@ console.log("haha");
 console.log("haha");
 arr.push(1);
 console.log(arr);
+console.log("Test");
+//Importing module
+"use strict";
 
-},{"lodash-es":"bXNwz"}],"bXNwz":[function(require,module,exports) {
+},{"lodash-es":"bXNwz","./shoppingCart.js":"l6bJl"}],"bXNwz":[function(require,module,exports) {
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
@@ -4107,6 +4120,26 @@ var _isObjectLikeJsDefault = parcelHelpers.interopDefault(_isObjectLikeJs);
 }
 exports.default = baseIsSet;
 
-},{"./_getTag.js":"1kCom","./isObjectLike.js":"iad76","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["86oZd","6rimH"], "6rimH", "parcelRequire7e89")
+},{"./_getTag.js":"1kCom","./isObjectLike.js":"iad76","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l6bJl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "shippingCost", ()=>shippingCost);
+parcelHelpers.export(exports, "totalprice", ()=>totalprice);
+parcelHelpers.export(exports, "totalQuantity", ()=>totalQuantity);
+console.log("Exporting Module");
+const shippingCost = 10;
+const cart = [];
+const totalprice = 5;
+const totalQuantity = 100;
+const addToCart = function(product, quantity) {
+    cart.push({
+        product,
+        quantity
+    });
+    console.log(`${quantity} ${product} added to cart`);
+};
+exports.default = addToCart;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["86oZd","6rimH"], "6rimH", "parcelRequire7e89")
 
 //# sourceMappingURL=index.8cfc62b9.js.map

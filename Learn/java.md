@@ -38,6 +38,8 @@
     - [Relationships between Classes](#relationships-between-classes)
   - [Using Predefined Classes](#using-predefined-classes)
     - [Objects and Object Variables](#objects-and-object-variables)
+    - [Mutator and Accessor Method](#mutator-and-accessor-method)
+- [Defining Your Own Classesf](#defining-your-own-classesf)
 
 
 # DATA TYPES
@@ -116,17 +118,19 @@ When two values are combined with a binary operator (such as n + f where n is an
 
 ```java
    enum Size { SMALL, MEDIUM, LARGE, EXTRA_LARGE };
-   Size itemSize = . . .;
+   Size itemSize = Size.MEDIUM;
    String label = switch (itemSize)
    {
-      case SMALL -> "S"; // no need to use Size.SMALL
+      case SMALL -> "S"; // no need to use Size.SMALL 
       case MEDIUM -> "M";
       case LARGE -> "L";
       case EXTRA_LARGE -> "XL";
-   };
+      default ....
+   }; 
+   //label -> M
 
 ```
-- When selector is enum, don't have case for all  constants, => need a default
+- When selector is enum, don't have case for all constants, => need a default
 - if selector is `null` => add case `null` because default does not match `null` 
 
 # String 
@@ -256,6 +260,30 @@ The most common relationships between classes are
 ## Using Predefined Classes 
 ### Objects and Object Variables 
 - use `Constructors` to construct new instance. A constructor is a special method whose purpose is to construct and initialize objects.
+```java
+   startTime = new Date()  //Wed Nov 06 23:09:55 ICT 2024
+   // other class LocalDate is useful for human readable 
+   LocalDate newYearsEve = LocalDate.of(1999, 12, 31); // 1999-12-31
+```
+
+### Mutator and Accessor Method
+- Mutator method -> Object is change when invoke method
+- Accessor method -> Method that only access the object without modifying them
+
+# Defining Your Own Classesf
+The simple form for a class defination in Java is
+```java
+class ClassName {
+   field1
+   field2
+   constructor1
+   constructor2
+
+   method1
+   method2
+}
+
+```
 
 
 

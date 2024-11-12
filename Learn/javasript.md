@@ -84,6 +84,10 @@
 - [async, await, try-catch](#async-await-try-catch)
 - [Module, Tooling and Functional](#module-tooling-and-functional)
   - [import, export](#import-export)
+  - [Top-level await](#top-level-await)
+  - [The module parttern](#the-module-parttern)
+  - [CommonJS module](#commonjs-module)
+- [Use npm](#use-npm)
 - [Confing Babel and Polyfilling](#confing-babel-and-polyfilling)
 
 # JavaScript Engine
@@ -1066,6 +1070,42 @@ console.log(PersonCl.sayHi());
 
   import * as .... from ...
 ```
+
+## Top-level await 
+- allow use await in the top of module without having wrap it inside async function
+
+
+## The module parttern
+```js
+const shippingCost = (function(){
+  const cart = [];
+  const shipper = 10;
+
+  const addToCart = function(product, price){
+      cart.push(price);
+      console.log(`${product} have cost is ${price} `);
+  }
+
+  return {
+      cart, shipper, addToCart
+  }
+})();
+
+shippingCost.addToCart("KL", 10);
+
+console.log(shippingCost);
+```
+
+
+## CommonJS module
+- can search the difference module system (ES6 Module) and CommonJS module  
+
+# Use npm 
+
+- nmp init
+- npm install ...
+- bunding with parcel and npm script
+- 
 
 
 # Confing Babel and Polyfilling

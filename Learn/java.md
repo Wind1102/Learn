@@ -39,7 +39,7 @@
   - [Using Predefined Classes](#using-predefined-classes)
     - [Objects and Object Variables](#objects-and-object-variables)
     - [Mutator and Accessor Method](#mutator-and-accessor-method)
-- [Defining Your Own Classesf](#defining-your-own-classesf)
+- [Defining Your Own Classes](#defining-your-own-classes)
 
 
 # DATA TYPES
@@ -270,7 +270,7 @@ The most common relationships between classes are
 - Mutator method -> Object is change when invoke method
 - Accessor method -> Method that only access the object without modifying them
 
-# Defining Your Own Classesf
+# Defining Your Own Classes
 The simple form for a class defination in Java is
 ```java
 class ClassName {

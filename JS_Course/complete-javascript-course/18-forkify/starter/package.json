@@ -1,0 +1,16 @@
+{
+  "name": "forkity",
+  "version": "1.0.0",
+  "description": "Recipe application",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "author": "Minh Hieu",
+  "license": "ISC",
+  "dependencies": {
+    "parcel": "^2.13.0",
+    "sass": "^1.80.7"
+  }
+}

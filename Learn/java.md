@@ -83,6 +83,8 @@
     - [Polymorphism](#polymorphism)
     - [UnderStanding Method call](#understanding-method-call)
     - [Preventing Inheritace](#preventing-inheritace)
+    - [toString Method](#tostring-method)
+  - [Generic Array Lists](#generic-array-lists)
 
 
 # DATA TYPES
@@ -646,3 +648,19 @@ example
 
 ### Preventing Inheritace 
 if you don't want a class can be inherted, you can declare a class with `final` keyword
+
+
+### toString Method
+- Whenever an object is concatenated with a string by the + operator, Java compiler automatically invokes the toString method to obtain a string reperesentation of the object.
+
+
+## Generic Array Lists
+- ArrayList is a generic class with type parameter. To specify the type of ArrayList hold, put it in angle bracket 
+Ex:
+```java
+   ArrayList<Employee> emp = new ArrayList<Employee>(); // declare array with no fixed number element 
+   emp.ensureCapacity(100);  // -> set fixed element is 100
+   emp.add(new Emp(....));   // -> add Element to array
+   emp.size(); // return size 
+   emp.trimToSize() // fix number element of array is current number element of array
+```

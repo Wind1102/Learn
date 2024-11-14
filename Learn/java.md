@@ -83,8 +83,14 @@
     - [Polymorphism](#polymorphism)
     - [UnderStanding Method call](#understanding-method-call)
     - [Preventing Inheritace](#preventing-inheritace)
+    - [Casting](#casting)
+    - [Pattern Matching InstanceOf](#pattern-matching-instanceof)
+  - [The cosmic superclass](#the-cosmic-superclass)
+    - [Varialbe of type object](#varialbe-of-type-object)
+    - [The equals Method](#the-equals-method)
     - [toString Method](#tostring-method)
   - [Generic Array Lists](#generic-array-lists)
+
 
 
 # DATA TYPES
@@ -648,8 +654,44 @@ example
 
 ### Preventing Inheritace 
 if you don't want a class can be inherted, you can declare a class with `final` keyword
+### Casting 
+- is forcing convert from one type to another type
 
+- surround another type in parenthese
+Ex: 
+```java
+   double x = 3.456
+   int y = (int) x;
+   var staff = new Employee[3];
+   staff[0] = new Manager();
+   boss = (Manager) staff[0];
+```
 
+### Pattern Matching InstanceOf
+```java
+   // instead 
+   if (staff[i] instanceof Manager)
+   {
+      Manager boss = (Manager) staff[i];
+      boss.setBonus(5000);
+   }
+   // do
+   if(staff[i] instanceof Manager boss ){
+      boss.setBonus(5000);
+   }
+```
+
+## The cosmic superclass
+### Varialbe of type object
+- Only primitive type is are not object
+### The equals Method
+- to compare two object -> method equals in Object lass'
+```java
+   var emp1 = new Employee("MinhHieu",101);
+   var emp2 = new Employee("MinhHieu",101);
+   System.out.print(emp1.equals(emp2)) // TRue
+   System.out.print(emp1 == emp2 ) // False
+```
 ### toString Method
 - Whenever an object is concatenated with a string by the + operator, Java compiler automatically invokes the toString method to obtain a string reperesentation of the object.
 
@@ -664,3 +706,4 @@ Ex:
    emp.size(); // return size 
    emp.trimToSize() // fix number element of array is current number element of array
 ```
+

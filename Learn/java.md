@@ -89,7 +89,11 @@
     - [Varialbe of type object](#varialbe-of-type-object)
     - [The equals Method](#the-equals-method)
     - [toString Method](#tostring-method)
+    - [Hascode Method](#hascode-method)
   - [Generic Array Lists](#generic-array-lists)
+    - [Accessing Array List elements](#accessing-array-list-elements)
+    - [Compatibility between Typed and Raw Array lists](#compatibility-between-typed-and-raw-array-lists)
+  - [Object Wrappers and Auto Boxing](#object-wrappers-and-auto-boxing)
 
 
 
@@ -691,10 +695,22 @@ Ex:
    var emp2 = new Employee("MinhHieu",101);
    System.out.print(emp1.equals(emp2)) // TRue
    System.out.print(emp1 == emp2 ) // False
+
+   //Example 
+   @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        MyClass myClass = (MyClass) obj;
+        return id == myClass.id;
+    }
 ```
 ### toString Method
 - Whenever an object is concatenated with a string by the + operator, Java compiler automatically invokes the toString method to obtain a string reperesentation of the object.
-
+- when you print the object -> it call toString Method
+- Base object return <ClassName>@<HasCode>
+### Hascode Method
+- Base Object return hash code of memory address
 
 ## Generic Array Lists
 - ArrayList is a generic class with type parameter. To specify the type of ArrayList hold, put it in angle bracket 
@@ -706,4 +722,52 @@ Ex:
    emp.size(); // return size 
    emp.trimToSize() // fix number element of array is current number element of array
 ```
+
+### Accessing Array List elements
+```java
+   emp.set(i, harry); // equivalent a[i] = harry;
+   // to get element 
+   Employee e = staff.get(i);  // get element
+   staff.set(i, emp);  // only set when staff have length >=i , if not, throw error IndexOutOfBoundsException:
+   Employee e = staff.remove(n);  // remove an element
+```
+
+### Compatibility between Typed and Raw Array lists
+```java
+      public class EmployeeDB
+   {
+      public void update(ArrayList list) { . . . }
+      public ArrayList find(String query) { . . . }
+   }
+   ArrayList<Employee> staff = . . .;
+   employeeDB.update(staff);
+   ArrayList<Employee> result = employeeDB.find(query); // yields warning
+   @SuppressWarnings("unchecked") // use it for pass warning
+   ArrayList<Employee> result = (ArrayList<Employee>) employeeDB.find(query); 
+   // yields another warning
+   In a running program, all array lists are the same—there are no type parameters in the virtual machine. Thus, the casts (ArrayList) and (ArrayList<Employee>) carry out identical runtime checks.
+```
+
+## Object Wrappers and Auto Boxing
+- Every primitive types have class counterparts.Example: class Integer -> int. These kinds of class are usually call wrappers. 
+- Wrapper class are immutable, they are also final, so you can't not subclass them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

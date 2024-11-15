@@ -94,7 +94,16 @@
     - [Accessing Array List elements](#accessing-array-list-elements)
     - [Compatibility between Typed and Raw Array lists](#compatibility-between-typed-and-raw-array-lists)
   - [Object Wrappers and Auto Boxing](#object-wrappers-and-auto-boxing)
-
+  - [Methods with a Variable Number of Argmument](#methods-with-a-variable-number-of-argmument)
+  - [Abstract Class](#abstract-class)
+  - [Enumeration Class](#enumeration-class)
+  - [Sealed classes](#sealed-classes)
+  - [Pattern Matching](#pattern-matching)
+    - [Null Handling](#null-handling)
+    - [GUARDs](#guards)
+    - [Exhaustiveness](#exhaustiveness)
+    - [Dominance](#dominance)
+    - [Reflection](#reflection)
 
 
 # DATA TYPES
@@ -751,6 +760,270 @@ Ex:
 ## Object Wrappers and Auto Boxing
 - Every primitive types have class counterparts.Example: class Integer -> int. These kinds of class are usually call wrappers. 
 - Wrapper class are immutable, they are also final, so you can't not subclass them.
+
+```java
+   var list = new ArrayList<Integer>();
+   list.add(3) => list.add(Integer.valueOf(3))  // Auto Boxing 
+   int n = list.get(i).intValue();  // Unboxing
+```
+
+## Methods with a Variable Number of Argmument
+```java
+public static double max(double... values)
+{
+   double largest = Double.NEGATIVE_INFINITY;
+   for (double v : values) if (v > largest) largest = v;
+   return largest;
+} 
+// like javaScript    
+```
+
+## Abstract Class 
+- A class with one or more abstract methods must itself be declared abstract.
+```java 
+   public abstract class Person{
+      public abstract String getDescription(){
+         
+      }
+   }
+```
+!Tip: A abstract class can have concrete methods
+
+## Enumeration Class
+```java
+   public enum Size {
+      SMALL("S"), MEDIUM("M"), LARGE("L"), EXTRA_LARGE("XL");
+
+      private String abbreviation;
+
+      Size(String abbreviation) {
+         this.abbreviation = abbreviation;
+      }
+
+      public String getAbbreviation() {
+         return abbreviation;
+      }
+   }
+```
+
+## Sealed classes
+```java
+   public abstract sealed class JSONValue
+      permits JSONArray, JSONNumber, JSONString, JSONBoolean, JSONObject, JSONNull
+   {
+
+   }
+
+
+   public class JSONComment extends JSONValue { . . . } // Error 
+   public sealed class Shape permits Circle, Square, Rectangle {
+    // Common properties or methods for all shapes
+   }
+
+   public final class Circle extends Shape {
+      double radius;
+   }
+
+   public final class Square extends Shape {
+      double side;
+   }
+
+   public final class Rectangle extends Shape {
+      double width, height;
+   }
+
+   // Pattern matching with sealed classes
+   public String getShapeDescription(Shape shape) {
+      return switch (shape) {
+         case Circle c -> "Circle with radius " + c.radius;
+         case Square s -> "Square with side " + s.side;
+         case Rectangle r -> "Rectangle with width " + r.width + " and height " + r.height;
+         default.....
+      };
+   }
+```
+
+## Pattern Matching
+```java 
+   Employee e = . . .;
+   String description = switch (e)
+      {
+         case Executive exec -> "An executive with a title of " + exec.getTitle();
+         case Manager m -> "A manager who deserves a bonus";
+         default -> "A lowly employee with a salary of " + e.getSalary();
+      };
+   
+```
+- Java 21 introduces unnamed variables: `case Employee __ -> "A lowly employee"`
+
+### Null Handling
+```java
+   case null -> "No employee";
+   case null, default -> "No free parking";
+```
+
+### GUARDs
+```java
+   Point p = . . .;
+   String description = switch (p)
+      {
+         case Point(var x, var y) when x == 0 && y == 0 -> "origin";
+         case Point(var x, var __) when x == 0 -> "on x-axis";
+         case Point(var __, var y) when y == 0 -> "on y-axis";
+         default -> "not on either axis";
+      };
+```
+You can add a condition to a pattern called a guard, using the restricted when keyword.
+
+### Exhaustiveness
+
+- Any switch expression must be exhaustive: there must be a case for each possible selector value. This is an obvious requirement since the expression must always yield a value.
+- Guarded pattern cannot be used for exhaustiveness checks
+- 
+```java
+   case Executive exec when exec.getTitle().getLength() >= 20 -> . . .
+   case Executive exec when exec.getTitle().getLength() < 20 -> . . .
+   // not work
+``` 
+
+### Dominance
+- case after never read if case before always execute
+- 
+### Reflection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

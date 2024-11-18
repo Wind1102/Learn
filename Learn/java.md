@@ -782,7 +782,13 @@ public static double max(double... values)
 - A class with one or more abstract methods must itself be declared abstract.
 ```java 
    public abstract class Person{
-      public abstract String getDescription(){
+      public abstract String getDescription(){ystem.out.println(staff.get(0));
+        var testToArray = new Employee[staff.size()];
+        staff.toArray(testToArray);
+        System.out.println(testToArray[0]);
+        Integer a = 1000;
+        Integer b = 1000;
+        System.out.println(a==b);
          
       }
    }

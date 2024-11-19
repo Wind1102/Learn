@@ -117,7 +117,18 @@
     - [Object Cloning](#object-cloning)
   - [Lambda expressions](#lambda-expressions)
     - [Syntax](#syntax)
-    - [Function Interfaces(559)](#function-interfaces559)
+    - [Functional Interfaces(559)](#functional-interfaces559)
+    - [Method References](#method-references)
+    - [Contructor Reference](#contructor-reference)
+    - [Variable scope](#variable-scope)
+    - [Processing Lambda Expression](#processing-lambda-expression)
+    - [Creating Comparators](#creating-comparators)
+  - [Inner Class](#inner-class)
+    - [Use of an Inner Class to Access Object State](#use-of-an-inner-class-to-access-object-state)
+    - [Special Syntax rules for inner classes](#special-syntax-rules-for-inner-classes)
+    - [Local Inner Classes](#local-inner-classes)
+    - [Accessing Variables from Outer Methods](#accessing-variables-from-outer-methods)
+    - [Anonymous Inner Classes](#anonymous-inner-classes)
 
 # DATA TYPES
 
@@ -157,7 +168,9 @@ Cannot convert between integers and boolean values
 - can declare CONSTANT with key word `final`
   - example: `final double CM_PER_INCH = 2.54;`
 - can declare CONSTANT in class and outside main function => class CONSTANT, can use from other class
+
   - example: other class can access by use `Constants.CM_PER_INCH`
+
     ```java
        class Constants{
           public static final double CM_PER_INCH = 2.54;
@@ -1174,4 +1187,156 @@ Rule:
    }
 ```
 
-### Function Interfaces(559)
+### Functional Interfaces(559)
+
+You can supply a lambda expression whenever an object of an interface with a single abstract method is expected. Such an interface is called a functional interface
+
+### Method References
+
+```java
+   var timer = new Timer(1000, event -> System.out.println(event));  // lambda
+   var timer = new Timer(1000, System.out::println);  // method reference
+```
+
+### Contructor Reference
+
+```java
+   //For example, suppose we want to have an array of Person objects. The Stream interface has a toArray method that returns an Object array:
+
+   Object[] people = stream.toArray();
+
+
+   // But that is unsatisfactory. The user wants an array of references to Person, not references to Object. The stream library solves that problem with constructor references. Pass Person[]::new to the toArray method:
+   Person[] people = stream.toArray(Person[]::new);
+```
+
+Constructor references are just like method references, except that the name of the method is new. For example, Person::new is a reference to a Person constructor
+
+### Variable scope
+
+- lambda expression is closure, but it can capture the value of variable, can't refer to changing variable, can't changing variable.
+
+```java
+   public static void countDown(int start, int delay)
+   {
+      ActionListener listener = event ->
+         {
+
+            start--; // ERROR: Can't mutate captured variable
+            System.out.println(delay); // allowed
+         };
+      new Timer(delay, listener).start();
+   }
+   public static void repeat(String text, int count)
+   {
+      for (int i = 1; i <= count; i++)
+      {
+         ActionListener listener = event ->
+            {
+               System.out.println(i + ": " + text);
+                  // ERROR: Cannot refer to changing i
+            };
+         new Timer(1000, listener).start();
+      }
+   }
+
+```
+
+### Processing Lambda Expression
+
+If you design your own interface with a single abstract method, you can tag it with the @FunctionalInterface annotation.It is not required to use the annotation.
+
+### Creating Comparators
+
+The Comparator interface has a number of convenient static methods for creating comparators. These methods are intended to be used with lambda expressions or method references.
+
+```java
+Arrays.sort(people, Comparator.comparing(Person::getName));
+Arrays.sort(people,
+   Comparator.comparing(Person::getLastName)
+      .thenComparing(Person::getFirstName));
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+      (s, t) -> Integer.compare(s.length(), t.length())));
+
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+   (s, t) -> Integer.compare(s.length(), t.length())));
+
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+   Comparator.comparingInt(String::length)))
+```
+
+## Inner Class
+
+- Inner class is class that defined inside another class
+- Inner classes can be hidden from other classes in the same package.
+- Inner class methods can access the data from the scope in which they are defined—including the data that would otherwise be private.
+
+### Use of an Inner Class to Access Object State
+
+An inner class object has a reference to an outer class object.
+![Inner Class](image/inner_class.png)
+
+```java
+public void actionPerformed(ActionEvent event)
+{
+   System.out.println("At the tone, the time is "
+      + Instant.ofEpochMilli(event.getWhen()));
+   if (outer.beep) Toolkit.getDefaultToolkit().beep();
+}
+// The outer class reference is set in the constructor. The compiler modifies all inner class constructors, adding a parameter for the outer class reference. The TimePrinter class defines no constructors; therefore, the compiler synthesizes a no-argument constructor, generating code like this:
+public TimePrinter(TalkingClock clock) // automatically generated code
+{
+   outer = clock;
+}
+
+
+```
+
+### Special Syntax rules for inner classes
+
+- actualy, the expression `OuterClass.this` denotes the outer class reference.
+
+```java
+public void actionPerformed(ActionEvent event)
+{
+   . . .
+   if (TalkingClock.this.beep) Toolkit.getDefaultToolkit().beep();
+}
+```
+
+- Conversely, you can write the inner object constructor more explicitly, using the syntax
+
+```java
+outerObject.new InnerClass(construction arguments);
+```
+
+- Note that you refer to an inner class as `OuterClass.InnerClass` when it occurs outside the scope of the outer class
+
+### Local Inner Classes
+
+- implement inner class in a funtion
+- Local classes are never declared with an access specifier (that is, public or private). Their scope is always restricted to the block in which they are declared.
+
+### Accessing Variables from Outer Methods
+
+```java
+   public void start(int interval, boolean beep)
+{
+   class TimePrinter implements ActionListener
+   {
+      public void actionPerformed(ActionEvent event)
+      {
+         System.out.println("At the tone, the time is " + Instant.ofEpochMilli(event.getWhen())); if (beep) Toolkit.getDefaultToolkit().beep();
+      }
+   }
+
+   var listener = new TimePrinter();
+   var timer = new Timer(interval, listener);
+   timer.start();
+}
+```
+
+beep local variable of start method
+
+### Anonymous Inner Classes
+(598)

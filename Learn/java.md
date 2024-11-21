@@ -129,6 +129,26 @@
     - [Local Inner Classes](#local-inner-classes)
     - [Accessing Variables from Outer Methods](#accessing-variables-from-outer-methods)
     - [Anonymous Inner Classes](#anonymous-inner-classes)
+    - [Static class (605)](#static-class-605)
+  - [Service Loaders (611)](#service-loaders-611)
+  - [Proxies (615)](#proxies-615)
+- [Exceptions, Assertiongs, and Loggings](#exceptions-assertiongs-and-loggings)
+  - [Exeptions](#exeptions)
+  - [Assertion](#assertion)
+    - [Assertion Enabling and Disabling](#assertion-enabling-and-disabling)
+  - [Logging](#logging)
+    - [Logging Configuration](#logging-configuration)
+- [Generic Programming](#generic-programming)
+  - [Generic class](#generic-class)
+  - [Generic methods](#generic-methods)
+  - [Bound for type Variable](#bound-for-type-variable)
+  - [Generic Code and the Virtual Machine (725)](#generic-code-and-the-virtual-machine-725)
+    - [Generic Record Patterns](#generic-record-patterns)
+  - [Wildcard Types](#wildcard-types)
+    - [Supertype Bounds for Wildcards](#supertype-bounds-for-wildcards)
+  - [Restrictions and Limitations (750)](#restrictions-and-limitations-750)
+- [Collections](#collections)
+  - [The collection interface](#the-collection-interface)
 
 # DATA TYPES
 
@@ -1339,4 +1359,161 @@ outerObject.new InnerClass(construction arguments);
 beep local variable of start method
 
 ### Anonymous Inner Classes
-(598)
+
+```java
+  var queen = new Person("Mary");
+  // a Person object
+var count = new Person("Dracula") { . . . initialization};
+  // an object of an inner class extending Person
+```
+
+### Static class (605)
+
+- The Java Language Specification uses the term “nested class” for any class that is declared inside another class or interface, “static class” for a (necessarily nested) static class, and “inner class” for a nested class that is not static.
+- You should use a static class whenever a nested class does not need to access an outer class object.
+
+## Service Loaders (611)
+
+## Proxies (615)
+
+# Exceptions, Assertiongs, and Loggings
+
+## Exeptions
+
+![Exception Hierachy](image/Exception_hierachy.png)(660)
+
+- use try-catch to catching exception
+- creating Expection: extend exception `class FileFormatException extends IOException`
+
+Tips:
+
+- Exception handling is not supposed to replace a simple test.
+- Do not micromanage exceptions.
+- Make good use of the exception hierarchy.
+- Do not squelch exceptions.
+- When you detect an error, “tough love” works better than indulgence.
+- Propagating exceptions is not a sign of shame.
+- Use standard methods for reporting null-pointer and out-of-bounds exceptions.
+- Don't show stack traces to end users.
+
+## Assertion
+
+```java
+   assert condition;
+   and
+   assert condition : expression;
+```
+
+### Assertion Enabling and Disabling
+
+By default, assertions are disabled. Enable them by running the program with the -enableassertions or -ea option:
+`java -enableassertions MyApp`
+
+You can even turn on assertions in specific classes or in entire packages. For example:
+`java -ea:MyClass -ea:com.mycompany.mylib... MyApp`
+This command turns on assertions for the class MyClass and all classes in the com.mycompany.mylib package and its subpackages. The option -ea:... turns on assertions in all classes of the unnamed package.  
+You can also disable assertions in certain classes and packages with the -disableassertions or -da option:
+`java -ea:... -da:MyClass MyApp`
+
+## Logging
+
+```java
+   System.Logger logger = System.getLogger("com.mycompany.myapp");
+   logger.log(System.Logger.Level.INFO, "Opening file " + filename);
+
+   // The record is printed like this:
+   Aug 04, 2022 09:53:34 AM com.mycompany.myapp.Main read INFO: Opening file data.txt
+```
+
+With the import statement,you can shorten the levels:
+
+```java
+import static java.lang.System.Logger.Level.*;
+logger.log(INFO, "Opening file " + filename);
+    // Instead of System.Logger.Level.INFO
+```
+
+### Logging Configuration
+You can change various properties of the backend by editing a configuration file. The default configuration file is located at conf/logging.properties in the JDK. To use another file, set the java.util.logging.config.file property to the file location by starting your application with 
+    `java -Djava.util.logging.config.file=configFile MainClass`
+
+# Generic Programming
+-> Generic classes and methods have type parameters. 
+
+## Generic class
+```java
+   public Pair<T>{
+      private T first;
+      private T second;
+
+      public T(){
+         first = null;
+         second = null;
+      }
+
+      public T (T first, T second){
+         this.first = first;
+         this.second = second; 
+      }
+      public T getFirst() { return first; }   
+   }
+   public class Pair<T, U> { . . . } 
+```
+
+## Generic methods
+```java
+class ArrayAlg
+{
+   public static <T> T getMiddle(T... a)
+   {
+      return a[a.length / 2];
+   }
+}
+String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
+// compiler has enough information to infer method that you want so it equivalent
+String middle = ArrayAlg.getMiddle("John", "Q.", "Public");
+```
+
+- Generic method can inside generic class or normal class
+
+## Bound for type Variable
+- The solution is to restrict T to a class that implements the Comparable interface
+```java
+public static <T extends Comparable> T min(T[] a) ...
+//Now, the generic min method can only be called with arrays of classes that implement the Comparable interface, such as String, LocalDate, and so on.
+```
+A type variable can have multiple bounds. For example: 
+```java
+    T extends Comparable & Serializable
+```
+## Generic Code and the Virtual Machine (725)
+### Generic Record Patterns
+Let us make our Pair class into a record: 
+    `record Pair<T>(T first, T second) {}`
+
+## Wildcard Types
+In a wildcard type, a type parameter is allowed to vary. For example, the wildcard type 
+   `Pair<? extends Employee> `
+     
+
+ ### Supertype Bounds for Wildcards
+ Wildcard bounds are similar to type variable bounds, but they have an added capability—you can specify a supertype bound, like this: 
+    `? super Manager  `
+
+## Restrictions and Limitations (750)
+
+
+# Collections
+## The collection interface
+```java
+   public inteface Collection<E>
+   {
+      boolean add(E element);
+      Iterator<E> iterator();
+
+   }
+```
+
+(798)
+
+

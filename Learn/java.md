@@ -117,7 +117,38 @@
     - [Object Cloning](#object-cloning)
   - [Lambda expressions](#lambda-expressions)
     - [Syntax](#syntax)
-    - [Function Interfaces(559)](#function-interfaces559)
+    - [Functional Interfaces(559)](#functional-interfaces559)
+    - [Method References](#method-references)
+    - [Contructor Reference](#contructor-reference)
+    - [Variable scope](#variable-scope)
+    - [Processing Lambda Expression](#processing-lambda-expression)
+    - [Creating Comparators](#creating-comparators)
+  - [Inner Class](#inner-class)
+    - [Use of an Inner Class to Access Object State](#use-of-an-inner-class-to-access-object-state)
+    - [Special Syntax rules for inner classes](#special-syntax-rules-for-inner-classes)
+    - [Local Inner Classes](#local-inner-classes)
+    - [Accessing Variables from Outer Methods](#accessing-variables-from-outer-methods)
+    - [Anonymous Inner Classes](#anonymous-inner-classes)
+    - [Static class (605)](#static-class-605)
+  - [Service Loaders (611)](#service-loaders-611)
+  - [Proxies (615)](#proxies-615)
+- [Exceptions, Assertiongs, and Loggings](#exceptions-assertiongs-and-loggings)
+  - [Exeptions](#exeptions)
+  - [Assertion](#assertion)
+    - [Assertion Enabling and Disabling](#assertion-enabling-and-disabling)
+  - [Logging](#logging)
+    - [Logging Configuration](#logging-configuration)
+- [Generic Programming](#generic-programming)
+  - [Generic class](#generic-class)
+  - [Generic methods](#generic-methods)
+  - [Bound for type Variable](#bound-for-type-variable)
+  - [Generic Code and the Virtual Machine (725)](#generic-code-and-the-virtual-machine-725)
+    - [Generic Record Patterns](#generic-record-patterns)
+  - [Wildcard Types](#wildcard-types)
+    - [Supertype Bounds for Wildcards](#supertype-bounds-for-wildcards)
+  - [Restrictions and Limitations (750)](#restrictions-and-limitations-750)
+- [Collections](#collections)
+  - [The collection interface](#the-collection-interface)
 
 # DATA TYPES
 
@@ -157,7 +188,9 @@ Cannot convert between integers and boolean values
 - can declare CONSTANT with key word `final`
   - example: `final double CM_PER_INCH = 2.54;`
 - can declare CONSTANT in class and outside main function => class CONSTANT, can use from other class
+
   - example: other class can access by use `Constants.CM_PER_INCH`
+
     ```java
        class Constants{
           public static final double CM_PER_INCH = 2.54;
@@ -1180,4 +1213,313 @@ Rule:
    }
 ```
 
-### Function Interfaces(559)
+### Functional Interfaces(559)
+
+You can supply a lambda expression whenever an object of an interface with a single abstract method is expected. Such an interface is called a functional interface
+
+### Method References
+
+```java
+   var timer = new Timer(1000, event -> System.out.println(event));  // lambda
+   var timer = new Timer(1000, System.out::println);  // method reference
+```
+
+### Contructor Reference
+
+```java
+   //For example, suppose we want to have an array of Person objects. The Stream interface has a toArray method that returns an Object array:
+
+   Object[] people = stream.toArray();
+
+
+   // But that is unsatisfactory. The user wants an array of references to Person, not references to Object. The stream library solves that problem with constructor references. Pass Person[]::new to the toArray method:
+   Person[] people = stream.toArray(Person[]::new);
+```
+
+Constructor references are just like method references, except that the name of the method is new. For example, Person::new is a reference to a Person constructor
+
+### Variable scope
+
+- lambda expression is closure, but it can capture the value of variable, can't refer to changing variable, can't changing variable.
+
+```java
+   public static void countDown(int start, int delay)
+   {
+      ActionListener listener = event ->
+         {
+
+            start--; // ERROR: Can't mutate captured variable
+            System.out.println(delay); // allowed
+         };
+      new Timer(delay, listener).start();
+   }
+   public static void repeat(String text, int count)
+   {
+      for (int i = 1; i <= count; i++)
+      {
+         ActionListener listener = event ->
+            {
+               System.out.println(i + ": " + text);
+                  // ERROR: Cannot refer to changing i
+            };
+         new Timer(1000, listener).start();
+      }
+   }
+
+```
+
+### Processing Lambda Expression
+
+If you design your own interface with a single abstract method, you can tag it with the @FunctionalInterface annotation.It is not required to use the annotation.
+
+### Creating Comparators
+
+The Comparator interface has a number of convenient static methods for creating comparators. These methods are intended to be used with lambda expressions or method references.
+
+```java
+Arrays.sort(people, Comparator.comparing(Person::getName));
+Arrays.sort(people,
+   Comparator.comparing(Person::getLastName)
+      .thenComparing(Person::getFirstName));
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+      (s, t) -> Integer.compare(s.length(), t.length())));
+
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+   (s, t) -> Integer.compare(s.length(), t.length())));
+
+   Arrays.sort(people, Comparator.comparing(Person::getName,
+   Comparator.comparingInt(String::length)))
+```
+
+## Inner Class
+
+- Inner class is class that defined inside another class
+- Inner classes can be hidden from other classes in the same package.
+- Inner class methods can access the data from the scope in which they are defined—including the data that would otherwise be private.
+
+### Use of an Inner Class to Access Object State
+
+An inner class object has a reference to an outer class object.
+![Inner Class](image/inner_class.png)
+
+```java
+public void actionPerformed(ActionEvent event)
+{
+   System.out.println("At the tone, the time is "
+      + Instant.ofEpochMilli(event.getWhen()));
+   if (outer.beep) Toolkit.getDefaultToolkit().beep();
+}
+// The outer class reference is set in the constructor. The compiler modifies all inner class constructors, adding a parameter for the outer class reference. The TimePrinter class defines no constructors; therefore, the compiler synthesizes a no-argument constructor, generating code like this:
+public TimePrinter(TalkingClock clock) // automatically generated code
+{
+   outer = clock;
+}
+
+
+```
+
+### Special Syntax rules for inner classes
+
+- actualy, the expression `OuterClass.this` denotes the outer class reference.
+
+```java
+public void actionPerformed(ActionEvent event)
+{
+   . . .
+   if (TalkingClock.this.beep) Toolkit.getDefaultToolkit().beep();
+}
+```
+
+- Conversely, you can write the inner object constructor more explicitly, using the syntax
+
+```java
+outerObject.new InnerClass(construction arguments);
+```
+
+- Note that you refer to an inner class as `OuterClass.InnerClass` when it occurs outside the scope of the outer class
+
+### Local Inner Classes
+
+- implement inner class in a funtion
+- Local classes are never declared with an access specifier (that is, public or private). Their scope is always restricted to the block in which they are declared.
+
+### Accessing Variables from Outer Methods
+
+```java
+   public void start(int interval, boolean beep)
+{
+   class TimePrinter implements ActionListener
+   {
+      public void actionPerformed(ActionEvent event)
+      {
+         System.out.println("At the tone, the time is " + Instant.ofEpochMilli(event.getWhen())); if (beep) Toolkit.getDefaultToolkit().beep();
+      }
+   }
+
+   var listener = new TimePrinter();
+   var timer = new Timer(interval, listener);
+   timer.start();
+}
+```
+
+beep local variable of start method
+
+### Anonymous Inner Classes
+
+```java
+  var queen = new Person("Mary");
+  // a Person object
+var count = new Person("Dracula") { . . . initialization};
+  // an object of an inner class extending Person
+```
+
+### Static class (605)
+
+- The Java Language Specification uses the term “nested class” for any class that is declared inside another class or interface, “static class” for a (necessarily nested) static class, and “inner class” for a nested class that is not static.
+- You should use a static class whenever a nested class does not need to access an outer class object.
+
+## Service Loaders (611)
+
+## Proxies (615)
+
+# Exceptions, Assertiongs, and Loggings
+
+## Exeptions
+
+![Exception Hierachy](image/Exception_hierachy.png)(660)
+
+- use try-catch to catching exception
+- creating Expection: extend exception `class FileFormatException extends IOException`
+
+Tips:
+
+- Exception handling is not supposed to replace a simple test.
+- Do not micromanage exceptions.
+- Make good use of the exception hierarchy.
+- Do not squelch exceptions.
+- When you detect an error, “tough love” works better than indulgence.
+- Propagating exceptions is not a sign of shame.
+- Use standard methods for reporting null-pointer and out-of-bounds exceptions.
+- Don't show stack traces to end users.
+
+## Assertion
+
+```java
+   assert condition;
+   and
+   assert condition : expression;
+```
+
+### Assertion Enabling and Disabling
+
+By default, assertions are disabled. Enable them by running the program with the -enableassertions or -ea option:
+`java -enableassertions MyApp`
+
+You can even turn on assertions in specific classes or in entire packages. For example:
+`java -ea:MyClass -ea:com.mycompany.mylib... MyApp`
+This command turns on assertions for the class MyClass and all classes in the com.mycompany.mylib package and its subpackages. The option -ea:... turns on assertions in all classes of the unnamed package.  
+You can also disable assertions in certain classes and packages with the -disableassertions or -da option:
+`java -ea:... -da:MyClass MyApp`
+
+## Logging
+
+```java
+   System.Logger logger = System.getLogger("com.mycompany.myapp");
+   logger.log(System.Logger.Level.INFO, "Opening file " + filename);
+
+   // The record is printed like this:
+   Aug 04, 2022 09:53:34 AM com.mycompany.myapp.Main read INFO: Opening file data.txt
+```
+
+With the import statement,you can shorten the levels:
+
+```java
+import static java.lang.System.Logger.Level.*;
+logger.log(INFO, "Opening file " + filename);
+    // Instead of System.Logger.Level.INFO
+```
+
+### Logging Configuration
+You can change various properties of the backend by editing a configuration file. The default configuration file is located at conf/logging.properties in the JDK. To use another file, set the java.util.logging.config.file property to the file location by starting your application with 
+    `java -Djava.util.logging.config.file=configFile MainClass`
+
+# Generic Programming
+-> Generic classes and methods have type parameters. 
+
+## Generic class
+```java
+   public Pair<T>{
+      private T first;
+      private T second;
+
+      public T(){
+         first = null;
+         second = null;
+      }
+
+      public T (T first, T second){
+         this.first = first;
+         this.second = second; 
+      }
+      public T getFirst() { return first; }   
+   }
+   public class Pair<T, U> { . . . } 
+```
+
+## Generic methods
+```java
+class ArrayAlg
+{
+   public static <T> T getMiddle(T... a)
+   {
+      return a[a.length / 2];
+   }
+}
+String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
+// compiler has enough information to infer method that you want so it equivalent
+String middle = ArrayAlg.getMiddle("John", "Q.", "Public");
+```
+
+- Generic method can inside generic class or normal class
+
+## Bound for type Variable
+- The solution is to restrict T to a class that implements the Comparable interface
+```java
+public static <T extends Comparable> T min(T[] a) ...
+//Now, the generic min method can only be called with arrays of classes that implement the Comparable interface, such as String, LocalDate, and so on.
+```
+A type variable can have multiple bounds. For example: 
+```java
+    T extends Comparable & Serializable
+```
+## Generic Code and the Virtual Machine (725)
+### Generic Record Patterns
+Let us make our Pair class into a record: 
+    `record Pair<T>(T first, T second) {}`
+
+## Wildcard Types
+In a wildcard type, a type parameter is allowed to vary. For example, the wildcard type 
+   `Pair<? extends Employee> `
+     
+
+ ### Supertype Bounds for Wildcards
+ Wildcard bounds are similar to type variable bounds, but they have an added capability—you can specify a supertype bound, like this: 
+    `? super Manager  `
+
+## Restrictions and Limitations (750)
+
+
+# Collections
+## The collection interface
+```java
+   public inteface Collection<E>
+   {
+      boolean add(E element);
+      Iterator<E> iterator();
+
+   }
+```
+
+(798)
+
+

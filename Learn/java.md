@@ -147,8 +147,21 @@
   - [Wildcard Types](#wildcard-types)
     - [Supertype Bounds for Wildcards](#supertype-bounds-for-wildcards)
   - [Restrictions and Limitations (750)](#restrictions-and-limitations-750)
-- [Collections](#collections)
-  - [The collection interface](#the-collection-interface)
+- [Collections (790)](#collections-790)
+  - [The Java Collections Framework](#the-java-collections-framework)
+    - [The collection interface](#the-collection-interface)
+    - [Iterators](#iterators)
+  - [Interfaces in the collections Framework](#interfaces-in-the-collections-framework)
+  - [Algorithms](#algorithms)
+- [Concurrency (930)](#concurrency-930)
+  - [Running Threads](#running-threads)
+  - [Thread state](#thread-state)
+    - [New Thread](#new-thread)
+    - [Runnable Thread](#runnable-thread)
+    - [Blocked and Waiting Threads](#blocked-and-waiting-threads)
+  - [Thread properties](#thread-properties)
+    - [Thread inturrupted](#thread-inturrupted)
+    - [Thread Names and Ids](#thread-names-and-ids)
 
 # DATA TYPES
 
@@ -1434,13 +1447,16 @@ logger.log(INFO, "Opening file " + filename);
 ```
 
 ### Logging Configuration
-You can change various properties of the backend by editing a configuration file. The default configuration file is located at conf/logging.properties in the JDK. To use another file, set the java.util.logging.config.file property to the file location by starting your application with 
-    `java -Djava.util.logging.config.file=configFile MainClass`
+
+You can change various properties of the backend by editing a configuration file. The default configuration file is located at conf/logging.properties in the JDK. To use another file, set the java.util.logging.config.file property to the file location by starting your application with
+`java -Djava.util.logging.config.file=configFile MainClass`
 
 # Generic Programming
--> Generic classes and methods have type parameters. 
+
+-> Generic classes and methods have type parameters.
 
 ## Generic class
+
 ```java
    public Pair<T>{
       private T first;
@@ -1453,14 +1469,15 @@ You can change various properties of the backend by editing a configuration file
 
       public T (T first, T second){
          this.first = first;
-         this.second = second; 
+         this.second = second;
       }
-      public T getFirst() { return first; }   
+      public T getFirst() { return first; }
    }
-   public class Pair<T, U> { . . . } 
+   public class Pair<T, U> { . . . }
 ```
 
 ## Generic methods
+
 ```java
 class ArrayAlg
 {
@@ -1477,34 +1494,45 @@ String middle = ArrayAlg.getMiddle("John", "Q.", "Public");
 - Generic method can inside generic class or normal class
 
 ## Bound for type Variable
+
 - The solution is to restrict T to a class that implements the Comparable interface
+
 ```java
 public static <T extends Comparable> T min(T[] a) ...
 //Now, the generic min method can only be called with arrays of classes that implement the Comparable interface, such as String, LocalDate, and so on.
 ```
-A type variable can have multiple bounds. For example: 
+
+A type variable can have multiple bounds. For example:
+
 ```java
     T extends Comparable & Serializable
 ```
+
 ## Generic Code and the Virtual Machine (725)
+
 ### Generic Record Patterns
-Let us make our Pair class into a record: 
-    `record Pair<T>(T first, T second) {}`
+
+Let us make our Pair class into a record:
+`record Pair<T>(T first, T second) {}`
 
 ## Wildcard Types
-In a wildcard type, a type parameter is allowed to vary. For example, the wildcard type 
-   `Pair<? extends Employee> `
-     
 
- ### Supertype Bounds for Wildcards
- Wildcard bounds are similar to type variable bounds, but they have an added capability—you can specify a supertype bound, like this: 
-    `? super Manager  `
+In a wildcard type, a type parameter is allowed to vary. For example, the wildcard type
+`Pair<? extends Employee> `
+
+### Supertype Bounds for Wildcards
+
+Wildcard bounds are similar to type variable bounds, but they have an added capability—you can specify a supertype bound, like this:
+`? super Manager  `
 
 ## Restrictions and Limitations (750)
 
+# Collections (790)
 
-# Collections
-## The collection interface
+## The Java Collections Framework
+
+### The collection interface
+
 ```java
    public inteface Collection<E>
    {
@@ -1514,6 +1542,117 @@ In a wildcard type, a type parameter is allowed to vary. For example, the wildca
    }
 ```
 
-(798)
+### Iterators
+
+## Interfaces in the collections Framework
+
+![Interfaces in the collections Framework](interface_collection.png)
+
+## Algorithms
+
+# Concurrency (930)
+
+- what is different between multi process and multi thread?
+- each process has a complete set of its own variables, threads share the same data
+
+## Running Threads
+
+```java
+   package concurrency;
+
+import java.time.Duration;
+import java.util.TreeMap;
+import java.util.concurrent.LinkedTransferQueue;
+
+public class Main {
+    private static final double MAX_AMOUNT = 10;
+    private static final int STEPS = 10;
+    private static final int DELAY = 2;
+    public static void main(String[] args){
+        Runnable r = () -> {
+            try{
+                for(int i =0;i <= STEPS;i++){
+                    double amount = MAX_AMOUNT * Math.random();
+                    BANK.transfer(0, 1, amount);
+                    Thread.sleep((int) (DELAY * Math.random()));
+                }
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } ;
+
+        };
+        Runnable r_2 = () -> {
+            try{
+                for(int i =0;i <= STEPS;i++){
+                    double amount = MAX_AMOUNT * Math.random();
+                    BANK.transfer(2, 3, amount);
+                    Thread.sleep((int) (DELAY * Math.random()));
+                }
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } ;
+
+        };
+        var t = new Thread(r);
+        var t_2 = new Thread(r_2);
+        t.start();
+        t_2.start();
 
 
+    }
+}
+
+```
+
+## Thread state
+
+![Thread state](image/Thead_state.png)
+
+Thread can be in one of six states:
+
+- New
+- Runnable
+- Blocked
+- Waiting
+- Timed Waiting
+- Terminated
+
+### New Thread
+
+When you create a Thread with the new operator: new Thread(r)- The thread is not running -> new state
+
+### Runnable Thread
+
+Once you invoke the start method, the thread is in the runnable state.but A runnable thread may or may not actually be running. It is up to the thread scheduler to give the thread time to run. Regardless it may not actually running or still running
+
+In java 21: have two kinds threads: platform threads and virtual threads
+
+Java platform thread -> thread provided by the operating system , which schedule its execution
+Vitual thread -> run on platform threads and are schedule by the java runtime
+
+Each processor can run one platform thread at a time. On a machine with multi processor can run multi thread parrallel. If there are more runnable threads than available processors, some of them are not actually running. They need to be scheduled for execution.
+
+### Blocked and Waiting Threads
+
+## Thread properties
+
+Virtual threads have the same API as platform threads. A simple way to create and start a virtual thread is:  
+ `Thread t = Thread.startVirtualThread(myRunnable);`
+
+The isVirtual method of the Thread class returns true when a thread is virtual.
+
+### Thread inturrupted
+
+InterruptedException chỉ được ném ra khi hai điều kiện đồng thời xảy ra:
+
+Thread đang trong trạng thái chờ đợi (ví dụ: gọi Thread.sleep(), wait(), hoặc join()).
+Thread bị interrupt bởi một thread khác qua phương thức interrupt()
+
+### Thread Names and Ids
+
+By default, threads have catchy names such as Thread-2. You can set any name with the setName method:
+var t = new Thread(runnable);
+t.setName("Web crawler");
+(958)

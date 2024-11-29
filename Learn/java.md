@@ -162,6 +162,23 @@
   - [Thread properties](#thread-properties)
     - [Thread inturrupted](#thread-inturrupted)
     - [Thread Names and Ids](#thread-names-and-ids)
+    - [Thread prorities](#thread-prorities)
+  - [Coordinating Tasks](#coordinating-tasks)
+    - [Callables and Futures](#callables-and-futures)
+    - [Invoking a Group of Tasks](#invoking-a-group-of-tasks)
+    - [Thread-Local Variables](#thread-local-variables)
+    - [The Fork-Join Framework](#the-fork-join-framework)
+  - [Synchronization](#synchronization)
+    - [Lock object \& Condition](#lock-object--condition)
+    - [Deadlocks](#deadlocks)
+    - [The synchronized keyword](#the-synchronized-keyword)
+    - [Volatile Field](#volatile-field)
+    - [ETC.....( xem them khoang trang 1050)](#etc-xem-them-khoang-trang-1050)
+  - [Processes (1110)](#processes-1110)
+    - [Building a process](#building-a-process)
+- [Annotations (1114)](#annotations-1114)
+  - [Defining Annotations](#defining-annotations)
+  - [Annotations in the Java API](#annotations-in-the-java-api)
 
 # DATA TYPES
 
@@ -1655,4 +1672,321 @@ Thread bị interrupt bởi một thread khác qua phương thức interrupt()
 By default, threads have catchy names such as Thread-2. You can set any name with the setName method:
 var t = new Thread(runnable);
 t.setName("Web crawler");
-(958)
+
+### Thread prorities 
+
+## Coordinating Tasks
+### Callables and Futures
+### Invoking a Group of Tasks
+```java
+   package executors;
+
+import java.io.IOException;
+import java.nio.file.*;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class ExecutorDemo {
+    /**
+     * Counts occurrences of a given word in a file.
+     * @return the number of times the word occurs in the given word
+     */
+    public static long occurrences(String word, Path path) throws IOException {
+        try(var in = new Scanner(path)){
+            int count = 0;
+            while (in.hasNext())
+                if (in.next().equals(word)) count++;
+            return count;
+        }
+        catch(IOException ex){
+            return 0;
+        }
+    }
+
+    /**
+     * Returns all descendants of a given directory
+     * @param rootDir the root directory
+     * @return a set of all descendants of the root directory
+     */
+    public static Set<Path> descendants(Path rootDir) throws IOException{
+        try (Stream<Path> entries = Files.walk(rootDir)){
+            return entries.filter(Files::isRegularFile).collect(Collectors.toSet());
+        }
+    }
+
+    /** Yields a task that searches for a word in a file.
+     * @param word the word to search
+     * @param path the file in which to search
+     * @return the search task that yields the path upon success
+     */
+    public static Callable<Path> searchForTask(String word, Path path){
+        return () -> {
+            try(var in = new Scanner(path)){
+                while (in.hasNext()){
+                    if(in.next().equals(word)) return path;
+                    if(Thread.currentThread().isInterrupted()){
+                        System.out.println("Search in " +path+ " cancel.");
+                        return null;
+                    }
+                }
+                throw new NoSuchElementException();
+            }
+
+        };
+    }
+
+
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+        try(var in = new Scanner(System.in)){
+            System.out.print("Enter base directory: (e.g. /opt/jdk-21-src): ");
+            String start = in.nextLine();
+            System.out.print("Enter keyword (e.g. volatile): ");
+            String word = in.nextLine();
+            Set<Path> files = descendants(Path.of(start));
+            var tasks = new ArrayList<Callable<Long>>();
+            for (Path file: files){
+                Callable<Long> task = () -> occurrences(word,file);
+                tasks.add(task);
+            }
+//            ExecutorService executor = Executors.newCachedThreadPool();
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+            ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+            Instant startTime = Instant.now();
+            List<Future<Long>> results = executor.invokeAll(tasks);
+            Instant endTime = Instant.now();
+            long total = 0;
+            for(Future<Long> result: results){
+                total += result.get();
+            }
+            System.out.println("Occurrences of " + word + ": " + total);
+            System.out.println("Time elapsed: "            + Duration.between(startTime, endTime).toMillis() + " ms");
+            var searchTasks = new ArrayList<Callable<Path>>();
+            for(Path file: files){
+                searchTasks.add(searchForTask(word,file));
+            }
+            startTime = Instant.now();
+            Path found = executor.invokeAny(searchTasks);
+            endTime = Instant.now();
+            System.out.println(word + " occurs in: " + found);
+            System.out.println("Time elapsed: "            + Duration.between(startTime, endTime).toMillis() + " ms");
+            executor.close();
+        }
+    }
+
+
+
+}
+
+```
+
+### Thread-Local Variables
+Sometimes you want to make a task-specific object available to all methods that collaborate on the task, without having to pass the object as a parameter of each method call. You can use a thread-local variable for this purpose. This is not an actual variable, but an object whose get and set methods access a value that depends on the current thread.
+
+```java
+   public static final ThreadLocal<Connection> CONNECTION = new ThreadLocal<>();
+   CONNECTION.set(connect(uri, username, password));
+   Connection connection = CONNECTION.get();
+   var result = connection.executeQuery(query);
+   ...
+
+
+   ////////////////////////////
+   Scoped values are a preview feature of Java 21 that provide a more performant version of inheritable thread-local variables. Scoped values have per-thread instances, but they are immutable and have a bounded lifetime. Scoped values are inherited in virtual threads created by a StructuredTaskScope. This code snippet shows how to use them: 
+      public static final ScopedValue<Connection> CONNECTION = ScopedValue.newInstance(); 
+   . . .
+   ScopedValue.where(CONNECTION, connect(uri, username, password)).run(() -> doWork());
+   . . .
+   public void doWork() {
+      . . .
+      Connection connection = CONNECTION.get();
+      var result = connection.executeQuery(query);
+      . . .
+   } 
+         When using virtual threads, prefer scoped values over thread-local variables.
+```
+
+### The Fork-Join Framework
+
+if (problemSize < threshold)
+{
+   solve problem directly
+}
+else 
+{
+   break problem into subproblems
+   recursively solve each subproblem
+   combine the results
+}
+
+To put the recursive computation in a form that is usable by the framework, supply a class that extends RecursiveTask<T> (if the computation produces a result of type T) or RecursiveAction (if it doesn't produce a result). Override the compute method to generate and invoke subtasks and to combine their results. 
+```java
+    class Counter extends RecursiveTask<Integer>
+{
+   . . .
+     protected Integer compute()
+   {
+      if (to - from < THRESHOLD)
+      {
+         solve problem directly
+      }
+      else
+      {
+         int mid = from + (to - from) / 2;
+         var first = new Counter(values, from, mid, filter);
+         var second = new Counter(values, mid, to, filter);
+         invokeAll(first, second);
+         return first.join() + second.join();
+      }
+   }
+}
+```
+
+## Synchronization
+- what happend if multi thread can access the same object in the same time (concurrent access) -> can orrcurs not correct 
+how to manage -> Lock object and Condition Object
+### Lock object & Condition
+```java
+   package synch;
+import java.util.*;
+import java.util.concurrent.locks.*;
+
+public class Bank {
+    private final double[] accounts;
+    private final Lock bankLock = new ReentrantLock();
+    private final Condition sufficientFunds = bankLock.newCondition();
+
+    /**
+     *  Constructs the bank.
+     *  @param n the number of accounts
+     *  @param initialBalance the initial balance for each account
+     */
+    public Bank(int n, int initialBalance) {
+        accounts = new double[n];
+        Arrays.fill(accounts, initialBalance);
+    }
+
+    /**
+     * Transfers money from one account to another
+     * @param from the account to transfer from
+     * @param to the account to transfer to
+     * @param amount the amount to transfer
+    */
+    public void transfer(int from, int to, double amount) throws InterruptedException {
+        bankLock.lock();
+        try{
+            while(accounts[from] < amount) sufficientFunds.await();
+            System.out.print(Thread.currentThread());
+            accounts[from] -= amount;
+            System.out.printf(" %10.2f from %d to %d", amount, from, to);
+            accounts[to] += amount;
+            System.out.printf(" Total Balance: %10.2f%n", getTotalBalance());
+            sufficientFunds.signalAll();
+        }
+        finally {
+            bankLock.unlock();
+        }
+    }
+
+
+    /**
+    * Gets the sum of all account balances
+    * @return the total balance
+    */
+    public double getTotalBalance(){
+        bankLock.lock();
+        try{
+            double sum = 0;
+            for (double a: accounts) sum+= a;
+            return sum;
+        } finally {
+           bankLock.unlock();
+        }
+    }
+
+    /**
+     * Gets the number of accounts in the bank.
+     * @return the number of accounts
+     */
+    public int size(){
+        return accounts.length;
+    }
+
+}
+```
+
+### Deadlocks
+- conflict between another thread
+
+### The synchronized keyword
+instead of using an explicit lock, we can simply declare the transfer method of the Bank class as synchronized.
+
+```java
+public synchronized void method()
+{
+   method body
+}
+public void method()
+{
+   this.intrinsicLock.lock();
+   try
+   {
+      method body
+   }
+   finally
+   {  this.intrinsicLock.unlock();
+   }
+}
+
+```
+### Volatile Field
+```java 
+class Example {
+    private volatile boolean flag = true;
+
+    public void stop() {
+        flag = false;  // Thread 1 modifies the flag
+    }
+
+    public void run() {
+        while (flag) {  // Thread 2 will see the updated value
+            // do work
+        }
+    }
+}
+```
+### ETC.....( xem them khoang trang 1050)
+
+## Processes (1110)
+### Building a process
+
+
+# Annotations (1114)
+##  Defining Annotations
+- Each annotation must be declared by an annotation interface, with the `@interface` syntax.
+```java
+   @Target(ElementType.METHOD)
+   @Retention(RetentionPolicy.RUNTIME)
+   public @interface RepeatedTest
+{
+   int failureThreshold();
+   . . .
+} 
+```
+- To specify a default value for an element, add a default clause after the method defining the element. For example,
+```java
+public @interface RepeatedTest
+{
+   int failureThreshold() default Integer.MAX_VALUE;
+   . . .
+} 
+```
+
+## Annotations in the Java API
+The Java API defines a number of annotation interfaces in the java.lang, java.lang.annotation, and javax.annotation packages.
+
+
+

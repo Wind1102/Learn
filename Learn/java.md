@@ -179,6 +179,20 @@
 - [Annotations (1114)](#annotations-1114)
   - [Defining Annotations](#defining-annotations)
   - [Annotations in the Java API](#annotations-in-the-java-api)
+- [The Java Platform Module System (1166)](#the-java-platform-module-system-1166)
+- [Streams](#streams)
+  - [From Iterating to stream operations](#from-iterating-to-stream-operations)
+  - [Stream creation](#stream-creation)
+  - [Filter, map , flatMap methods](#filter-map--flatmap-methods)
+  - [The Optional type](#the-optional-type)
+  - [Collecting results](#collecting-results)
+  - [Collecting into Map](#collecting-into-map)
+  - [Grouping and Partitioning](#grouping-and-partitioning)
+  - [DownStream Collectors (87v2)](#downstream-collectors-87v2)
+  - [Reduction operations](#reduction-operations)
+  - [Parallel Streams](#parallel-streams)
+- [Input and Output](#input-and-output-1)
+- [XML (312)](#xml-312)
 
 # DATA TYPES
 
@@ -657,7 +671,7 @@ A record is a special form of a class whose state is immutable and readable by t
    // and accessor methods
    // public double x()
    // public double y()
-   //Instance fields of a record are automatically final
+   // Instance fields of a record are automatically final
    ____________________________
    // can add owner method to record
    record Point(double x, double y)
@@ -1995,4 +2009,383 @@ public @interface RepeatedTest
 The Java API defines a number of annotation interfaces in the java.lang, java.lang.annotation, and javax.annotation packages.
 
 
+
+# The Java Platform Module System (1166)
+
+** #JavaCoreV2 **
+
+#  Streams
+## From Iterating to stream operations
+
+- Streams follow the “what, not how” principle.
+- Streams seems superficially similar to collection, allowing you transform and retrieve data. but there are significant differences:
+  - 1. Stream doesn't store its elements. They may be stored in an underlying collection or generated on demand.
+  - 2. Stream operation don't mutated their source.
+  - 3. Stream operations are lazy when possible. This means they are not executed until their result is needed.
+
+```java
+java.util.stream.Stream<T>
+- Stream<T> filter(Predicate<? super T> p) 
+   yields a stream containing all elements of this stream fulfilling p.   
+
+- long count() 
+   yields the number of elements of this stream. This is a terminal operation
+
+java.util.Collection<E> 
+- default Stream<E> stream() 
+- default Stream<E> parallelStream() 
+   yield a sequential or parallel stream of the elements in this collection.
+```
+
+
+## Stream creation
+```java 
+   package streams;
+
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+public class CreatingStream {
+    public static <T>  void show(String title, Stream<T> stream){
+        final int SIZE = 10;
+        List<T> firstElement = stream.limit(SIZE +1).toList();
+        System.out.print(title + ": ");
+        for(int i=0;i<firstElement.size();i++){
+            if(i>0) System.out.print(", ");
+            if(i<SIZE) System.out.print(firstElement.get(i));
+            else System.out.print("...");
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Path path = Path.of("/home/ubuntu/Desktop/test");
+        String content = Files.readString(path);
+        Stream<String> words = Stream.of(content.split("\\PL+"));
+        show("words", words);
+        Stream<String> song = Stream.of("gently", "down", "the", "stream");
+        show("song", song);
+        Stream<String> silence = Stream.empty();
+        show("silence", silence);
+        Stream<String> echo = Stream.generate(() -> "Echo");
+        show("echo", echo);
+        Stream<Double> randoms = Stream.generate(Math::random);
+        show("Randoms", randoms);
+        Stream<String> greetings = "Hello \n Minh \n Hieu".lines();
+        show("greetings" , greetings);
+
+        Stream<String> wordsAnotherWay = Pattern.compile("\\PL+").splitAsStream(content);
+        show("wordsAnotherWay", wordsAnotherWay);
+
+        try (Stream<String> lines = Files.lines(path).limit(1))
+        {
+            show("lines", lines);
+        }
+
+        Iterable<Path> iterable = FileSystems.getDefault().getRootDirectories();
+        Stream<Path> rootDirectories = StreamSupport.stream(iterable.spliterator(), false);
+        show("rootDirectories", rootDirectories);
+
+        Iterator<Path> iterator = Path.of("/usr/share/dict/words").iterator();
+        Stream<Path> pathComponents = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                iterator, Spliterator.ORDERED), false);
+        show("pathComponents", pathComponents);a
+        Object[] power =  Stream.iterate(1.0, p-> p*2).peek(System.out::println).limit(20).toArray();
+    }
+}
+
+```
+## Filter, map , flatMap methods 
+
+## The Optional type
+```java
+   package optional;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+public class OptionalTest {
+    public static void main(String[] args) throws IOException {
+        String content = Files.readString(Path.of("/home/ubuntu/Desktop/test"));
+        List<String> words = List.of(content.split("\\PL+"));
+        Optional<String> optionalValue = words.stream().filter(x -> x.contains("fred")).findFirst();
+        System.out.println(optionalValue.orElse("No word") + " contains fred");
+        Optional<String> optionalString = Optional.empty();
+        String results = optionalString.orElse("N\\A");
+        System.out.println("Result: " + results);
+        results = optionalString.orElseGet(()-> Locale.getDefault().getDisplayName());
+        System.out.println("Result: " + results);
+        try{
+
+            results = optionalString.orElseThrow(IllegalStateException::new);
+            System.out.println("Results: " + results);
+        }
+        catch (Throwable t){
+            t.printStackTrace();
+        }
+
+        optionalValue = words.stream().filter(x -> x.contains("red")).findFirst();
+        optionalValue.ifPresent(s -> System.out.println(s + "contains red"));
+        var result = new HashSet<String>();
+        optionalValue.ifPresent(result::add);
+        Optional<Boolean> added = optionalValue.map(result::add);
+        added.ifPresent(System.out::println);
+
+    }
+}
+
+```
+
+## Collecting results
+```java
+   package collecting;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+public class CollectingResults {
+    public static Stream<String> noVowels() throws IOException {
+        String content = Files.readString(Path.of("/home/ubuntu/Desktop/test"));
+        List<String> wordList = List.of(content.split("\\PL++"));
+        Stream<String> words = wordList.stream();
+        return words.map(s-> s.replaceAll("[aieouAIEOU]",""));
+    };
+
+    public static <T> void show(String label, Set<T> set){
+        System.out.println(label+ ": " + set.getClass().getName());
+        System.out.println("[" + set.stream().limit(10).map(Object::toString).collect(Collectors.joining(", ")) + "]");
+    }
+
+    public static Stream<String> getMaxWordLength() throws IOException {
+        String content = Files.readString(Path.of("/home/ubuntu/Desktop/test"));
+        List<String> wordList = List.of(content.split("\\PL++"));
+        Stream<String> words = wordList.stream();
+        return words.filter(s-> s.length() == 16);
+    };
+
+    public static void main(String[] args) throws IOException {
+        Iterator<Integer> iter = Stream.iterate(0,n->n+1).limit(10).iterator();
+        while (iter.hasNext()){
+            System.out.println(iter.next());
+        }
+
+        Object[] numbers = Stream.iterate(0, n-> n +1).limit(10).toArray();
+        System.out.println("Object Array: "+ Arrays.toString(numbers));
+
+        try {
+            var number = (Integer) numbers[0];
+            System.out.println("Number: " + number);
+            System.out.println("The following statement throws an exception:");
+            var number2 = (Integer[]) numbers;
+        }catch (ClassCastException e){
+            System.out.println(e);
+        }
+
+        Integer[] numbers3 = Stream.iterate(0, n-> n+1).limit(10).toArray(Integer[]::new);
+        System.out.println("Integer array: " + Arrays.toString(numbers3));
+
+        Set<String> noVowelSet = noVowels().collect(Collectors.toSet());
+        show("noVowelSet", noVowelSet);
+
+        TreeSet<String> noVowelTreeSet = noVowels().collect(Collectors.toCollection(TreeSet::new));
+        show("noVowelTreeSet", noVowelTreeSet);
+        String result = noVowels().limit(10).collect(Collectors.joining());
+        System.out.println("Joining: " + result);
+        result = noVowels().limit(10)
+                .collect(Collectors.joining(", "));
+        System.out.println("Joining with commas: " + result);
+        IntSummaryStatistics summary = noVowels().collect(
+                Collectors.summarizingInt(String::length));
+        double averageWordLength = summary.getAverage();
+        double maxWordLength = summary.getMax();
+        System.out.println("Average word length: " + averageWordLength);
+        System.out.println("Max word length: " + maxWordLength);
+        System.out.println("forEach:");
+//        noVowels().limit(10).forEach(System.out::println);
+        System.out.println(noVowels().filter(s -> s.length()==16).toList());
+
+
+    }
+}
+
+```
+## Collecting into Map
+
+```java
+   package collecting;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class CollectingIntoMaps {
+    public record Person(int id, String name) {
+    }
+
+    ;
+
+    public static Stream<Person> people() {
+        return Stream.of(new Person(1001, "Minh Hieu"), new Person(1002, "Huong"), new Person(1003, "Tam"));
+
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, String> idToName = people().collect(Collectors.toMap(Person::id, Person::name));
+        System.out.println("idToName: " + idToName.toString());
+        Map<Integer, Person> idToPerson = people().collect(Collectors.toMap(Person::id, Function.identity()));
+        System.out.println("idToPerson: " + idToPerson.getClass().getName() + " : " + idToPerson);
+        idToPerson = people().collect(Collectors.toMap(Person::id, Function.identity(), (existValue, newValue) -> {
+            throw new IllegalStateException();
+        }, TreeMap::new));
+
+        System.out.println("idToPerson: " + idToPerson.getClass().getName()
+                + idToPerson);
+        Map<String, String> languageNames = Locale.availableLocales().collect(
+                Collectors.toMap(
+                        Locale::getDisplayLanguage,
+                        l -> l.getDisplayLanguage(l),
+                        (existingValue, newValue) -> existingValue));
+        System.out.println("languageNames: " + languageNames);
+        Map<String, Set<String>> countryLanguageSets = Locale.availableLocales().collect(
+                Collectors.toMap(
+                        Locale::getDisplayCountry,
+                        l -> Set.of(l.getDisplayLanguage()),
+                        (a, b) ->
+                        { // union of a and b
+                            Set<String> union = new HashSet<>(a);
+                            union.addAll(b);
+                            return union;
+                        }));
+        System.out.println("countryLanguageSets: " + countryLanguageSets);
+
+    }
+
+}
+
+```
+
+## Grouping and Partitioning
+
+```java
+   Map<String, List<Locale>> countryToLocales = Locale.availableLocales().collect(
+   Collectors.groupingBy(Locale::getCountry));
+   List<Locale> swissLocales = countryToLocales.get("CH");
+   // Yields locales de_CH, fr_CH, it_CH, and maybe more
+   Map<Boolean, List<Locale>> englishAndOtherLocales = Locale.availableLocales().collect(
+   Collectors.partitioningBy(l -> l.getLanguage().equals("en")));
+   List<Locale> englishLocales = englishAndOtherLocales.get(true);
+
+```
+
+
+## DownStream Collectors (87v2)
+```java
+package collecting;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
+
+public class DownstreamCollectors {
+    public record City(String name, String state, int population) {
+    }
+
+    ;
+
+    public static Stream<City> readCities(String filename) throws IOException {
+        return Files.lines(Path.of(filename)).map(l -> l.split(",")).map(a -> new City(a[0], a[1], Integer.parseInt(a[2])));
+    }
+
+    public static void main(String[] args) throws IOException {
+//        Map<String, Set<Locale>> countryToLocaleSet = Locale.availableLocales().collect(groupingBy(Locale::getCountry, toSet()));
+//        System.out.println("countryToLocaleSet: " + countryToLocaleSet);
+        Map<String, Map<String, List<Locale>>> countryAndLanguageToLocale = Locale.availableLocales().collect(groupingBy(Locale::getCountry, groupingBy(Locale::getLanguage)));
+        System.out.println("Hindi locales in India: "
+                + countryAndLanguageToLocale.get("VN"));
+//        Map<String,Long> countryToLocaleCount = Locale.availableLocales().collect(groupingBy(Locale::getCountry,counting()));
+//        System.out.println("countryToLocaleCounts: " + countryToLocaleCount.get("VN"));
+        Stream<City> cities = readCities("cities.txt");
+        Map<String, Integer> stateToCityPopulation = cities.collect(groupingBy(
+                City::state, summingInt(City::population)));
+        System.out.println("stateToCityPopulation: " + stateToCityPopulation);
+        cities = readCities("cities.txt");
+        Map<String, Optional<String>> stateToLongestCityName = cities
+                .collect(groupingBy(City::state,
+                        mapping(City::name, maxBy(Comparator.comparing(String::length)))));
+        System.out.println("stateToLongestCityName: " + stateToLongestCityName);
+
+        Map<String, Set<String>> countryToLanguages = Locale.availableLocales().collect(groupingBy(
+                Locale::getDisplayCountry, mapping(Locale::getDisplayLanguage, toSet())));
+        System.out.println("countryToLanguages: " + countryToLanguages);
+
+        cities = readCities("cities.txt");
+        Map<String, IntSummaryStatistics> stateToCityPopulationSummary = cities
+                .collect(groupingBy(City::state, summarizingInt(City::population)));
+        System.out.println(stateToCityPopulationSummary.get("NY"));
+
+        cities = readCities("cities.txt");
+        Map<String, String> stateToCityNames = cities.collect(groupingBy(
+                City::state,
+                reducing("", City::name, (s, t) -> s.length() == 0 ? t : s + ", " + t)));
+
+        cities = readCities("cities.txt");
+        stateToCityNames = cities.collect(groupingBy(City::state,
+                mapping(City::name, joining(", "))));
+        System.out.println("stateToCityNames: " + stateToCityNames);
+
+        cities = readCities("cities.txt");
+        record Pair<S, T>(S first, T second) {
+        }
+        Pair<List<String>, Double> result = cities.filter(c -> c.state().equals("NV"))
+                .collect(teeing(
+                        mapping(City::name, toList()), averagingDouble(City::population),
+                        Pair::new));
+        System.out.println(result);
+
+    }
+
+}
+
+```
+
+## Reduction operations
+``` java
+   List<Integer> values = List.of(1,2,3,4);
+        Optional<Integer> sum = values.stream().reduce((x,y) -> x +y);
+        System.out.println(sum.get());
+   int result = words.reduce(0, 
+   (total, word) -> total + word.length(), 
+   (total1, total2) -> total1 + total2);     
+```
+## Parallel Streams 
+
+# Input and Output
+
+# XML (312)
 

@@ -188,7 +188,11 @@
   - [Collecting results](#collecting-results)
   - [Collecting into Map](#collecting-into-map)
   - [Grouping and Partitioning](#grouping-and-partitioning)
-  - [DownStream Collectors](#downstream-collectors)
+  - [DownStream Collectors (87v2)](#downstream-collectors-87v2)
+  - [Reduction operations](#reduction-operations)
+  - [Parallel Streams](#parallel-streams)
+- [Input and Output](#input-and-output-1)
+- [XML (312)](#xml-312)
 
 # DATA TYPES
 
@@ -2290,5 +2294,92 @@ public class CollectingIntoMaps {
 ```
 
 
-## DownStream Collectors
+## DownStream Collectors (87v2)
+```java
+package collecting;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
+
+public class DownstreamCollectors {
+    public record City(String name, String state, int population) {
+    }
+
+    ;
+
+    public static Stream<City> readCities(String filename) throws IOException {
+        return Files.lines(Path.of(filename)).map(l -> l.split(",")).map(a -> new City(a[0], a[1], Integer.parseInt(a[2])));
+    }
+
+    public static void main(String[] args) throws IOException {
+//        Map<String, Set<Locale>> countryToLocaleSet = Locale.availableLocales().collect(groupingBy(Locale::getCountry, toSet()));
+//        System.out.println("countryToLocaleSet: " + countryToLocaleSet);
+        Map<String, Map<String, List<Locale>>> countryAndLanguageToLocale = Locale.availableLocales().collect(groupingBy(Locale::getCountry, groupingBy(Locale::getLanguage)));
+        System.out.println("Hindi locales in India: "
+                + countryAndLanguageToLocale.get("VN"));
+//        Map<String,Long> countryToLocaleCount = Locale.availableLocales().collect(groupingBy(Locale::getCountry,counting()));
+//        System.out.println("countryToLocaleCounts: " + countryToLocaleCount.get("VN"));
+        Stream<City> cities = readCities("cities.txt");
+        Map<String, Integer> stateToCityPopulation = cities.collect(groupingBy(
+                City::state, summingInt(City::population)));
+        System.out.println("stateToCityPopulation: " + stateToCityPopulation);
+        cities = readCities("cities.txt");
+        Map<String, Optional<String>> stateToLongestCityName = cities
+                .collect(groupingBy(City::state,
+                        mapping(City::name, maxBy(Comparator.comparing(String::length)))));
+        System.out.println("stateToLongestCityName: " + stateToLongestCityName);
+
+        Map<String, Set<String>> countryToLanguages = Locale.availableLocales().collect(groupingBy(
+                Locale::getDisplayCountry, mapping(Locale::getDisplayLanguage, toSet())));
+        System.out.println("countryToLanguages: " + countryToLanguages);
+
+        cities = readCities("cities.txt");
+        Map<String, IntSummaryStatistics> stateToCityPopulationSummary = cities
+                .collect(groupingBy(City::state, summarizingInt(City::population)));
+        System.out.println(stateToCityPopulationSummary.get("NY"));
+
+        cities = readCities("cities.txt");
+        Map<String, String> stateToCityNames = cities.collect(groupingBy(
+                City::state,
+                reducing("", City::name, (s, t) -> s.length() == 0 ? t : s + ", " + t)));
+
+        cities = readCities("cities.txt");
+        stateToCityNames = cities.collect(groupingBy(City::state,
+                mapping(City::name, joining(", "))));
+        System.out.println("stateToCityNames: " + stateToCityNames);
+
+        cities = readCities("cities.txt");
+        record Pair<S, T>(S first, T second) {
+        }
+        Pair<List<String>, Double> result = cities.filter(c -> c.state().equals("NV"))
+                .collect(teeing(
+                        mapping(City::name, toList()), averagingDouble(City::population),
+                        Pair::new));
+        System.out.println(result);
+
+    }
+
+}
+
+```
+
+## Reduction operations
+``` java
+   List<Integer> values = List.of(1,2,3,4);
+        Optional<Integer> sum = values.stream().reduce((x,y) -> x +y);
+        System.out.println(sum.get());
+   int result = words.reduce(0, 
+   (total, word) -> total + word.length(), 
+   (total1, total2) -> total1 + total2);     
+```
+## Parallel Streams 
+
+# Input and Output
+
+# XML (312)
 

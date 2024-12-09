@@ -11,6 +11,17 @@
     - [build image](#build-image)
     - [Tagging images](#tagging-images)
     - [Multi-stage builds](#multi-stage-builds)
+  - [Running container](#running-container)
+    - [publishing and exposing ports](#publishing-and-exposing-ports)
+      - [Publishing to ephemeral ports](#publishing-to-ephemeral-ports)
+      - [Publishing all port](#publishing-all-port)
+    - [Overriding container default](#overriding-container-default)
+      - [Setting environment variables](#setting-environment-variables)
+      - [Restricting the container to consume the resources](#restricting-the-container-to-consume-the-resources)
+    - [Persisting Container Data](#persisting-container-data)
+      - [Container volumns](#container-volumns)
+    - [Sharing local file with Containers](#sharing-local-file-with-containers)
+    - [Multi-container applications](#multi-container-applications)
 
 # Mục Lục
 
@@ -96,6 +107,45 @@ Push docker to a registry:
 
 
 -----------------------------------------------------------------------
+set environment for container
+`  docker run --env-file .env postgres env `
+` docker run -e ENV_VARIABLE=ENV_VALUE postgres env  `
+
+
+-----------------------------------------------------------------------
+Create custom network
+`docker network create NETWORK_NAME`
+
+verify network
+`docker network ls`
+
+check network
+`docker network inspect NETWORK_NAME` 
+
+pass --network in docker run to override default by connecting the container to custom docker network (default is bridge network)
+`docker run -d -e POSTGRES_PASSWORD=secret -p 5434:5432 --network mynetwork postgres`
+
+-----------------------------------------------------------------------
+Create a volume
+`docker volume create VOLUMN_NAME`
+
+List all volume:
+`docker volume ls`
+
+Remove volume (only work if not attach to container)
+`docker volume rm <name or id>`
+
+Remove all volume unused
+`docker volume prune`
+
+
+-----------------------------------------------------------------------
+Sharing local file with container
+`docker run -v HOST_DIR:CONTAINER_DIR`
+
+Using bind mount:
+`docker run --mount type="bind",source=/HOST/PATH,target=/CONTAINER/PATH,<permisstion access>` image`
+
 
 
 
@@ -114,6 +164,41 @@ Push docker to a registry:
 
 
 -----------------------------------------------------------------------
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+-----------------------------------------------------------------------
+
+
+
 
 
 ```
@@ -227,4 +312,86 @@ The docker init command will analyze your project and quickly create a Dockerfil
 - `TAG`: A custom, human-readable identifier that's typically used to identify different versions or variants of an image. If no tag is specified, latest is used by default.
   
 ### Multi-stage builds
-- 
+```docker
+  FROM eclipse-temurin:21.0.2_13-jdk-jammy AS builder 
+  WORKDIR /opt/app
+  COPY .mvn/ .mvn
+  COPY mvnw pom.xml ./
+  RUN ./mvnw dependency:go-offline
+  COPY ./src ./src
+  RUN ./mvnw clean install 
+
+  FROM eclipse-temurin:21.0.2_13-jre-jammy AS final
+  WORKDIR /opt/app
+  EXPOSE 8080
+  COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
+  ENTRYPOINT ["java","-jar","/opt/app/*.jar"]
+```
+
+## Running container
+### publishing and exposing ports
+- Publishing a port provides the ability to break through a little bit of networking isolation by setting up a forwarding rule. As an example, you can indicate that requests on your host’s port 8080 should be forwarded to the container’s port 80. Publishing ports happens during container creation using the -p (or --publish) flag with docker run. The syntax is:
+```docker 
+   docker run -d -p HOST_PORT:CONTAINER_PORT nginx
+   - HOST_PORT: The port number on your host machine where you want to receive traffic
+   - CONTAINER_PORT: The port number within the container that's listening for connections
+```
+
+#### Publishing to ephemeral ports
+simply omit the `HOST_POST` configuration 
+```docker 
+  docker run -p 80 nginx
+```
+
+#### Publishing all port
+When creating a container image, the EXPOSE instruction is used to indicate the packaged application will use the specified port. These ports aren't published by default.
+With the -P or --publish-all flag, you can automatically publish all exposed ports to ephemeral ports. This is quite useful when you’re trying to avoid port conflicts in development or testing environments.
+```docker 
+  docker run -P nginx
+```
+
+### Overriding container default
+####Overriding the network ports
+`docker run -d -p HOST_PORT:CONTAINER_PORT postgres`
+
+#### Setting environment variables
+```docker
+  docker run -e foo=bar  postgres env
+```
+The .env file acts as a convenient way to set environment variables for your Docker containers without cluttering your command line with numerous -e flags. To use a .env file, you can pass --env-file option with the docker run command.
+
+```docker
+  docker run --env-file .env postgres env 
+```
+
+#### Restricting the container to consume the resources
+
+You can use the `--memory` and `--cpus` flags with the docker run command to restrict how much CPU and MEMORY a container can use. 
+For example, you can set a memory limit for the Python API container, preventing it from consuming excessive resources on your host. Here's the command:
+
+```docker
+  docker run -e POSTGRES_PASSWORD=secret --memory="512m" --cpus="0.5" postgres
+```
+
+Can use command `docker stats` to monitor the real-time resource usage of running container.
+
+**KEY different between default bridge and custom networks**
+1. DNS resolution: by default, containers connected to the default bridge network can communicate with each other, but only by IP address.
+
+
+### Persisting Container Data
+#### Container volumns
+ 
+To create volume -> docker volume create <volume_name>
+docker volume rm <volume>
+
+### Sharing local file with Containers
+- Docker offer two primary storage options for persisting data and sharing files between the host machine and containers
+- if want to ensure that data generated or modified inside the container persists even after the container stop, you would opt for a volume
+- If you have specific files or directories on your host system that you want to directly share with your container, like configuration files or development code, then you would use a bind mount. 
+
+if you use `-v` or `--volume`, if the host directory isn't exist, a directory will be automatically created.
+if you use `--mount` to bind mount a file or directory that doesn't yet exist on the Docker host, the docker run command doesn't automatically create it for you but generates an error.
+
+
+### Multi-container applications

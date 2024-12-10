@@ -193,6 +193,7 @@
   - [Parallel Streams](#parallel-streams)
 - [Input and Output](#input-and-output-1)
 - [XML (312)](#xml-312)
+  - [The XML Structure](#the-xml-structure)
 
 # DATA TYPES
 
@@ -2388,4 +2389,43 @@ public class DownstreamCollectors {
 # Input and Output
 
 # XML (312)
+
+## The XML Structure
+
+An XML Structure should be start with header such as (Optional )
+```xml
+   <?xml version="1.0"?> or <?xml version="1.0" encoding="utf-8"?>
+```
+<?xml version="1.0">
+
+- Character references have the form &#decimalValue; or &#xhexValue
+   - For example,&#233; &#xE9;
+
+- Entity references have the form &name;
+  - &lt; &gt; &amp; &quot; &apos;
+
+- Processing instructions are instructions for applications that process XML documents. They are delimited by <? and ?>,
+  -  for example: <?xml-stylesheet href="mystyle.css" type="text/css"?> 
+- Comments are delimited by <!-- and -->, 
+  - for example <!-- This is a comment. -->
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

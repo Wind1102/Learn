@@ -193,6 +193,16 @@
   - [Parallel Streams](#parallel-streams)
 - [Input and Output](#input-and-output-1)
 - [XML (312)](#xml-312)
+  - [The XML Structure](#the-xml-structure)
+- [Networking](#networking)
+  - [Connecting to Servers](#connecting-to-servers)
+    - [Using telnet](#using-telnet)
+    - [Using Java](#using-java)
+    - [Socket Timeout](#socket-timeout)
+    - [Internet Address](#internet-address)
+    - [Implementing Servers](#implementing-servers)
+    - [Serving Multiple Client](#serving-multiple-client)
+
 
 # DATA TYPES
 
@@ -2388,4 +2398,237 @@ public class DownstreamCollectors {
 # Input and Output
 
 # XML (312)
+
+## The XML Structure
+
+An XML Structure should be start with header such as (Optional )
+```xml
+   <?xml version="1.0"?> or <?xml version="1.0" encoding="utf-8"?>
+```
+<?xml version="1.0">
+
+- Character references have the form &#decimalValue; or &#xhexValue
+   - For example,&#233; &#xE9;
+
+- Entity references have the form &name;
+  - &lt; &gt; &amp; &quot; &apos;
+
+- Processing instructions are instructions for applications that process XML documents. They are delimited by <? and ?>,
+  -  for example: <?xml-stylesheet href="mystyle.css" type="text/css"?> 
+- Comments are delimited by <!-- and -->, 
+  - for example <!-- This is a comment. -->
+        
+
+# Networking
+
+## Connecting to Servers
+### Using telnet
+### Using Java
+A socket is one endpoint of a two-way communication link between two programs running on the network. A socket is bound to a port number so that the TCP layer can identify the application that data is destined to be sent to.
+```java
+package socket;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class SocketTest {
+    public static void main(String[] args) throws IOException {
+        try(var s = new Socket("time-a.nist.gov",13)){
+            s.setSoTimeout(1000);
+            var in = new Scanner(s.getInputStream());
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                System.out.println(line);
+            }
+        }
+    }
+}
+```
+
+### Socket Timeout 
+```java
+var s = new Socket(. . .);
+s.setSoTimeout(10000); // time out after 10 seconds
+```
+
+### Internet Address
+```java
+package inetAddress;
+
+import java.io.*;
+import java.net.*;
+
+{
+   public static void main(String[] args) throws IOException
+   {
+      if (args.length > 0)
+      {
+         String host = args[0];
+         InetAddress[] addresses = InetAddress.getAllByName(host);
+         for (InetAddress a : addresses)
+            System.out.println(a);
+      }
+      else
+      {
+         InetAddress localHostAddress = InetAddress.getLocalHost();
+         System.out.println(localHostAddress);
+      }
+   }
+}
+```
+
+### Implementing Servers   
+```java
+package server;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class EchoServer {
+    public static void main(String[] args) throws IOException {
+        int port = args.length > 1 ? Integer.parseInt(args[0]): 8189;
+        try (var s = new ServerSocket(port);
+             Socket incoming = s.accept()){
+             serve(incoming);
+        }
+    }
+
+    public static void serve(Socket incoming) throws IOException {
+        try(var in = new Scanner(incoming.getInputStream());
+            var out = new PrintWriter(incoming.getOutputStream(),true);
+        ){
+            out.println("Hello! Enter Bye to exit.");
+            boolean done = false;
+            while (!done && in.hasNextLine()){
+                String line = in.nextLine();
+                out.println("Echo: " + line);
+                if(line.strip().equals("BYE")){
+                    done= true;
+                }
+            }
+        }
+    }
+}
+
+```
+### Serving Multiple Client 
+```Java
+   package server;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class EchoServer {
+    public static void main(String[] args) throws IOException {
+        int port = args.length > 1 ? Integer.parseInt(args[0]): 8189;
+
+        try (var s = new ServerSocket(port)){
+            int i = 1;
+            ExecutorService service = Executors.newVirtualThreadPerTaskExecutor();
+            while (true){
+                Socket incoming = s.accept();
+                System.out.println("Spawning: " + i);
+                service.submit(() -> serve(incoming));
+                i++;
+            }
+        }
+    }
+
+    public static void serve(Socket incoming){
+        try(var in = new Scanner(incoming.getInputStream());
+            var out = new PrintWriter(incoming.getOutputStream(),true)
+        ){
+            out.println("Hello! Enter Bye to exit.");
+            boolean done = false;
+            while (!done && in.hasNextLine()){
+                String line = in.nextLine();
+                out.println("Echo: " + line);
+                if(line.strip().equals("BYE")){
+                    done= true;
+                }
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

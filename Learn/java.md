@@ -201,6 +201,12 @@
     - [Internet Address](#internet-address)
     - [Implementing Servers](#implementing-servers)
     - [Serving Multiple Client](#serving-multiple-client)
+- [DATABASE PROGRAMMING](#database-programming)
+  - [JDBC Configuration](#jdbc-configuration)
+    - [Database url](#database-url)
+    - [Driver JAR Files](#driver-jar-files)
+    - [Connecting to DB](#connecting-to-db)
+  - [Working with JDBC statement](#working-with-jdbc-statement)
 
 # DATA TYPES
 
@@ -2542,6 +2548,107 @@ public class EchoServer {
 
 
 
+# DATABASE PROGRAMMING
+
+## JDBC Configuration
+### Database url 
+- when connecting to database, you must use various database-specific parameters such as host names, port numbers, and database names
+### Driver JAR Files
+```java
+   java -classpath driverJarPath:. ProgramName
+```
+### Connecting to DB 
+```java
+   String url = "jdbc:postgresql:COREJAVA";
+   String username = "dbuser";
+   String password = "secret";
+   Connection conn = DriverManager.getConnection(url, username, password);
+```
+or read from config file database.properties
+```
+jdbc.drivers=org.postgresql.Driver
+jdbc.url=jdbc:postgresql://localhost:5678/COREJAVA
+jdbc.username=postgres
+jdbc.password=secret
+
+```
+
+```java
+   package test;
+
+import java.sql.*;
+import java.io.*;
+import java.util.*;
+
+
+
+public class TestDB {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        try
+        {
+            runTest();
+        } catch (SQLException e) {
+            for (Throwable t : e)
+                t.printStackTrace();
+        }
+
+
+    }
+    public static void runTest() throws SQLException, IOException {
+        try(Connection conn = getConnection();
+            Statement stat = conn.createStatement();
+        ){
+            stat.executeUpdate("Create TABLE IF NOT EXISTS Greetings (Message VARCHAR(20))");
+            stat.executeUpdate("INSERT INTO Greetings VALUES ('Hello, World!')");
+
+            try (ResultSet result = stat.executeQuery("SELECT * FROM Greetings"))
+            {
+                while (result.next())
+                    System.out.println(result.getString(1));
+            }
+//            stat.executeUpdate("DROP TABLE Greetings");
+        }
+    }
+
+
+    public static Connection getConnection() throws IOException, SQLException {
+        var props = new Properties();
+        System.out.println(TestDB.class.getClassLoader().getResourceAsStream("resources/database.properties"));
+        try (InputStream inputStream = TestDB.class.getClassLoader().getResourceAsStream("database.properties"))
+        {
+            props.load(inputStream);
+        }
+
+        String drivers = props.getProperty("jdbc.drivers");
+        if (drivers != null) System.setProperty("jdbc.drivers", drivers);
+        String url = props.getProperty("jdbc.url");
+        String username = props.getProperty("jdbc.username");
+        String password = props.getProperty("jdbc.password");
+        return DriverManager.getConnection(url,username,password);
+    }
+}
+
+```
+
+## Working with JDBC statement
+- To execute a sql command -> create Statement object.
+```java
+   Connection  conn = DriverManager.getConnection(url,user,password);
+   Statement stat = conn.createStatement();
+   String command = """
+      UPDATE Books
+         SET Price = Price - 5.00
+         WHERE Title NOT LIKE '%Introduction%'
+      """;
+   stat.executeUpdate(command);
+   // executeUpdate can run DDL and DML 
+   // to execute query -> executeQuery -> DQL 
+   //  The basic loop for analyzing a result set looks like this: 
+    while (rs.next())
+      {
+         look at a row of the result set
+      }
+```
 
 
 

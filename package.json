@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "leaflet": "^1.9.4"
-  },
-  "devDependencies": {
-    "@parcel/transformer-sass": "^2.13.0"
-  }
-}

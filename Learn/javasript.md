@@ -1077,7 +1077,7 @@ console.log(PersonCl.sayHi());
 
 ## The module parttern
 ```js
-const shippingCost = (function(){
+  const shippingCost = (function(){
   const cart = [];
   const shipper = 10;
 

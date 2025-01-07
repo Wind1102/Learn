@@ -1,5 +1,5 @@
 import icons from 'url:../../img/icons.svg';
-import {Fraction} from 'fractional';
+import fracty from 'fracty';
 import View from './view.js';
 class RecipeView extends View{
     _parentElement = document.querySelector('.recipe');
@@ -9,6 +9,23 @@ class RecipeView extends View{
 
     addHandlerRender(handler){
         ['hashchange','load'].forEach(ev => window.addEventListener(ev, handler));
+    }
+
+    addHandlerUpdateServings(handler){
+        this._parentElement.addEventListener('click', function(e){
+            const btn = e.target.closest('.btn--tiny');
+            if (!btn) return;
+            const newServings = btn.dataset.servings;
+            if(+newServings > 0) handler(parseInt(newServings));
+        })
+    }
+
+    addHandlerAddBookmark(handler){
+        this._parentElement.addEventListener('click', function(e){
+            const btn = e.target.closest('.btn--bookmark');
+            if(!btn) return;
+            handler();
+        })
     }
 
     _generateMarkup(recipe){
@@ -23,27 +40,27 @@ class RecipeView extends View{
             <div class="recipe__details">
             <div class="recipe__info">
                 <svg class="recipe__info-icon">
-                <use href="${icons}_icon-clock"></use>
+                <use href="${icons}#icon-clock"></use>
                 </svg>
                 <span class="recipe__info-data recipe__info-data--minutes">${recipe.cookingTime}</span>
                 <span class="recipe__info-text">minutes</span>
             </div>
             <div class="recipe__info">
                 <svg class="recipe__info-icon">
-                <use href="${icons}_icon-users"></use>
+                <use href="${icons}#icon-users"></use>
                 </svg>
                 <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
                 <span class="recipe__info-text">servings</span>
 
                 <div class="recipe__info-buttons">
-                <button class="btn--tiny btn--increase-servings">
+                <button data-servings=${recipe.servings - 1} class="btn--tiny btn--decrease-servings">
                     <svg>
-                    <use href="${icons}_icon-minus-circle"></use>
+                    <use href="${icons}#icon-minus-circle"></use>
                     </svg>
                 </button>
-                <button class="btn--tiny btn--increase-servings">
+                <button data-servings=${recipe.servings + 1} class="btn--tiny btn--increase-servings">
                     <svg>
-                    <use href="${icons}_icon-plus-circle"></use>
+                    <use href="${icons}#icon-plus-circle"></use>
                     </svg>
                 </button>
                 </div>
@@ -51,12 +68,12 @@ class RecipeView extends View{
 
             <div class="recipe__user-generated">
                 <svg>
-                <use href="${icons}_icon-user"></use>
+                <use href="${icons}#icon-user"></use>
                 </svg>
             </div>
-            <button class="btn--round">
+            <button class="btn--round btn--bookmark">
                 <svg class="">
-                <use href="${icons}_icon-bookmark-fill"></use>
+                <use href="${icons}#icon-bookmark${recipe.bookmarked?'-fill':''}"></use>
                 </svg>
             </button>
             </div>
@@ -82,7 +99,7 @@ class RecipeView extends View{
             >
                 <span>Directions</span>
                 <svg class="search__icon">
-                <use href="${icons}_icon-arrow-right"></use>
+                <use href="${icons}#icon-arrow-right"></use>
                 </svg>
             </a>
             </div>
@@ -93,9 +110,9 @@ class RecipeView extends View{
         return  `
             <li class="recipe__ingredient">
                 <svg class="recipe__icon">
-                    <use href="${icons}_icon-check"></use>
+                    <use href="${icons}#icon-check"></use>
                 </svg>
-                <div class="recipe__quantity">${ing.quantity?new Fraction(ing.quantity).toString():''}</div>
+                <div class="recipe__quantity">${ing.quantity?fracty(ing.quantity).toString():''}</div>
                 <div class="recipe__description">
                     <span class="recipe__unit">${ing.unit}</span>
                     ${ing.description}

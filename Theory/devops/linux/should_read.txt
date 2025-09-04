@@ -1,0 +1,128 @@
+ ✅ Must-Learn for DevOps (Core Skills)
+
+These are essential and you’ll use them daily:
+
+Chapter 1 – Basics of Linux
+
+1.1 Levels and Layers of Abstraction (overview)
+
+1.3 The Kernel (just skim process/memory/system calls — enough to understand top/htop/ps outputs)
+
+1.4 User Space
+
+Chapter 2 – Basic Commands & Filesystem
+
+2.2 Using the Shell
+
+2.3 Basic Commands (ls, cp, mv, rm, echo)
+
+2.4 Navigating Directories
+
+2.5 Intermediate Commands (grep, less, pwd, find, head/tail, sort)
+
+2.14 Shell I/O (>, >>, 2>, pipes)
+
+2.16 Listing & Killing Processes
+
+2.17 File Modes & Permissions
+
+2.18 Archiving & Compressing (tar, gzip)
+
+2.19 Linux Directory Hierarchy Essentials
+
+2.20 Running Commands as Superuser (sudo)
+
+Chapter 4 – Disks & Filesystems
+
+4.2 Filesystems (types, mounting, /etc/fstab)
+
+4.2.10 Filesystem Capacity (df, du)
+
+4.2.11 Checking & Repairing Filesystems
+
+Chapter 5 & 6 – Booting & Init
+
+Just learn systemd basics (services, units, logs, systemctl, journalctl)
+
+Chapter 7 – System Configuration
+
+7.2 Logging
+
+7.3 User & Group Management (/etc/passwd, /etc/shadow)
+
+7.6 cron (scheduling tasks)
+
+7.10 PAM (just conceptually, for auth configs)
+
+Chapter 8 – Processes & Resource Monitoring
+
+8.1 Tracking Processes (ps, top, htop)
+
+8.2 lsof
+
+8.3 strace (basic troubleshooting)
+
+8.7 Resource Monitoring (CPU, memory)
+
+8.10 vmstat, 8.11 iostat, 8.12 pidstat
+
+Chapter 9 & 10 – Networking
+
+9.1–9.5 Basics: IP, subnet, routes, ping, traceroute, DNS
+
+9.11 NetworkManager basics (if using on servers)
+
+9.21 Firewalls (iptables, nftables, ufw)
+
+10.3 SSH (client + server)
+
+10.5 Diagnostic Tools (tcpdump, netcat, lsof)
+
+Chapter 11 – Shell Scripting
+
+Conditionals, loops, variables, quoting
+
+Using awk, sed, xargs
+👉 This is huge for automation (a DevOps must).
+
+Chapter 12 – Moving Files Across Network
+
+rsync, scp basics
+
+Samba/NFS just for awareness
+
+Chapter 13 – User Environments
+
+Shell startup files (.bashrc, .profile)
+
+Aliases, PATH, environment variables
+
+Chapter 15–16 – Development & Compilation
+
+Only skim: understand compiling basics, but in DevOps you’ll mostly use package managers & containers
+
+Chapter 17 – Advanced Topics
+
+Skim cloud/virtualization/container mentions
+
+🚀 Suggested Learning Order for DevOps
+
+Command-line basics & filesystem (Ch. 2)
+
+Permissions & processes (Ch. 2.17 + Ch. 8)
+
+Systemd & services (Ch. 6)
+
+Users, groups, cron jobs (Ch. 7)
+
+Networking + SSH (Ch. 9 & 10)
+
+Shell scripting (Ch. 11)
+
+File transfers & automation tools (Ch. 12, rsync, scp)
+
+Logs & monitoring tools (Ch. 7.2 + Ch. 8)
+
+Optional deeper dive: Kernel, compilation, virtualization
+
+👉 In practice, you don’t need to read every section. Focus on server management, automation, monitoring, and networking — that’s the heart of DevOps Linux usage.

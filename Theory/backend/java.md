@@ -193,6 +193,7 @@
   - [Parallel Streams](#parallel-streams)
 - [Input and Output](#input-and-output-1)
 - [XML (312)](#xml-312)
+  - [The XML Structure](#the-xml-structure)
 - [Networking](#networking)
   - [Connecting to Servers](#connecting-to-servers)
     - [Using telnet](#using-telnet)
@@ -207,6 +208,7 @@
     - [Driver JAR Files](#driver-jar-files)
     - [Connecting to DB](#connecting-to-db)
   - [Working with JDBC statement](#working-with-jdbc-statement)
+
 
 # DATA TYPES
 
@@ -1009,8 +1011,14 @@ public static double max(double... values)
 
 ```java
    public abstract class Person{
-      public abstract String getDescription(){
-
+      public abstract String getDescription(){System.out.println(staff.get(0));
+        var testToArray = new Employee[staff.size()];
+        staff.toArray(testToArray);
+        System.out.println(testToArray[0]);
+        Integer a = 1000;
+        Integer b = 1000;
+        System.out.println(a==b);
+         
       }
    }
 ```
@@ -2397,6 +2405,26 @@ public class DownstreamCollectors {
 
 # XML (312)
 
+## The XML Structure
+
+An XML Structure should be start with header such as (Optional )
+```xml
+   <?xml version="1.0"?> or <?xml version="1.0" encoding="utf-8"?>
+```
+<?xml version="1.0">
+
+- Character references have the form &#decimalValue; or &#xhexValue
+   - For example,&#233; &#xE9;
+
+- Entity references have the form &name;
+  - &lt; &gt; &amp; &quot; &apos;
+
+- Processing instructions are instructions for applications that process XML documents. They are delimited by <? and ?>,
+  -  for example: <?xml-stylesheet href="mystyle.css" type="text/css"?> 
+- Comments are delimited by <!-- and -->, 
+  - for example <!-- This is a comment. -->
+        
+
 # Networking
 
 ## Connecting to Servers
@@ -2649,6 +2677,7 @@ public class TestDB {
          look at a row of the result set
       }
 ```
+
 
 
 

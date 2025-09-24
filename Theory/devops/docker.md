@@ -87,70 +87,80 @@ docker compose down --volumes
 -----------------------------------------------------------------------
 ** Check container logs **
 `docker logs node-app-v1`
+
+**Get 5 lasted log**
+`docker container logs --tail 5 <container-name>`
+
+** Get realtime logs ** 
+`docker container logs --tail 5 --follow <container-name>`
+
+
 -----------------------------------------------------------------------
 ** Building image **
 `docker build .`
 - The final . in the command provides the path or URL to the build context. At this location, the builder will find the Dockerfile and other referenced files.
 
 -----------------------------------------------------------------------
-To tag an image during a build, add the -t or --tag flag:
+**To tag an image during a build, add the -t or --tag flag:**
 `docker build -t my-username/my-image .`
 
 -----------------------------------------------------------------------
-If you've already built an image, you can add another tag to the image by using the docker image tag command:
+**If you've already built an image, you can add another tag to the image by using the docker image tag command:**
 
 `docker image tag my-username/my-image another-username/another-image:v1`
 
 -----------------------------------------------------------------------
-Push docker to a registry:
+**Push docker to a registry:**
 `docker push my-username/my-image`
 
 
 -----------------------------------------------------------------------
-set environment for container
+**set environment for container**
 `  docker run --env-file .env postgres env `
 ` docker run -e ENV_VARIABLE=ENV_VALUE postgres env  `
 
 
 -----------------------------------------------------------------------
-Create custom network
+**Create custom network**
 `docker network create NETWORK_NAME`
 
-verify network
+**verify network**
 `docker network ls`
 
-check network
+**check network**
 `docker network inspect NETWORK_NAME` 
 
 pass --network in docker run to override default by connecting the container to custom docker network (default is bridge network)
 `docker run -d -e POSTGRES_PASSWORD=secret -p 5434:5432 --network mynetwork postgres`
 
 -----------------------------------------------------------------------
-Create a volume
+**Create a volume**
 `docker volume create VOLUMN_NAME`
 
-List all volume:
+**List all volume:**
 `docker volume ls`
 
-Remove volume (only work if not attach to container)
+**Remove volume (only work if not attach to container)**
 `docker volume rm <name or id>`
 
-Remove all volume unused
+**Remove all volume unused**
 `docker volume prune`
 
 
 -----------------------------------------------------------------------
-Sharing local file with container
+**Sharing local file with container**
 `docker run -v HOST_DIR:CONTAINER_DIR`
 
-Using bind mount:
+**Using bind mount:**
 `docker run --mount type="bind",source=/HOST/PATH,target=/CONTAINER/PATH,<permisstion access>` image`
 
 
 
 
 -----------------------------------------------------------------------
+**Use attach command to attach out Terminal standard input, output, err to running container**
 
+`docker attach <container-name/id>`
 
 
 -----------------------------------------------------------------------

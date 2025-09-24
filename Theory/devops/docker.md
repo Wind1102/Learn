@@ -95,6 +95,21 @@ docker compose down --volumes
 `docker container logs --tail 5 --follow <container-name>`
 
 
+** Advance change default log ** 
+
+```
+cd /etc/docker
+touch daemon.json
+{  
+  "Log-driver": "json-log",  
+  "log-opts": {   
+     "max-size": "10m",     file log max 10Mb
+     "max-file": 3       number of file max is 3
+    }
+}
+
+
+```
 -----------------------------------------------------------------------
 ** Building image **
 `docker build .`
@@ -160,7 +175,7 @@ pass --network in docker run to override default by connecting the container to 
 -----------------------------------------------------------------------
 **Use attach command to attach out Terminal standard input, output, err to running container**
 
-`docker attach <container-name/id>`
+`docker attach <container-name/id>`  (to exit using Ctrl+P Ctrl+Q)
 
 
 -----------------------------------------------------------------------

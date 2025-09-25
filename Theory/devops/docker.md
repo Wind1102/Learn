@@ -21,7 +21,13 @@
     - [Persisting Container Data](#persisting-container-data)
       - [Container volumns](#container-volumns)
     - [Sharing local file with Containers](#sharing-local-file-with-containers)
-    - [Multi-container applications](#multi-container-applications)
+- [Anotomy of container](#anotomy-of-container)
+  - [Namespace](#namespace)
+  - [cgroups](#cgroups)
+  - [Union Filesystems (Unionfs)](#union-filesystems-unionfs)
+- [Creating and managing container images](#creating-and-managing-container-images)
+  - [The layered filesystem](#the-layered-filesystem)
+  - [The writable container layer](#the-writable-container-layer)
 
 # Mục Lục
 
@@ -419,4 +425,27 @@ if you use `-v` or `--volume`, if the host directory isn't exist, a directory wi
 if you use `--mount` to bind mount a file or directory that doesn't yet exist on the Docker host, the docker run command doesn't automatically create it for you but generates an error.
 
 
-### Multi-container applications
+# Anotomy of container
+## Namespace
+- Namespaces in Linux serve to isolate system resources so that each process or group of processes “sees” and “uses” resources as if they had a separate environment.
+
+## cgroups
+- Linux cgroups are used to limit, manage, and isolate resource usage of collections of processes running on system
+
+## Union Filesystems (Unionfs)
+- mainly used of Linux
+- allow file and directory of distinct filesystems to be overlaid to form a single coherent filesystem (the individual filesystems are called branch)
+- Contents of directories that have the same path within the merged branch will be seen in a single merged directory, within the new vitual filesystem 
+- When merging branches, the priority between the branches is specified. In that way, when two branches contain the same file, the one with the higher priority is seen in the final filesystem.
+
+
+# Creating and managing container images
+## The layered filesystem
+- Container image are templates from which containers are created.
+- images are composed of many layer. The first layer is base layer.
+- Each individual layer contains files and folders. Each layer only contains the changes to the filesystem with respect to the underlying layers. (Docker use union filesystem)
+- The layers of image are all immutable (means that once generated, it can't not be change). The only possible operation affecting the layer is its physical deletion
+- The content of each layer is mapped to a special folder on the host, is usually a subfolder of /var/lib/docker/
+
+## The writable container layer
+When docker create a container from container image, it add a writable container layer on tob of this stack of immutable layers.

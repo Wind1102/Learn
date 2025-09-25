@@ -28,6 +28,8 @@
 - [Creating and managing container images](#creating-and-managing-container-images)
   - [The layered filesystem](#the-layered-filesystem)
   - [The writable container layer](#the-writable-container-layer)
+  - [Copy on write](#copy-on-write)
+  - [Interactive image creation](#interactive-image-creation)
 
 # Mục Lục
 
@@ -449,3 +451,10 @@ if you use `--mount` to bind mount a file or directory that doesn't yet exist on
 
 ## The writable container layer
 When docker create a container from container image, it add a writable container layer on tob of this stack of immutable layers.
+
+## Copy on write
+- if a layer uses a file or folder that is avaiable in one of the low-lying layers, then it just uses it. A layer wants to modify, a file from a low-lying layer than it first copies this file up to the target layer and then modifies it.
+
+## Interactive image creation
+
+- 

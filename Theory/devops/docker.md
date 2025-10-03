@@ -36,6 +36,9 @@
   - [COPY AND ADD KEYWORD](#copy-and-add-keyword)
   - [WORKDIR KEYWORD](#workdir-keyword)
   - [THE CMD and ENTRYPOINT](#the-cmd-and-entrypoint)
+  - [DOCKER FILE MULTI-STAGE](#docker-file-multi-stage)
+  - [Best practice Dockerfile](#best-practice-dockerfile)
+  - [Saving and Loading Image](#saving-and-loading-image)
 >>>>>>> Stashed changes
 
 # Mục Lục
@@ -524,4 +527,53 @@ CMD command param1 param2
 FROM alpine:3.10
 CMD wget -O - http://www.google.com
 ```
-- If ENTRYPOINT is missing, the default value is `/bin/sh -c`
+- If ENTRYPOINT is missing, the default value is `/bin/sh -c` 
+
+## DOCKER FILE MULTI-STAGE
+Example: ONE Stage
+```dockerfile
+FROM alpine:3.10 as build
+RUN apk update && apk add --update alpine-sdk
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN mkdir bin
+RUN gcc -Wall hello.c -o bin/hello
+CMD /app/bin/hello
+```
+-> container size is 188MB
+
+```dockerfile
+FROM alpine:3.10 as build
+RUN apk update && apk add --update alpine-sdk
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN mkdir bin
+RUN gcc -Wall hello.c -o bin/hello
+
+FROM alpine:3.10 as production
+COPY --from=build /app/bin/hello /app/hello
+CMD /app/hello
+```
+-> container size is 5.6MB
+
+## Best practice Dockerfile
+
+- Try hard to keep the time that is needed to initialize the application running inside the container at a minimum, as well as the time needed to terminate or clean up the application.
+- Keep build times at a minimum. =>> should order the individual commands in the dockerfile so that we leverage caching as much as possible
+- keep number layer is minimun, easiest way to reduce the number of layers is to combine multiple individual RUN command into single one.
+Example:
+```dockerfile
+RUN apt-get update
+RUN apt-get install -y ca-certificates
+RUN rm -rf /var/lib/apt/lists/*
+=>>>
+RUN apt-get update \
+    && apt-get install -y ca-certificates \
+        && rm -rf /var/lib/apt/lists/*
+```
+
+- use .dockerignore to avoid copying unnecessary files and folders into an image, to keep lean as posible.
+
+## Saving and Loading Image

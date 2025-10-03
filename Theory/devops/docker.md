@@ -28,6 +28,15 @@
 - [Creating and managing container images](#creating-and-managing-container-images)
   - [The layered filesystem](#the-layered-filesystem)
   - [The writable container layer](#the-writable-container-layer)
+  - [Copy on write](#copy-on-write)
+  - [Interactive image creation](#interactive-image-creation)
+- [DOCKER FILE](#docker-file)
+  - [FROM KEYWORD](#from-keyword)
+  - [RUN KEYWORD](#run-keyword)
+  - [COPY AND ADD KEYWORD](#copy-and-add-keyword)
+  - [WORKDIR KEYWORD](#workdir-keyword)
+  - [THE CMD and ENTRYPOINT](#the-cmd-and-entrypoint)
+>>>>>>> Stashed changes
 
 # Mục Lục
 
@@ -449,3 +458,70 @@ if you use `--mount` to bind mount a file or directory that doesn't yet exist on
 
 ## The writable container layer
 When docker create a container from container image, it add a writable container layer on tob of this stack of immutable layers.
+
+## Copy on write
+- if a layer uses a file or folder that is avaiable in one of the low-lying layers, then it just uses it. A layer wants to modify, a file from a low-lying layer than it first copies this file up to the target layer and then modifies it.
+
+## Interactive image creation
+
+- 
+
+
+# DOCKER FILE
+## FROM KEYWORD
+- Define which base image we want to start building our custom image from.
+
+## RUN KEYWORD
+- The argument for RUN is any valid Linux command, such as the following
+
+## COPY AND ADD KEYWORD
+- two keywords are used to copy files and folders from the host into the image that we're building
+- the two keywords are very similar, with the exception that the ADD keyword also lets us copy and unpack TAR files, as well as providing a URL as source for the files and folders to copy
+
+```dockerfile
+COPY . /app
+COPY ./web /app/web
+COPY sample.txt /data/my-sample.txt
+ADD sample.tar /app/bin/
+ADD http://example.com/sample.txt /data/
+COPY ./sample* /mydir/    (can use wildcard in source path)
+ADD --chown=11:22 ./data/web* /app/data/
+```
+
+- By default, all files and folders inside the image will have a user ID (UUID) and a group ID (GID) of 0, we can change the ownership using --chown
+
+## WORKDIR KEYWORD
+- The WORKDIR keyword defines the working directory or context that is used when a container is run from our custom image.
+- Example `WORKDIR /app/bin`
+- All activity that happend inside the image after the preceding line will use this directory as the working directory.
+=>> 
+```dockerfile
+RUN cd /app/bin
+RUN touch sample.txt
+
+is different with
+
+WORKDIR /app/bin
+RUN touch sample.txt
+```
+
+## THE CMD and ENTRYPOINT
+- While other keywords defined for a dockerfile are execute at the time the image is built, these two keyword are actually definations of what will happend when a container is started from image we define.
+- ENTRYPOINT is used to defind command of the expession, while CMD is used to define the parameters for the command.
+```dockerfile
+FROM alpine:3.10
+ENTRYPOINT ["ping"]
+CMD ["-c" , "3", "3.8.8.8."]
+=>> exec form 
+```
+Alternative , can also use shell form
+```dockerfile
+CMD command param1 param2
+```
+- we can instead enter whole expression as a value of CMD and it will work, as shown in the following code block
+
+```dockerfile
+FROM alpine:3.10
+CMD wget -O - http://www.google.com
+```
+- If ENTRYPOINT is missing, the default value is `/bin/sh -c`

@@ -30,6 +30,8 @@
   - [The writable container layer](#the-writable-container-layer)
   - [Copy on write](#copy-on-write)
   - [Interactive image creation](#interactive-image-creation)
+  - [Building an Image](#building-an-image)
+  - [Multi step build](#multi-step-build)
 
 # Mục Lục
 
@@ -457,4 +459,9 @@ When docker create a container from container image, it add a writable container
 
 ## Interactive image creation
 
-- 
+
+## Building an Image
+Image process build visualize 
+![Image process build visualize ](image.png)
+
+## Multi step build

@@ -32,6 +32,18 @@
   - [Interactive image creation](#interactive-image-creation)
   - [Building an Image](#building-an-image)
   - [Multi step build](#multi-step-build)
+- [DOCKER FILE](#docker-file)
+  - [FROM KEYWORD](#from-keyword)
+  - [RUN KEYWORD](#run-keyword)
+  - [COPY AND ADD KEYWORD](#copy-and-add-keyword)
+  - [WORKDIR KEYWORD](#workdir-keyword)
+  - [THE CMD and ENTRYPOINT](#the-cmd-and-entrypoint)
+  - [DOCKER FILE MULTI-STAGE](#docker-file-multi-stage)
+  - [Best practice Dockerfile](#best-practice-dockerfile)
+  - [Saving and Loading Image](#saving-and-loading-image)
+- [Lift and shift: Containerizing a legacy app](#lift-and-shift-containerizing-a-legacy-app)
+>>>>>>> Stashed changes
+>>>>>>> branch/vti
 
 # Mục Lục
 
@@ -465,3 +477,121 @@ Image process build visualize
 ![Image process build visualize ](image.png)
 
 ## Multi step build
+
+
+
+# DOCKER FILE
+## FROM KEYWORD
+- Define which base image we want to start building our custom image from.
+
+## RUN KEYWORD
+- The argument for RUN is any valid Linux command, such as the following
+
+## COPY AND ADD KEYWORD
+- two keywords are used to copy files and folders from the host into the image that we're building
+- the two keywords are very similar, with the exception that the ADD keyword also lets us copy and unpack TAR files, as well as providing a URL as source for the files and folders to copy
+
+```dockerfile
+COPY . /app
+COPY ./web /app/web
+COPY sample.txt /data/my-sample.txt
+ADD sample.tar /app/bin/
+ADD http://example.com/sample.txt /data/
+COPY ./sample* /mydir/    (can use wildcard in source path)
+ADD --chown=11:22 ./data/web* /app/data/
+```
+
+- By default, all files and folders inside the image will have a user ID (UUID) and a group ID (GID) of 0, we can change the ownership using --chown
+
+## WORKDIR KEYWORD
+- The WORKDIR keyword defines the working directory or context that is used when a container is run from our custom image.
+- Example `WORKDIR /app/bin`
+- All activity that happend inside the image after the preceding line will use this directory as the working directory.
+=>> 
+```dockerfile
+RUN cd /app/bin
+RUN touch sample.txt
+
+is different with
+
+WORKDIR /app/bin
+RUN touch sample.txt
+```
+
+## THE CMD and ENTRYPOINT
+- While other keywords defined for a dockerfile are execute at the time the image is built, these two keyword are actually definations of what will happend when a container is started from image we define.
+- ENTRYPOINT is used to defind command of the expession, while CMD is used to define the parameters for the command.
+```dockerfile
+FROM alpine:3.10
+ENTRYPOINT ["ping"]
+CMD ["-c" , "3", "3.8.8.8."]
+=>> exec form 
+```
+Alternative , can also use shell form
+```dockerfile
+CMD command param1 param2
+```
+- we can instead enter whole expression as a value of CMD and it will work, as shown in the following code block
+
+```dockerfile
+FROM alpine:3.10
+CMD wget -O - http://www.google.com
+```
+- If ENTRYPOINT is missing, the default value is `/bin/sh -c` 
+
+## DOCKER FILE MULTI-STAGE
+Example: ONE Stage
+```dockerfile
+FROM alpine:3.10 as build
+RUN apk update && apk add --update alpine-sdk
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN mkdir bin
+RUN gcc -Wall hello.c -o bin/hello
+CMD /app/bin/hello
+```
+-> container size is 188MB
+
+```dockerfile
+FROM alpine:3.10 as build
+RUN apk update && apk add --update alpine-sdk
+RUN mkdir /app
+WORKDIR /app
+COPY . /app
+RUN mkdir bin
+RUN gcc -Wall hello.c -o bin/hello
+
+FROM alpine:3.10 as production
+COPY --from=build /app/bin/hello /app/hello
+CMD /app/hello
+```
+-> container size is 5.6MB
+
+## Best practice Dockerfile
+
+- Try hard to keep the time that is needed to initialize the application running inside the container at a minimum, as well as the time needed to terminate or clean up the application.
+- Keep build times at a minimum. =>> should order the individual commands in the dockerfile so that we leverage caching as much as possible
+- keep number layer is minimun, easiest way to reduce the number of layers is to combine multiple individual RUN command into single one.
+Example:
+```dockerfile
+RUN apt-get update
+RUN apt-get install -y ca-certificates
+RUN rm -rf /var/lib/apt/lists/*
+=>>>
+RUN apt-get update \
+    && apt-get install -y ca-certificates \
+        && rm -rf /var/lib/apt/lists/*
+```
+
+- use .dockerignore to avoid copying unnecessary files and folders into an image, to keep lean as posible.
+
+## Saving and Loading Image
+- Third way to create a new container image is by importing or loading it from a file.
+```shell
+docker image save -o ./backup/my-alpine.tar my-alpine
+docker image load -i ./backup/my-alpine.tar
+```
+
+# Lift and shift: Containerizing a legacy app
+

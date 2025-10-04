@@ -39,6 +39,7 @@
   - [DOCKER FILE MULTI-STAGE](#docker-file-multi-stage)
   - [Best practice Dockerfile](#best-practice-dockerfile)
   - [Saving and Loading Image](#saving-and-loading-image)
+- [Lift and shift: Containerizing a legacy app](#lift-and-shift-containerizing-a-legacy-app)
 >>>>>>> Stashed changes
 
 # Mục Lục
@@ -577,3 +578,10 @@ RUN apt-get update \
 - use .dockerignore to avoid copying unnecessary files and folders into an image, to keep lean as posible.
 
 ## Saving and Loading Image
+- Third way to create a new container image is by importing or loading it from a file.
+```shell
+docker image save -o ./backup/my-alpine.tar my-alpine
+docker image load -i ./backup/my-alpine.tar
+```
+
+# Lift and shift: Containerizing a legacy app

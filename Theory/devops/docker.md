@@ -42,8 +42,15 @@
   - [Best practice Dockerfile](#best-practice-dockerfile)
   - [Saving and Loading Image](#saving-and-loading-image)
 - [Lift and shift: Containerizing a legacy app](#lift-and-shift-containerizing-a-legacy-app)
->>>>>>> Stashed changes
->>>>>>> branch/vti
+  - [Analysis of external dependencies](#analysis-of-external-dependencies)
+  - [Source code and build instructions](#source-code-and-build-instructions)
+  - [Configuration](#configuration)
+  - [Secrets](#secrets)
+  - [Authoring the Dockerfile](#authoring-the-dockerfile)
+- [Sharing and shippiing Images](#sharing-and-shippiing-images)
+  - [Tagging an image](#tagging-an-image)
+    > > > > > > > Stashed changes
+    > > > > > > > branch/vti
 
 # Mục Lục
 
@@ -113,23 +120,23 @@ docker compose down --volumes
 **Get 5 lasted log**
 `docker container logs --tail 5 <container-name>`
 
-** Get realtime logs ** 
+** Get realtime logs **
 `docker container logs --tail 5 --follow <container-name>`
 
 
-** Advance change default log ** 
+** Advance change default log **
 
 ```
+
 cd /etc/docker
 touch daemon.json
 {  
-  "Log-driver": "json-log",  
-  "log-opts": {   
-     "max-size": "10m",     file log max 10Mb
-     "max-file": 3       number of file max is 3
-    }
+ "Log-driver": "json-log",  
+ "log-opts": {  
+ "max-size": "10m", file log max 10Mb
+"max-file": 3 number of file max is 3
 }
-
+}
 
 ```
 -----------------------------------------------------------------------
@@ -165,7 +172,7 @@ touch daemon.json
 `docker network ls`
 
 **check network**
-`docker network inspect NETWORK_NAME` 
+`docker network inspect NETWORK_NAME`
 
 pass --network in docker run to override default by connecting the container to custom docker network (default is bridge network)
 `docker run -d -e POSTGRES_PASSWORD=secret -p 5434:5432 --network mynetwork postgres`
@@ -337,7 +344,6 @@ CMD ['uvicorn' ,'app.main:app', '--host','0.0.0.0', '--port','8000']
 - `USER <user-or-uid>`- this instruction sets the default user for all subsequent instructions.
 - `CMD ["<command>", "<arg1>"]` - this instruction sets the default command a container using this image will run.
 
-
 Containerize new projects quickly with docker init
 
 The docker init command will analyze your project and quickly create a Dockerfile, a compose.yaml, and a .dockerignore, helping you get up and going
@@ -349,24 +355,28 @@ The docker init command will analyze your project and quickly create a Dockerfil
 - Publishing images - the process to distribute or share the newly created image using a container registry
 
 ### build image
+
 - `docker build .` `.` in the command provides the path or URL to the build context. At this location, the builder will find the Dockerfile and other referenced files.
 
 ### Tagging images
-` [HOST[:PORT_NUMBER]/]PATH[:TAG] ` 
+
+`[HOST[:PORT_NUMBER]/]PATH[:TAG]`
+
 - `HOST`: The optional registry hostname where the image is located. If no host is specified, Docker's public registry at docker.io is used by default.
 - `PORT_NUMBER`: The registry port number if a hostname is provided
 - `PATH`: The path of the image, consisting of slash-separated components. For Docker Hub, the format follows [NAMESPACE/]REPOSITORY, where namespace is either a user's or organization's name. If no namespace is specified, library is used, which is the namespace for Docker Official Images.
 - `TAG`: A custom, human-readable identifier that's typically used to identify different versions or variants of an image. If no tag is specified, latest is used by default.
-  
+
 ### Multi-stage builds
+
 ```docker
-  FROM eclipse-temurin:21.0.2_13-jdk-jammy AS builder 
+  FROM eclipse-temurin:21.0.2_13-jdk-jammy AS builder
   WORKDIR /opt/app
   COPY .mvn/ .mvn
   COPY mvnw pom.xml ./
   RUN ./mvnw dependency:go-offline
   COPY ./src ./src
-  RUN ./mvnw clean install 
+  RUN ./mvnw clean install
 
   FROM eclipse-temurin:21.0.2_13-jre-jammy AS final
   WORKDIR /opt/app
@@ -376,44 +386,54 @@ The docker init command will analyze your project and quickly create a Dockerfil
 ```
 
 ## Running container
+
 ### publishing and exposing ports
+
 - Publishing a port provides the ability to break through a little bit of networking isolation by setting up a forwarding rule. As an example, you can indicate that requests on your host’s port 8080 should be forwarded to the container’s port 80. Publishing ports happens during container creation using the -p (or --publish) flag with docker run. The syntax is:
-```docker 
+
+```docker
    docker run -d -p HOST_PORT:CONTAINER_PORT nginx
    - HOST_PORT: The port number on your host machine where you want to receive traffic
    - CONTAINER_PORT: The port number within the container that's listening for connections
 ```
 
 #### Publishing to ephemeral ports
-simply omit the `HOST_POST` configuration 
-```docker 
+
+simply omit the `HOST_POST` configuration
+
+```docker
   docker run -p 80 nginx
 ```
 
 #### Publishing all port
+
 When creating a container image, the EXPOSE instruction is used to indicate the packaged application will use the specified port. These ports aren't published by default.
 With the -P or --publish-all flag, you can automatically publish all exposed ports to ephemeral ports. This is quite useful when you’re trying to avoid port conflicts in development or testing environments.
-```docker 
+
+```docker
   docker run -P nginx
 ```
 
 ### Overriding container default
+
 ####Overriding the network ports
 `docker run -d -p HOST_PORT:CONTAINER_PORT postgres`
 
 #### Setting environment variables
+
 ```docker
   docker run -e foo=bar  postgres env
 ```
+
 The .env file acts as a convenient way to set environment variables for your Docker containers without cluttering your command line with numerous -e flags. To use a .env file, you can pass --env-file option with the docker run command.
 
 ```docker
-  docker run --env-file .env postgres env 
+  docker run --env-file .env postgres env
 ```
 
 #### Restricting the container to consume the resources
 
-You can use the `--memory` and `--cpus` flags with the docker run command to restrict how much CPU and MEMORY a container can use. 
+You can use the `--memory` and `--cpus` flags with the docker run command to restrict how much CPU and MEMORY a container can use.
 For example, you can set a memory limit for the Python API container, preventing it from consuming excessive resources on your host. Here's the command:
 
 ```docker
@@ -423,40 +443,46 @@ For example, you can set a memory limit for the Python API container, preventing
 Can use command `docker stats` to monitor the real-time resource usage of running container.
 
 **KEY different between default bridge and custom networks**
+
 1. DNS resolution: by default, containers connected to the default bridge network can communicate with each other, but only by IP address.
 
-
 ### Persisting Container Data
+
 #### Container volumns
- 
+
 To create volume -> docker volume create <volume_name>
 docker volume rm <volume>
 
 ### Sharing local file with Containers
+
 - Docker offer two primary storage options for persisting data and sharing files between the host machine and containers
 - if want to ensure that data generated or modified inside the container persists even after the container stop, you would opt for a volume
-- If you have specific files or directories on your host system that you want to directly share with your container, like configuration files or development code, then you would use a bind mount. 
+- If you have specific files or directories on your host system that you want to directly share with your container, like configuration files or development code, then you would use a bind mount.
 
 if you use `-v` or `--volume`, if the host directory isn't exist, a directory will be automatically created.
 if you use `--mount` to bind mount a file or directory that doesn't yet exist on the Docker host, the docker run command doesn't automatically create it for you but generates an error.
 
-
 # Anotomy of container
+
 ## Namespace
+
 - Namespaces in Linux serve to isolate system resources so that each process or group of processes “sees” and “uses” resources as if they had a separate environment.
 
 ## cgroups
+
 - Linux cgroups are used to limit, manage, and isolate resource usage of collections of processes running on system
 
 ## Union Filesystems (Unionfs)
+
 - mainly used of Linux
 - allow file and directory of distinct filesystems to be overlaid to form a single coherent filesystem (the individual filesystems are called branch)
-- Contents of directories that have the same path within the merged branch will be seen in a single merged directory, within the new vitual filesystem 
+- Contents of directories that have the same path within the merged branch will be seen in a single merged directory, within the new vitual filesystem
 - When merging branches, the priority between the branches is specified. In that way, when two branches contain the same file, the one with the higher priority is seen in the final filesystem.
 
-
 # Creating and managing container images
+
 ## The layered filesystem
+
 - Container image are templates from which containers are created.
 - images are composed of many layer. The first layer is base layer.
 - Each individual layer contains files and folders. Each layer only contains the changes to the filesystem with respect to the underlying layers. (Docker use union filesystem)
@@ -464,30 +490,34 @@ if you use `--mount` to bind mount a file or directory that doesn't yet exist on
 - The content of each layer is mapped to a special folder on the host, is usually a subfolder of /var/lib/docker/
 
 ## The writable container layer
+
 When docker create a container from container image, it add a writable container layer on tob of this stack of immutable layers.
 
 ## Copy on write
+
 - if a layer uses a file or folder that is avaiable in one of the low-lying layers, then it just uses it. A layer wants to modify, a file from a low-lying layer than it first copies this file up to the target layer and then modifies it.
 
 ## Interactive image creation
 
-
 ## Building an Image
-Image process build visualize 
+
+Image process build visualize
 ![Image process build visualize ](image.png)
 
 ## Multi step build
 
-
-
 # DOCKER FILE
+
 ## FROM KEYWORD
+
 - Define which base image we want to start building our custom image from.
 
 ## RUN KEYWORD
+
 - The argument for RUN is any valid Linux command, such as the following
 
 ## COPY AND ADD KEYWORD
+
 - two keywords are used to copy files and folders from the host into the image that we're building
 - the two keywords are very similar, with the exception that the ADD keyword also lets us copy and unpack TAR files, as well as providing a URL as source for the files and folders to copy
 
@@ -504,10 +534,12 @@ ADD --chown=11:22 ./data/web* /app/data/
 - By default, all files and folders inside the image will have a user ID (UUID) and a group ID (GID) of 0, we can change the ownership using --chown
 
 ## WORKDIR KEYWORD
+
 - The WORKDIR keyword defines the working directory or context that is used when a container is run from our custom image.
 - Example `WORKDIR /app/bin`
 - All activity that happend inside the image after the preceding line will use this directory as the working directory.
-=>> 
+  =>>
+
 ```dockerfile
 RUN cd /app/bin
 RUN touch sample.txt
@@ -519,28 +551,36 @@ RUN touch sample.txt
 ```
 
 ## THE CMD and ENTRYPOINT
+
 - While other keywords defined for a dockerfile are execute at the time the image is built, these two keyword are actually definations of what will happend when a container is started from image we define.
 - ENTRYPOINT is used to defind command of the expession, while CMD is used to define the parameters for the command.
+
 ```dockerfile
 FROM alpine:3.10
 ENTRYPOINT ["ping"]
 CMD ["-c" , "3", "3.8.8.8."]
-=>> exec form 
+=>> exec form
 ```
+
 Alternative , can also use shell form
+
 ```dockerfile
 CMD command param1 param2
 ```
+
 - we can instead enter whole expression as a value of CMD and it will work, as shown in the following code block
 
 ```dockerfile
 FROM alpine:3.10
 CMD wget -O - http://www.google.com
 ```
-- If ENTRYPOINT is missing, the default value is `/bin/sh -c` 
+
+- If ENTRYPOINT is missing, the default value is `/bin/sh -c`
 
 ## DOCKER FILE MULTI-STAGE
+
 Example: ONE Stage
+
 ```dockerfile
 FROM alpine:3.10 as build
 RUN apk update && apk add --update alpine-sdk
@@ -551,6 +591,7 @@ RUN mkdir bin
 RUN gcc -Wall hello.c -o bin/hello
 CMD /app/bin/hello
 ```
+
 -> container size is 188MB
 
 ```dockerfile
@@ -566,6 +607,7 @@ FROM alpine:3.10 as production
 COPY --from=build /app/bin/hello /app/hello
 CMD /app/hello
 ```
+
 -> container size is 5.6MB
 
 ## Best practice Dockerfile
@@ -573,7 +615,8 @@ CMD /app/hello
 - Try hard to keep the time that is needed to initialize the application running inside the container at a minimum, as well as the time needed to terminate or clean up the application.
 - Keep build times at a minimum. =>> should order the individual commands in the dockerfile so that we leverage caching as much as possible
 - keep number layer is minimun, easiest way to reduce the number of layers is to combine multiple individual RUN command into single one.
-Example:
+  Example:
+
 ```dockerfile
 RUN apt-get update
 RUN apt-get install -y ca-certificates
@@ -587,7 +630,9 @@ RUN apt-get update \
 - use .dockerignore to avoid copying unnecessary files and folders into an image, to keep lean as posible.
 
 ## Saving and Loading Image
+
 - Third way to create a new container image is by importing or loading it from a file.
+
 ```shell
 docker image save -o ./backup/my-alpine.tar my-alpine
 docker image load -i ./backup/my-alpine.tar
@@ -595,3 +640,31 @@ docker image load -i ./backup/my-alpine.tar
 
 # Lift and shift: Containerizing a legacy app
 
+## Analysis of external dependencies
+
+- Does it use database? which one? what does connection string look like?
+- Does it use external api? What are the API keys and key secrets?
+- Is it consuming from or publishing to an Enterprise Service Bus (ESB)?
+
+## Source code and build instructions
+
+- Next step is to locate all source code and other assets, such as image and CSS and HTML files that are part of the application. Ideally, they should be located in single folder.
+- An option to download or copy files during the build from different locations, using `COPY` and `ADD` commands. This option is useful if the sources for your legacy application cannot be easily contained in a single, local folder.
+
+## Configuration
+
+- We can differentiate a few types of configurations as follow:
+  - `Build time`: This is the information needed during the build of the application and/or its Docker image. It needs to be available when we create the Docker images.
+  - `Environment`: configuration information that varies with the environment in which the application is running, for example, DEVELOPMENT versus STAGING or PRODUCTION
+  - `Runtime`: This is infomation that the application retrieves during runtime, such as secrets to access an external API.
+
+## Secrets
+
+- There are various ways traditional applications got their secrets. The worst and most insecure way of providing secrets is by hardcoding them or reading them from configuration files or environment variables, where they are available in cleartext.
+- A much better way is to read the secrets during runtime from a special secrets store that persists the secrets encrypted and provides them to the application over a secure connection, such as Transport Layer Security (TLS).
+
+## Authoring the Dockerfile
+
+# Sharing and shippiing Images
+
+## Tagging an image

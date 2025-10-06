@@ -57,6 +57,7 @@
   - [Defining environtment variables for containers](#defining-environtment-variables-for-containers)
   - [Define env variables in container images](#define-env-variables-in-container-images)
   - [Environment variables at build time.](#environment-variables-at-build-time)
+- [Debugging Code Running in Containers](#debugging-code-running-in-containers)
 
 # Mục Lục
 
@@ -738,3 +739,5 @@ Example
 ```bash
 $ docker image build --build-arg BASE_IMAGE_VERSION=12.7-alpine -t my-node-app-test .
 ```
+
+# Debugging Code Running in Containers

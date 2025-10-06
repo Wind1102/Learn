@@ -49,8 +49,14 @@
   - [Authoring the Dockerfile](#authoring-the-dockerfile)
 - [Sharing and shippiing Images](#sharing-and-shippiing-images)
   - [Tagging an image](#tagging-an-image)
-    > > > > > > > Stashed changes
-    > > > > > > > branch/vti
+  - [Image namespaces](#image-namespaces)
+  - [Pushing images to a registry](#pushing-images-to-a-registry)
+- [Data Volumes and Configurations](#data-volumes-and-configurations)
+  - [Defining volumes in images](#defining-volumes-in-images)
+- [Configuration Container](#configuration-container)
+  - [Defining environtment variables for containers](#defining-environtment-variables-for-containers)
+  - [Define env variables in container images](#define-env-variables-in-container-images)
+  - [Environment variables at build time.](#environment-variables-at-build-time)
 
 # Mục Lục
 
@@ -668,3 +674,67 @@ docker image load -i ./backup/my-alpine.tar
 # Sharing and shippiing Images
 
 ## Tagging an image
+- A tag is often used to version images, but it has a broader reach than just being a version number. If we do not explicitly specify a tag when working with images, then Docker automatically assumes we're referring to the latest tag.
+
+## Image namespaces
+- The most generic way to define an image an image is by its fully qualified name, which looks as follow:
+  - `<registry URL><User or Org>/<name>:<tag>`
+    - <register URL>: This is the URL, to the registry from which we want to pull the image. By default, this is docker.io, Other than docker hub, there are quite a few public registries out there that you could pull image from (google, Amazon, ...)
+  - `<User or Org>`: This is the private Docker ID of either an individual or an organization defined on Docker hub, or any other registry, for that matter- such as microsoft or oracle.
+  - `<name>`: this is the name of the image, which is often also, called a repository.
+  - `<tag>`: This is the tag of image
+  - Example: https://registry.acme.com/engineering/web-app:1.0
+    - If we omit the registry URL, then Docker Hub is automatically taken.
+    - If we omit the tag, then latest is taken.
+    - If it is an official image on Docker Hub, then no user or organization namespace is needed.
+
+## Pushing images to a registry
+```bash
+docker image tag alpine:lastest <user>/alpine:1.0
+docker login -u <user> -p <password>
+docker image push <user>/alpine:1.0
+
+```
+- with private repository -> can be pull if login and have permission
+
+# Data Volumes and Configurations 
+
+
+## Defining volumes in images
+
+```dockerfile
+VOLUME /app/data 
+VOLUME /app/data, /app/profiles, /app/config 
+VOLUME ["/app/data", "/app/profiles", "/app/config"] 
+```
+- path in docker file above is path in container
+- when build image => docker automatically create volumes and mount it to the corresponding target folder of the container for each path defined in the docker file.Since each volume is created automatically by Docker, it will have an SHA-256 as its ID.
+
+
+# Configuration Container
+## Defining environtment variables for containers
+- use `--env` or `-e` <key> = <value>
+- `--env-file` in run command to pass collection of env
+
+## Define env variables in container images 
+- to define default env for each container from image, we can define env for image with `ENV` keyword in dockerfile 
+- we can override env of image when running container from it. 
+
+## Environment variables at build time.
+- we using `ARG` keyword to define default that is used each time we build an image from the preceding Dockerfile.
+Example 
+
+```dockerfile
+ARG BASE_IMAGE_VERSION=12.7-stretch
+FROM node:${BASE_IMAGE_VERSION}
+WORKDIR /app
+COPY packages.json .
+RUN npm install
+COPY . .
+CMD npm start
+```
+- or we can use `--build-arg` <key>=<value>
+Example 
+```bash
+$ docker image build --build-arg BASE_IMAGE_VERSION=12.7-alpine -t my-node-app-test .
+```

@@ -57,6 +57,23 @@
   - [Defining environtment variables for containers](#defining-environtment-variables-for-containers)
   - [Define env variables in container images](#define-env-variables-in-container-images)
   - [Environment variables at build time.](#environment-variables-at-build-time)
+- [Using docker to supercharge automation](#using-docker-to-supercharge-automation)
+  - [Using Docker to power a CI/CD pipeline](#using-docker-to-power-a-cicd-pipeline)
+- [Advanced Docker usage scenarios](#advanced-docker-usage-scenarios)
+  - [Running Docker in Docker](#running-docker-in-docker)
+  - [Formatting output of common docker command](#formatting-output-of-common-docker-command)
+  - [Filter the output of common Docker commands](#filter-the-output-of-common-docker-commands)
+  - [Limiting resources consumed by a container](#limiting-resources-consumed-by-a-container)
+  - [Read-only file system](#read-only-file-system)
+  - [Running your termianl in a remote container and accessing it via https](#running-your-termianl-in-a-remote-container-and-accessing-it-via-https)
+  - [Pattern and best practice](#pattern-and-best-practice)
+    - [Load balancing](#load-balancing)
+    - [Circuit breaker pattern](#circuit-breaker-pattern)
+  - [Application update](#application-update)
+- [Single host networking](#single-host-networking)
+  - [Dissecting the container network model](#dissecting-the-container-network-model)
+  - [Network firewalling](#network-firewalling)
+  - [Running in an existing network namespace](#running-in-an-existing-network-namespace)
 
 # Mục Lục
 
@@ -289,7 +306,7 @@ Some contrainer registry: Amazon elastic Container registry(ECR), GitLab contain
 
 - A registry is centralized location that stores and manages container image
 - Repository is a collection of related container image within a registry
-  ![Registry vs Repository](image/registry_repository.png)
+  ![Registry vs Repository](../image/registry_repository.png)
 
 # Building Image
 
@@ -508,7 +525,7 @@ When docker create a container from container image, it add a writable container
 ## Building an Image
 
 Image process build visualize
-![Image process build visualize ](image.png)
+![Image process build visualize ](../image/image_process_build.png)
 
 ## Multi step build
 
@@ -738,3 +755,88 @@ Example
 ```bash
 $ docker image build --build-arg BASE_IMAGE_VERSION=12.7-alpine -t my-node-app-test .
 ```
+
+# Using docker to supercharge automation
+## Using Docker to power a CI/CD pipeline
+
+
+
+# Advanced Docker usage scenarios
+## Running Docker in Docker
+- add docker cli in container, and use socket of docker deamon in host map to container to borrow docker engine from host to run docker.
+Example
+```bash
+#!/bin/bash
+docker container run --rm --name builder \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v "$PWD":/usr/src/app \
+-e HUB_USER=wind1102 \
+-e HUB_PW=22102002hhbg \
+-e REPO=sample-app \
+-e TAG=1.0 \
+builder
+
+```
+## Formatting output of common docker command 
+```bash
+docker container ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
+```
+
+## Filter the output of common Docker commands
+- `--filter <key>=<value>`
+
+## Limiting resources consumed by a container
+- we can limit the resource a single container can consume at.
+```bash
+$ docker container run --rm -it \   
+ --name stress-test \    
+ --memory 512M \    
+ ubuntu:19.04 /bin/bash
+```
+
+## Read-only file system
+- the flag `--read-only` mounts the container's filesystem as read-only.
+
+## Running your termianl in a remote container and accessing it via https
+
+## Pattern and best practice
+### Load balancing
+- is external service that intercepts the call and takes over the part of deciding which of the target service instances to forward the call to.
+- Use different algo to decide how to distribute incomming call to target service.
+- Most common algo is round-robin.
+
+### Circuit breaker pattern 
+- is mechanism that is used to avoid a distributed system application going down due to the cascading failure of many essential component.
+- Once the number of failures reaches a certain threshold, the circuit breaker trips. All subsequent calls to the circuit breaker will return with an error, without the protected call being made at all
+
+## Application update
+- `Rolling update`: The assumption here is that the particular piece of software that has to be updated runs in multiple instances. Only then can we use this type of update. the next instance of the current service is taken down and replaced with a new instance. This pattern is repeated until all the service instances have been replaced.
+- `Blue green deployment`: current version is blue, new version of application is green.  The new service is not wired with the rest of the application yet. Once green is installed, we can execute smoke tests against this new service and, if those succeed, the router can be configured to funnel all traffic that previously went to blue to the new service, green.
+- `Canary release`: current version and new version install parallel. Config a router so that it funnels a small percentage, 1%. If oke => funnel more traffic, say 5%....-> repeated until 100%.
+
+# Single host networking
+## Dissecting the container network model 
+- Container network model (CNM):
+  - `Sandbox`: The sandbox perectly isolates a container from the outside world. No inbound connection directly allowed into the sandboxed container.
+  - `Endpoint`: An endpoint is a controlled gateway from the outside world into the network's sandbox that shields the container. The endpoint connects the network sandbox (but not the container) to the third element of the model, which is the network.
+  - `Network`: The network is the pathway that transports the data packets of an instance of communication from endpoint to endpoint or, ultimately, from container to container.
+![The docker CNM](../image/cnm.png)
+
+- we have multiple implementations of CNM:
+
+| **Network**              | **Company**   | **Scope** | **Description**                                                                                      | **Typical Use Case**                                       |
+|---------------------------|---------------|------------|------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
+| **Bridge**                | Docker        | Local      | Simple network based on Linux bridges to allow networking on a single host                           | Default network for containers on a single host            |
+| **Macvlan**               | Docker        | Local      | Configures multiple layer 2 (that is, MAC) addresses on a single physical host interface              | When containers need direct LAN access with unique IPs     |
+| **Overlay**               | Docker        | Global     | Multinode-capable container network based on Virtual Extensible LAN (VXLAN)                          | Connecting containers across multiple Docker hosts         |
+| **Weave Net**             | Weaveworks    | Global     | Simple, resilient, multi-host Docker networking                                                      | Simplifying networking in multi-node environments          |
+| **Contiv Network Plugin** | Cisco         | Global     | Open source container networking                                                                     | Enterprise-grade networking and policy management          |
+
+## Network firewalling
+## Running in an existing network namespace
+
+
+
+
+
+

@@ -66,6 +66,10 @@
   - [Limiting resources consumed by a container](#limiting-resources-consumed-by-a-container)
   - [Read-only file system](#read-only-file-system)
   - [Running your termianl in a remote container and accessing it via https](#running-your-termianl-in-a-remote-container-and-accessing-it-via-https)
+- [Instrumenting your code to produce meaningful logging information](#instrumenting-your-code-to-produce-meaningful-logging-information)
+- [Using docker to Supercharge Automation](#using-docker-to-supercharge-automation-1)
+- [Distributed Application Architecture](#distributed-application-architecture)
+  - [Defining the terminology](#defining-the-terminology)
   - [Pattern and best practice](#pattern-and-best-practice)
     - [Load balancing](#load-balancing)
     - [Circuit breaker pattern](#circuit-breaker-pattern)
@@ -691,9 +695,11 @@ docker image load -i ./backup/my-alpine.tar
 # Sharing and shippiing Images
 
 ## Tagging an image
+
 - A tag is often used to version images, but it has a broader reach than just being a version number. If we do not explicitly specify a tag when working with images, then Docker automatically assumes we're referring to the latest tag.
 
 ## Image namespaces
+
 - The most generic way to define an image an image is by its fully qualified name, which looks as follow:
   - `<registry URL><User or Org>/<name>:<tag>`
     - <register URL>: This is the URL, to the registry from which we want to pull the image. By default, this is docker.io, Other than docker hub, there are quite a few public registries out there that you could pull image from (google, Amazon, ...)
@@ -706,40 +712,45 @@ docker image load -i ./backup/my-alpine.tar
     - If it is an official image on Docker Hub, then no user or organization namespace is needed.
 
 ## Pushing images to a registry
+
 ```bash
 docker image tag alpine:lastest <user>/alpine:1.0
 docker login -u <user> -p <password>
 docker image push <user>/alpine:1.0
 
 ```
+
 - with private repository -> can be pull if login and have permission
 
-# Data Volumes and Configurations 
-
+# Data Volumes and Configurations
 
 ## Defining volumes in images
 
 ```dockerfile
-VOLUME /app/data 
-VOLUME /app/data, /app/profiles, /app/config 
-VOLUME ["/app/data", "/app/profiles", "/app/config"] 
+VOLUME /app/data
+VOLUME /app/data, /app/profiles, /app/config
+VOLUME ["/app/data", "/app/profiles", "/app/config"]
 ```
+
 - path in docker file above is path in container
 - when build image => docker automatically create volumes and mount it to the corresponding target folder of the container for each path defined in the docker file.Since each volume is created automatically by Docker, it will have an SHA-256 as its ID.
 
-
 # Configuration Container
+
 ## Defining environtment variables for containers
+
 - use `--env` or `-e` <key> = <value>
 - `--env-file` in run command to pass collection of env
 
-## Define env variables in container images 
-- to define default env for each container from image, we can define env for image with `ENV` keyword in dockerfile 
-- we can override env of image when running container from it. 
+## Define env variables in container images
+
+- to define default env for each container from image, we can define env for image with `ENV` keyword in dockerfile
+- we can override env of image when running container from it.
 
 ## Environment variables at build time.
+
 - we using `ARG` keyword to define default that is used each time we build an image from the preceding Dockerfile.
-Example 
+  Example
 
 ```dockerfile
 ARG BASE_IMAGE_VERSION=12.7-stretch
@@ -750,21 +761,25 @@ RUN npm install
 COPY . .
 CMD npm start
 ```
+
 - or we can use `--build-arg` <key>=<value>
-Example 
+  Example
+
 ```bash
 $ docker image build --build-arg BASE_IMAGE_VERSION=12.7-alpine -t my-node-app-test .
 ```
 
 # Using docker to supercharge automation
+
 ## Using Docker to power a CI/CD pipeline
 
-
-
 # Advanced Docker usage scenarios
+
 ## Running Docker in Docker
+
 - add docker cli in container, and use socket of docker deamon in host map to container to borrow docker engine from host to run docker.
-Example
+  Example
+
 ```bash
 #!/bin/bash
 docker container run --rm --name builder \
@@ -777,66 +792,96 @@ docker container run --rm --name builder \
 builder
 
 ```
-## Formatting output of common docker command 
+
+## Formatting output of common docker command
+
 ```bash
 docker container ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
 ```
 
 ## Filter the output of common Docker commands
+
 - `--filter <key>=<value>`
 
 ## Limiting resources consumed by a container
+
 - we can limit the resource a single container can consume at.
+
 ```bash
-$ docker container run --rm -it \   
- --name stress-test \    
- --memory 512M \    
+$ docker container run --rm -it \
+ --name stress-test \
+ --memory 512M \
  ubuntu:19.04 /bin/bash
 ```
 
 ## Read-only file system
+
 - the flag `--read-only` mounts the container's filesystem as read-only.
 
 ## Running your termianl in a remote container and accessing it via https
 
+# Instrumenting your code to produce meaningful logging information
+
+- `TRACE` : Very fine-grained information. At this level, you are looking at capturing every detail possible about your application's behavior.
+- `DEBUG`: Relatively granular and mostly diagnostic information helping to pin down potential problems if they occur.
+- `INFO`: Normal application behavior or milestones.
+- `WARN`: The application might have encountered a problem or you detected an unusual situation.
+- `ERROR`: The application encountered a serious issue. This most probably represents the failure of an important application task.
+- `FATAL`: The catastrophic failure of your application. The immediate shutdown of the application is advised.
+
+# Using docker to Supercharge Automation
+
+# Distributed Application Architecture
+
+## Defining the terminology
+
+- `VM`: The acronym for virtual machine. this is virtual compute.
+- `Node`: An individual server used to run application, this can be a phisical server, often called bare-metal, or a VM. Normally, a node is part of a cluster
+- `Cluster`: A group of nodes connected by a network that used to run distributed applications
+- `Network`: Physical and software defined communication paths between individual nodes of a cluster and programs running on those nodes.
+- `Port`: A channel on which an application such as a web server listens for incoming requests.
+- `Service`: is a very overloaded term and its real meaning depends on the context that it is used in.
+
 ## Pattern and best practice
+
 ### Load balancing
+
 - is external service that intercepts the call and takes over the part of deciding which of the target service instances to forward the call to.
 - Use different algo to decide how to distribute incomming call to target service.
 - Most common algo is round-robin.
 
-### Circuit breaker pattern 
+### Circuit breaker pattern
+
 - is mechanism that is used to avoid a distributed system application going down due to the cascading failure of many essential component.
 - Once the number of failures reaches a certain threshold, the circuit breaker trips. All subsequent calls to the circuit breaker will return with an error, without the protected call being made at all
 
 ## Application update
+
 - `Rolling update`: The assumption here is that the particular piece of software that has to be updated runs in multiple instances. Only then can we use this type of update. the next instance of the current service is taken down and replaced with a new instance. This pattern is repeated until all the service instances have been replaced.
-- `Blue green deployment`: current version is blue, new version of application is green.  The new service is not wired with the rest of the application yet. Once green is installed, we can execute smoke tests against this new service and, if those succeed, the router can be configured to funnel all traffic that previously went to blue to the new service, green.
+- `Blue green deployment`: current version is blue, new version of application is green. The new service is not wired with the rest of the application yet. Once green is installed, we can execute smoke tests against this new service and, if those succeed, the router can be configured to funnel all traffic that previously went to blue to the new service, green.
 - `Canary release`: current version and new version install parallel. Config a router so that it funnels a small percentage, 1%. If oke => funnel more traffic, say 5%....-> repeated until 100%.
 
 # Single host networking
-## Dissecting the container network model 
+
+## Dissecting the container network model
+
 - Container network model (CNM):
+
   - `Sandbox`: The sandbox perectly isolates a container from the outside world. No inbound connection directly allowed into the sandboxed container.
   - `Endpoint`: An endpoint is a controlled gateway from the outside world into the network's sandbox that shields the container. The endpoint connects the network sandbox (but not the container) to the third element of the model, which is the network.
   - `Network`: The network is the pathway that transports the data packets of an instance of communication from endpoint to endpoint or, ultimately, from container to container.
-![The docker CNM](../image/cnm.png)
+    ![The docker CNM](../image/cnm.png)
 
 - we have multiple implementations of CNM:
 
-| **Network**              | **Company**   | **Scope** | **Description**                                                                                      | **Typical Use Case**                                       |
-|---------------------------|---------------|------------|------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| **Bridge**                | Docker        | Local      | Simple network based on Linux bridges to allow networking on a single host                           | Default network for containers on a single host            |
-| **Macvlan**               | Docker        | Local      | Configures multiple layer 2 (that is, MAC) addresses on a single physical host interface              | When containers need direct LAN access with unique IPs     |
-| **Overlay**               | Docker        | Global     | Multinode-capable container network based on Virtual Extensible LAN (VXLAN)                          | Connecting containers across multiple Docker hosts         |
-| **Weave Net**             | Weaveworks    | Global     | Simple, resilient, multi-host Docker networking                                                      | Simplifying networking in multi-node environments          |
-| **Contiv Network Plugin** | Cisco         | Global     | Open source container networking                                                                     | Enterprise-grade networking and policy management          |
+| **Network**               | **Company** | **Scope** | **Description**                                                                          | **Typical Use Case**                                   |
+| ------------------------- | ----------- | --------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Bridge**                | Docker      | Local     | Simple network based on Linux bridges to allow networking on a single host               | Default network for containers on a single host        |
+| **Macvlan**               | Docker      | Local     | Configures multiple layer 2 (that is, MAC) addresses on a single physical host interface | When containers need direct LAN access with unique IPs |
+| **Overlay**               | Docker      | Global    | Multinode-capable container network based on Virtual Extensible LAN (VXLAN)              | Connecting containers across multiple Docker hosts     |
+| **Weave Net**             | Weaveworks  | Global    | Simple, resilient, multi-host Docker networking                                          | Simplifying networking in multi-node environments      |
+| **Contiv Network Plugin** | Cisco       | Global    | Open source container networking                                                         | Enterprise-grade networking and policy management      |
 
 ## Network firewalling
+
 ## Running in an existing network namespace
-
-
-
-
-
-

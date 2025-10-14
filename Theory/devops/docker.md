@@ -78,6 +78,9 @@
   - [Dissecting the container network model](#dissecting-the-container-network-model)
   - [Network firewalling](#network-firewalling)
   - [Running in an existing network namespace](#running-in-an-existing-network-namespace)
+- [Docker Compose](#docker-compose)
+  - [Running multi-service app](#running-multi-service-app)
+  - [Building images with docker compose](#building-images-with-docker-compose)
 
 # Mục Lục
 
@@ -885,3 +888,31 @@ $ docker container run --rm -it \
 ## Network firewalling
 
 ## Running in an existing network namespace
+
+# Docker Compose
+
+## Running multi-service app
+
+```docker-compose.yml
+version: "2.4"
+services:
+ web:
+    image: fundamentalsofdocker/ch11-web:2.0
+    build: web
+    ports:
+    - 80:3000
+ db:
+    image: fundamentalsofdocker/ch11-db:2.0
+    build: db
+    volumes:
+    - pets-data:/var/lib/postgresql/data
+
+volumes:
+ pets-data:
+```
+
+- `version`: we specify the version of the Docker Compose format we want to use.
+- `service`: we specify the services that make up our application in the service block. Example `web`, `db` service
+- `volumes`: The volumes used by any of the services have to be declared in this section. This is the last section of file.
+
+## Building images with docker compose

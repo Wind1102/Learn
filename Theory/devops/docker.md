@@ -78,6 +78,8 @@
   - [Dissecting the container network model](#dissecting-the-container-network-model)
   - [Network firewalling](#network-firewalling)
   - [Running in an existing network namespace](#running-in-an-existing-network-namespace)
+  - [Managing container port](#managing-container-port)
+- [Docker Compose](#docker-compose)
 
 # Mục Lục
 
@@ -885,3 +887,18 @@ $ docker container run --rm -it \
 ## Network firewalling
 
 ## Running in an existing network namespace
+- Normally, docker creates a new network namespace for each container we run. The network namespace of the container corresponds to the sandbox of the CNM. As we attach the container to a network, we define an endpoint that connects the container network namespace with the actule network.
+- Docker provides way to defined network namespace that conatiner run. When creating new container, we can specify that it should be attached o the network namespace of existing container
+Example
+```bash
+docker network create --drive bridge test-net
+docker container run --name web -d --network test-nest nginx:alpine
+docker container run -it --rm --network container:web alpine:latest /bin/sh => run container in the same network namespace with web
+```
+## Managing container port
+- `-p` <host_port>:<container_port>
+- if want to use UDP protocal: the publish param look like `-p 4040:4321/udp`
+- if want to communicate with both TCP and UDP over the same port, then we have to map each protocol separately
+
+# Docker Compose
+

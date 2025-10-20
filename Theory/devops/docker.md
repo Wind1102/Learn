@@ -81,6 +81,7 @@
 - [Docker Compose](#docker-compose)
   - [Running multi-service app](#running-multi-service-app)
   - [Building images with docker compose](#building-images-with-docker-compose)
+- [Orchestrator](#orchestrator)
 
 # Mục Lục
 
@@ -916,3 +917,13 @@ volumes:
 - `volumes`: The volumes used by any of the services have to be declared in this section. This is the last section of file.
 
 ## Building images with docker compose
+
+- use `--build` to rebuild image.
+- use `--scale` to run multiple instance
+- can use `-f` to define file docker compose to run.
+
+# Orchestrator
+
+- `desired state` is complete description of how you want your application to run is called the desire state.
+- when you first give it this `desired state`, the orchestrator springs into action
+- `reconcilliation` is process that orchestrator notices any difference between how things are running (actual state) and how they should be running (desired state), it immediately tries to fix it.

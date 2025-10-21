@@ -82,7 +82,8 @@
 - [Docker Compose](#docker-compose)
   - [Running multi-service app](#running-multi-service-app)
   - [Building images with docker compose](#building-images-with-docker-compose)
-  - [Scaling Service](#scaling-service)
+  - [Scaling Service \&\& Building and pushing an application](#scaling-service--building-and-pushing-an-application)
+- [Orchestrator](#orchestrator)
 
 # Mục Lục
 
@@ -937,5 +938,23 @@ volumes:
 - `docker compose down -v`
 - use `-p` to setting name project for application
 
-## Scaling Service
-- 
+## Scaling Service && Building and pushing an application
+- use `--build` to rebuild image.
+- use `--scale` to run multiple instance
+- can use `-f` to define file docker compose to run. ` docker-compose -f docker-compose.yml -f docker-compose-ci.yml up -d --build` to overried  docker-compose.yml with docker-compose-ci.yml
+Tip:
+```
+When using environment variables, note the following precedence:
+- Declaring them in the Docker file defines a default value
+- Declaring the same variable in the Docker Compose file overrides the value from the Dockerfile
+- We have standard naming convention and called the base file just docker-compose.yml and the override is docker-compose.overried.yml. Then we could have started the application with docker-compose up -d without explicitly naming the compose files.
+```
+
+- `docker compose -f <file> push` to push all image to docker hub.
+
+# Orchestrator
+
+- `desired state` is complete description of how you want your application to run is called the desire state.
+- when you first give it this `desired state`, the orchestrator springs into action
+- `reconciliation` is process that orchestrator notices any difference between how things are running (actual state) and how they should be running (desired state), it immediately tries to fix it.
+- two type of service that we might want to run in a cluster `replicated` and `global`

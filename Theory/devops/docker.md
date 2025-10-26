@@ -98,6 +98,12 @@
   - [Docker Swarm architecture](#docker-swarm-architecture)
   - [Swarm nodes](#swarm-nodes)
   - [Swarm manager](#swarm-manager)
+  - [Swarm workers](#swarm-workers)
+  - [Stack, service, and tasks](#stack-service-and-tasks)
+    - [Services](#services)
+    - [Task](#task)
+    - [Stack](#stack)
+- [Multi-host networking](#multi-host-networking)
 
 # Mục Lục
 
@@ -905,15 +911,19 @@ $ docker container run --rm -it \
 ## Network firewalling
 
 ## Running in an existing network namespace
+
 - Normally, docker creates a new network namespace for each container we run. The network namespace of the container corresponds to the sandbox of the CNM. As we attach the container to a network, we define an endpoint that connects the container network namespace with the actule network.
 - Docker provides way to defined network namespace that conatiner run. When creating new container, we can specify that it should be attached o the network namespace of existing container
-Example
+  Example
+
 ```bash
 docker network create --drive bridge test-net
 docker container run --name web -d --network test-nest nginx:alpine
 docker container run -it --rm --network container:web alpine:latest /bin/sh => run container in the same network namespace with web
 ```
+
 ## Managing container port
+
 - `-p` <host_port>:<container_port>
 - if want to use UDP protocal: the publish param look like `-p 4040:4321/udp`
 - if want to communicate with both TCP and UDP over the same port, then we have to map each protocol separately
@@ -953,10 +963,12 @@ volumes:
 - use `-p` to setting name project for application
 
 ## Scaling Service && Building and pushing an application
+
 - use `--build` to rebuild image.
 - use `--scale` to run multiple instance
-- can use `-f` to define file docker compose to run. ` docker-compose -f docker-compose.yml -f docker-compose-ci.yml up -d --build` to overried  docker-compose.yml with docker-compose-ci.yml
-Tip:
+- can use `-f` to define file docker compose to run. ` docker-compose -f docker-compose.yml -f docker-compose-ci.yml up -d --build` to overried docker-compose.yml with docker-compose-ci.yml
+  Tip:
+
 ```
 When using environment variables, note the following precedence:
 - Declaring them in the Docker file defines a default value
@@ -974,54 +986,68 @@ When using environment variables, note the following precedence:
 - two type of service that we might want to run in a cluster `replicated` and `global`
 
 ## Routing
--  This process of funneling the data packets from a source to a destination is also called routing
+
+- This process of funneling the data packets from a source to a destination is also called routing
 
 ## Load balancing
+
 ## Scaling
+
 ## Self-healing
+
 - All these activities, where the orchestrator monitors the current state and automatically repairs the damage or reconciles the desired state, lead to a so-called self-healing system
 - Orchestrators define seams or probes, over which an application service can communicate to the orchestrator about what state it is in.
 - Two fundamental type of probe exist:
-  - The service can tell the orchestrator that it is healthy or not 
+  - The service can tell the orchestrator that it is healthy or not
   - The service can tell the orchestrator that it is ready or temporarily unavailable
 
 ## Zero downtime deployment
+
 - `Rolling update`
 - `Blue green deployment`
 - `Canary release`
 
 ## Secure communication and cryptographic node identity
+
 - Communication that happens in a cluster can be separated into three types:
-  - `The management plane` is used by the cluster managers or master  for example, schedule service instances, execute health checks, or create and modify any other resources in the cluster, such as data volumes, secrets, or networks.
+  - `The management plane` is used by the cluster managers or master for example, schedule service instances, execute health checks, or create and modify any other resources in the cluster, such as data volumes, secrets, or networks.
   - `The control plane` is used to exchange important state infomation between all nodes of the cluster. This kind of information is, for example, used to update the local IP tables on clusters, which are used for routing purposes.
   - `The data plane` is where the actual application services communicate with each other and exchange data.
 
 ## Secure networks and network policies
+
 - not every service needs to communicate with every other service in cluster. -> want the ability to sandbox serives from each other, only run those services in the same networking sandbox that need to communicate
 - All other services and all network traffic coming from outside of the cluster should have no possibility of accessing the sandboxed services.
 - Two way network-based sandboxing:
   - Software-defined network(SDN) to group application services,
-  - We can have one flat network, and use network policies to control who does and does not have access to a particular service or group of services. 
+  - We can have one flat network, and use network policies to control who does and does not have access to a particular service or group of services.
 
 ## Role-based access control (RBAC)
+
 - RBAC defines how subjects, users, or groups of users of the system, organized into team, and so on... can access and manipulate the system.
-- One way of implementing RBAC is through the defination of grants. 
+- One way of implementing RBAC is through the defination of grants.
 - A grants is an association between a subject, role, and a resource collection.
   - `Role` is comprised of a set of access permissions to a resource, such permissions can be to create, stop, remove, list, view container, deploy application...
   - `Resouce collection`: is a group of logically related resource of the cluster, such as application services, secrets, data volume, container...
 
 ## Secret
+
 - secret is created, then encrypt and store in internal database cluster
-- 
+-
+
 ## Content trust
+
 - Some orchestrator allow us to configure a cluster so that it can only ever run signed images.
 - By signing images at the source, and validating the signature at the target, we can guarantee that the images that we want to run are not compromised.
 
-# Docker Swarm 
+# Docker Swarm
+
 ## Docker Swarm architecture
+
 ![Docker swarm architecture](../image/docker_swarm_architect.png)
+
 - docker swarm have two main part
-  - `raft consensus group`: 
+  - `raft consensus group`:
   - `group of worker nodes`: communicate with each other over grossip network (control plane)
 - `manager nodes`: manage the swarm. Each mannger has a complete copy of the full state of the Swarm in its local raft store. Managers synchronously communicate with each other and their raft stores are always in sync.
 - `worker nodes`: execute the application deployed into the swarm. It communicate with each other asynchronously for scalability reasons
@@ -1029,22 +1055,58 @@ When using environment variables, note the following precedence:
 - raft consensus protocal.
 
 ## Swarm nodes
+
 - A Swarm is a collection of nodes.
 - Classify node as a physical computer (also called bare metal) and virtual Machinde(VM)
-![Bare metal and VM types of Docker Swar](../image/bare_metal_vm.png)
+  ![Bare metal and VM types of Docker Swar](../image/bare_metal_vm.png)
 - Install docker in such a node -> this node call docker host
 - to become a member of docker swarm, a node must be docker host.
 - A node in docker swarm can have one of two roles:
   - manager node
-  - worker node 
+  - worker node
 - Manager node can also be a worker node and hence run application workload -> not recommend.
 
 ## Swarm manager
+
 - Each Swarm needs at least one manager node.
 - Raft consensus protocol ask for an odd number of member in what is called the consensus group. Consensus group should always have odd number of member, 1,3,5,7..
-- Consensus group have a leader. 
+- Consensus group have a leader.
 - Whenever the consensus group needs to make a decision, the leader asks all followers for agreement. If a majority of the manager nodes give a positive answer, then the leader executes the task.
 - if leader off -> elect a new leader
 - the manager also manage state of swarm like property of node such as name, IP addess..
 - All the Swarm states are stored in a high-performance key-value store (kv-store) on each manager node
 - If a new manager joins the consensus group, then it synchronizes the Swarm state with the existing members of the group until it has a complete replica
+- Recommendation: using three managers nodes in a small to medium size swarm and use five manager in large to extra large swarms.
+
+## Swarm workers
+
+- Worker nodes communicate with each other over the so-called control plane. They use the gossip protocol for their communication.
+- worker exchange information that needed for service discovery and routing.
+- Each worker node synchronizes its own state with three random neighbors.
+- Worker nodes are kind of passive. They never actively do something other than run the workloads that they get assigned by the manager nodes
+
+## Stack, service, and tasks
+
+### Services
+
+- A Swarm service is abstract of thing. It description of the desired state of an application or application service that we want to run in a Swarm.
+- The Swarm service is like a manifest describing such things as the following:
+  - Name of the service
+  - Image from which to create the containers
+  - Number of replicas to run
+  - Network(s) that the containers of the service are attached to
+  - Ports that should be mapped
+
+### Task
+
+- Task is description of container as a part of swarm service.
+- On Docker Swarm, a task is the atomic unit of deployment. Each task of a service is deployed by the Swarm scheduler to a worker node. The task contains all of the necessary information that the worker node needs to run a container based on the image
+
+### Stack
+
+- A stack is used to describe a collection of Swarm services that are related
+- we could also say that a stack describes an application that consists of one to many services that we want to run on the Swarm.
+
+![Diagram showing the relationship between stack, services, and tasks](../image/relation_stack_service_task.png)
+
+# Multi-host networking

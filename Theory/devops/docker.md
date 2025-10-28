@@ -105,6 +105,14 @@
     - [Stack](#stack)
 - [Multi-host networking](#multi-host-networking)
 - [Creating a local single node swarm.](#creating-a-local-single-node-swarm)
+- [Creating a service](#creating-a-service)
+- [Logs of a service](#logs-of-a-service)
+- [Reconciling the desired state](#reconciling-the-desired-state)
+- [Deleting a service or a stack](#deleting-a-service-or-a-stack)
+- [Deploying a multi-service stack](#deploying-a-multi-service-stack)
+- [The swarm routing mesh](#the-swarm-routing-mesh)
+- [Zero-Downtime Deployments and Secrets](#zero-downtime-deployments-and-secrets)
+- [Heath checks](#heath-checks)
 
 # Mục Lục
 
@@ -1128,3 +1136,68 @@ When using environment variables, note the following precedence:
 - `docker node inpect` to get even more information.
 - `docker swarm join-token <worker or manager> -q` to get token
 - `docker node promote <node1>, <node2>` to become manager
+
+# Creating a service
+- file stack.yaml, a sample stack file define single service
+```yaml
+services:
+  whoami:
+    image: training/whoami:latest
+    networks:
+      - test-net
+    ports:
+      - 81:8000
+    deploy:
+      replicas: 6
+      update_config:
+        parallelism: 2
+        delay: 10s
+      labels:
+        app: sample-app
+        environment: prod-south
+
+networks:
+  test-net:
+    driver: overlay
+
+```
+- `docker stack deploy -c stack.yaml sample-stack` to create stack
+- `docker stack ls`
+- `docker service ls`
+- `docker service ps <service-name>` to get list replica of service
+
+# Logs of a service
+- `docker service logs <serivce>`
+
+# Reconciling the desired state
+- if a task is failed, the Swarm immediately reconciled the desired state be rescheduling the failed task on a node with free resource
+- if a node comback online in the Swarm, the task that had previously been running on it will not automatically be transferred back to it. But the node is now ready for a new workload.
+# Deleting a service or a stack
+- `docker stack rm sample-stack` to removes all services that are part of the stack definition.
+- the stopped containers are not removed from the docker host. -> time to time to purge container on worker noes to reclaim unused resource.
+- Question: Why does it make sense to leave stopped or crashed containers on the worker node and not automatically remove them? -> to get log or find a reason why container is crash or stop
+
+# Deploying a multi-service stack
+# The swarm routing mesh
+![Docker swarm routing mesh](../image/docker_swarm_routing_mesh.png)
+- The routing mesh make sure that when we publish a port of a service, that port is then published on all nodes of the Swarm.
+- Hence, network traffic that hits any node of the Swarm and requests to use a specific port will be forwarded to one of the service containers by the routing mesh
+- if now request for port 8080 coming from an external, then this request is handled by the IPVS (IP Virtual server) on that node. This service makes a lookup with the give port 8080 in the IP table and will find that this coressponds to the VIP of the web service. Now, since the VIP is not a real target, the IPVS service will load balance the IP addresses of the tasks that are associated with this service. Finally, the ingress Network (Overlay) is used to forward the request to the target container on Host C.
+
+# Zero-Downtime Deployments and Secrets
+```yaml
+
+services:
+ web:
+   image: nginx:alpine
+   deploy:
+     replicas: 10
+     update_config:
+       parallelism: 2
+       delay: 10s
+```
+
+or `docker service update`
+
+# Heath checks
+- 

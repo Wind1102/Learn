@@ -113,6 +113,13 @@
 - [The swarm routing mesh](#the-swarm-routing-mesh)
 - [Zero-Downtime Deployments and Secrets](#zero-downtime-deployments-and-secrets)
 - [Heath checks](#heath-checks)
+- [Rollback](#rollback)
+- [Storing Configuration data in the swarm](#storing-configuration-data-in-the-swarm)
+- [Protecting sensitive data with Docker secrets](#protecting-sensitive-data-with-docker-secrets)
+- [Using a secret](#using-a-secret)
+- [Secret and legacy application'](#secret-and-legacy-application)
+- [Updating secrets](#updating-secrets)
+- [Docker, Kubernets, and the Cloud](#docker-kubernets-and-the-cloud)
 
 # Mục Lục
 
@@ -1200,4 +1207,158 @@ services:
 or `docker service update`
 
 # Heath checks
-- 
+Example of dockerfile
+```dockerfile
+FROM alpine:3.6
+...
+HEALTHCHECK --interval=30s \
+    --timeout=10s
+    --retries=3
+    --start-period=60s
+    CMD curl -f http://localhost:3000/health || exit 1
+...
+```
+
+- `--interval` define wait time between healthcheck
+- `--timeout` define how long docker should wait if the health check does not response
+- `--retries` the number of retry
+- `--start-period` define how long SwarmKit should wait before it executes the very first health check and thus give the application time to initialize. (the first check)
+- `CMD curl -f http://localhost:3000/health`  we define the actual probing command This call is expected to have three possible outcomes:
+  - The command succeeds.
+  - The command fails.
+  - The command times out.
+
+
+Example of docker swarm
+
+```yaml
+version: "3.5"
+services:
+  web:
+    image: example/web:1.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+...
+
+```
+
+# Rollback
+```yaml
+services:
+  web:
+    image: nginx:1.12-alpine
+    ports:
+      - 80:80
+    deploy:
+      replicas: 10
+      update_config:
+        parallelism: 2
+        delay: 10s
+
+        failure_action: rollback
+        monitor: 10s
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "-", "http://localhost"]
+      interval: 2s
+      timeout: 2s
+      retries: 3
+      start_period: 2s
+```
+
+- `monitor` defined how long newly deploy tasks should be monitored for heath and whether or not to continue with the next batch in the rolling update
+- `failure_action`  defines what the orchestrator will do if it encounters a failure during the rolling update,
+
+
+# Storing Configuration data in the swarm
+- If we want to store non-sensitive data such as configuration files in Docker Swarm, then we can use Docker configs.
+- main difference is that config values are not encrypted at rest, while secrets are. Docker configs can only be used in Docker Swarm, that is, they cannot be used in your non-Swarm development environment
+- Docker configs are mounted directly into the container's filesystem
+
+# Protecting sensitive data with Docker secrets
+- when a new secret is created on a manager node, and it can only be created on a manager node. Its value is encrypted and stored in the raft consensus storage.
+- Create secret
+```shell
+echo "sample secret value" | docker secret create sample-secrete -
+
+docker secret create other-secret ~/my-secrets/secret-value.txt
+```
+- `docker secret inspect sample-secret`
+
+# Using a secret
+- `docker service create --name web --secret api-secret-key -p .....`
+
+- default ` docker exec -it <container ID> cat /run/secrets/api-secret-key`
+- custom ` docker service create --name web \
+    --name web \
+    -p 8000:8000 \
+    --secret source=api-secret-key,target=/run/my-secrets/api-secret-key \
+    fundamentalsofdocker/whoami:latest` mount secret to /app/my-secret
+
+# Secret and legacy application'
+
+```sh
+export DEMO_SECRET = $(cat /run/secret/demo-secret)
+
+# in file app.config
+#ecrets:
+#  demo-secret: "<<demo-secret-value>>"
+#  other-secret: "<<other-secret-value>>"
+#  yet-another-secret: "<<yet-another-secret-value>>"
+
+file = /app/bin/app.conf
+demo_secret = $(cat /run/secret/demo-secret)
+sed -i "s/<<demo-secret-value>>/$demo_secret/g" "$file"
+
+```
+- we but script into a file called entrypoint.sh, make this file executable and
+
+Example
+
+```sh
+# a file whoami.conf
+database:
+  name: demo
+  db_password: "<<db_password_value>>"
+others:
+  val1=123
+  val2="hello world"
+
+# entrypoint.sh
+file=/app/whoami.conf
+db_pwd=$(cat /run/secret/db-password)
+sed -i "s/<<db_password_value>>/$db_pwd/g" "$file"
+
+#  sudo chmod +x ./entrypoint.sh
+
+# Docker file
+FROM fundamentalsofdocker/whoami:latest
+COPY ./whoami.conf /app/
+COPY ./entrypoint.sh /
+CMD ["/entrypoint.sh"]
+
+
+# Build image from docker file
+docker build -t secret-demos:1.0 .
+
+# Create secret in swarm
+$ echo "passw0rD123" | docker secret create demo-secret -
+
+# Create a service that uses the following secret
+
+$ docker service create --name demo \
+    --secret demo-secret \
+    secrets-demo:1.0
+
+```
+
+# Updating secrets
+- SwarmKit does not allow to update an existing secret in running service -> remove secret and add new
+- docker service update --secret-rm db-password web
+- docker service update --secret-add source=...,target=... web
+
+# Docker, Kubernets, and the Cloud

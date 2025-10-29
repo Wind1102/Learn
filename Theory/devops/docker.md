@@ -120,6 +120,10 @@
 - [Secret and legacy application'](#secret-and-legacy-application)
 - [Updating secrets](#updating-secrets)
 - [Docker, Kubernets, and the Cloud](#docker-kubernets-and-the-cloud)
+- [Kubernetes architecture](#kubernetes-architecture)
+- [Kubernetes master nodes](#kubernetes-master-nodes)
+- [Cluster nodes](#cluster-nodes)
+- [Introduction to pods](#introduction-to-pods)
 
 # Mục Lục
 
@@ -1362,3 +1366,45 @@ $ docker service create --name demo \
 - docker service update --secret-add source=...,target=... web
 
 # Docker, Kubernets, and the Cloud
+
+# Kubernetes architecture
+
+
+- A Kubernetes cluster consists of a set of servers.
+- Each member of the cluster can have one of two roles is Kubernetes master or a (worker) node
+- in Kubernetes parlance, you only talk about a node when you're talking about a server that runs application workloads
+-  All members of the cluster need to be connected by a physical network, the so-called underlay network.
+-  Kubernetes defines one flat network for the whole cluster.
+-  Kubernetes just defines the Container Network Interface (CNI) and leaves the implementation to others
+-  The CNI is pretty simple. It basically states that each pod running in the cluster must be able to reach any other pod also running in the cluster without any Network Address Translation (NAT) happening in-between
+-  The same must be true between cluster nodes and pods, that is, applications or daemons running directly on a cluster node must be able to reach each pod in the cluster and vice versa.
+
+![Kubernetes Architecture](../image/kubernetes_architecture.png)
+
+- cluster of etcd nodes: etcd is a distributed key-value store that is used to store all the state of the cluster.
+- cluster of Kubernetes master node: the master nodes are used to manage the whole cluster, we are also talking about the management plane. Master nodes use the etcd cluster as their backing store. It is good practice to put a load balancer (LB) in front of master nodes with a well-known Fully Qualified Domain Name (FQDN), such as https://admin.example.com.
+- cluster of worker node: Kubernetes master and worker nodes communicate with each other,  All ingress traffic accessing applications running in the cluster should go through another load balancer. This is the application load balancer or reverse proxy. We never want external traffic to directly access any of the worker nodes.
+
+# Kubernetes master nodes
+
+![Kubernetes master](../image/kubernetes_master.png)
+- `API server`: this is gateway to kubernetes. All request to list, create, delete... any resource in the cluster must go through this service. It expose a REST interface that tools such as kubectl use to manage the cluster and applications in the cluster
+- `Controller`: observes state of cluster via api server, to move current or effective state toward the desired state if they differ
+- `Scheduler`: is service that tries its best to schedule pods on worker nodes while considering various boundary conditions, such as resource requirements, policies, quality of service requirements, and more
+- `Cluster store`: This is an instance of etcd that is used to store all information about the state of cluster
+
+# Cluster nodes
+![Kubernetes worker node](../image/kubernetes_worker_node.png)
+
+- `Kubelet`: is primary node agent. The Kubelet serivice uses pod specifications to make sure all of the containers of the corresponding pods are running and healthy.  Pod specifications are files written in YAML or JSON format and they declaratively describe a pod. PodSpecs are provided to kubelet primarily through the API server
+- `Container runtime`: The container runtime is responsible for managing and running the individual containers of a pod. Kubernetes, by default, has used containerd since version 1.9 as its container runtime
+- `kube proxy`: It runs as a daemon and is a simple network proxy and load balancer for all application services running on that particular node
+
+# Introduction to pods
+- you cannot run containers directly in a kubernets cluster -> can only run pod
+- Pods are the atomic unit of deployment in Kubernetes.
+- A Pod is an abstraction of one or many co-located containers that share the same Kernel namespaces.
+
+![Kubernetes Pod](../image/kubernet_pods.png)
+
+

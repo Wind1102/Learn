@@ -124,6 +124,13 @@
 - [Kubernetes master nodes](#kubernetes-master-nodes)
 - [Cluster nodes](#cluster-nodes)
 - [Introduction to pods](#introduction-to-pods)
+- [Comparing Docker container and Kubernetes pod networking](#comparing-docker-container-and-kubernetes-pod-networking)
+- [Pod life cycle](#pod-life-cycle)
+- [Pod specifications](#pod-specifications)
+- [Pods and volumes](#pods-and-volumes)
+- [Kubernetes ReplicaSet](#kubernetes-replicaset)
+- [Replicaset specification](#replicaset-specification)
+- [self healing](#self-healing-1)
 
 # Mục Lục
 
@@ -1396,7 +1403,7 @@ $ docker service create --name demo \
 # Cluster nodes
 ![Kubernetes worker node](../image/kubernetes_worker_node.png)
 
-- `Kubelet`: is primary node agent. The Kubelet serivice uses pod specifications to make sure all of the containers of the corresponding pods are running and healthy.  Pod specifications are files written in YAML or JSON format and they declaratively describe a pod. PodSpecs are provided to kubelet primarily through the API server
+- `Kubelet`: is primary node agent. The Kubelet service uses pod specifications to make sure all of the containers of the corresponding pods are running and healthy.  Pod specifications are files written in YAML or JSON format and they declaratively describe a pod. PodSpecs are provided to kubelet primarily through the API server
 - `Container runtime`: The container runtime is responsible for managing and running the individual containers of a pod. Kubernetes, by default, has used containerd since version 1.9 as its container runtime
 - `kube proxy`: It runs as a daemon and is a simple network proxy and load balancer for all application services running on that particular node
 
@@ -1407,4 +1414,105 @@ $ docker service create --name demo \
 
 ![Kubernetes Pod](../image/kubernet_pods.png)
 
+# Comparing Docker container and Kubernetes pod networking
+![Container in a pod sharing the same network namespace](../image/different_docker_container_vs_kube_port.png)
+- In docker if network is not specific for a container -> docker engine create veth enpoint for each container
+- In kubernetes, a pod create a pause container and assign every container in pod to --net container:pause -> it using same namespace
 
+# Pod life cycle
+- When a pod is created -> status pending
+- When all container in pod are up and running, and all container run successful -> status running
+- If a pod asked to terminate, it will request all its containers to terminate, if all container terminate with exit code zero -> status succeeded
+- If, during the startup of the pod, at least one container is not able to run and fails (that is, it exits with a nonzero exit code), the pod goes from the pending state into the failed state
+- If the pod is in the running status and one of the containers suddenly crashes or exits with a nonzero exit code, then the pod transitions from the running state into the failed state.
+- If the pod is asked to terminate and, during the shutdown at least one of the containers, exits with a nonzero exit code, then the pod also enters into the failed state.
+
+# Pod specifications
+```yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  containers:
+  - name: web
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+
+```
+- `kubectl create -f pod.yaml`
+- `kubectl get pods`
+- `kubectl describe pod/web-pod`, pod/ or pods/ or po/ 
+
+# Pods and volumes
+- Kubernetes supports a plethora of volume types
+Example creating a local volume implicitly
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-data-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+```
+
+- `kubectl get pvc` (pvc is short for PersistentVolumeClaim)
+
+```yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+spec:
+  containers:
+  - name: web
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: my-data
+      mountPath: /data
+  volumes:
+  - name: my-data
+    persistentVolumeClaim:
+      claimName: my-data-claim
+
+```
+
+# Kubernetes ReplicaSet
+- set of pod
+# Replicaset specification
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  replicas: 3
+  template: 
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+```
+
+# self healing
+
+![Kubernet Deployment](../image/kubernetes_deployment.png)
+
+In this regard, a deployment is really a wrapper object to a ReplicaSet.

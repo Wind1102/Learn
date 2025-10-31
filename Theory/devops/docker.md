@@ -133,6 +133,8 @@
 - [self healing](#self-healing-1)
 - [Kubernetes service](#kubernetes-service)
 - [Context-based routing](#context-based-routing)
+- [Deploying, Updating, and Securing and Application with Kubernetes](#deploying-updating-and-securing-and-application-with-kubernetes)
+- [Readiness and liveness](#readiness-and-liveness)
 
 # Mục Lục
 
@@ -1557,3 +1559,26 @@ In this regard, a deployment is really a wrapper object to a ReplicaSet.
 - When external request from client example.com/web
 - Ingress controller read Ingress Object via kube api server and change config of nginx reverse proxy
 - nginx reload its config and will be able to correctly route any incoming request to example.com/web
+
+# Deploying, Updating, and Securing and Application with Kubernetes
+
+
+# Readiness and liveness
+```yaml
+spec:
+ containers:
+ - name: liveness-demo
+   image: postgres:12.10
+   ...
+   livenessProbe:
+     tcpSocket:
+       port: 5432
+     failureThreshold: 2
+     periodSeconds: 5
+   
+   readinessProbe:
+     tcpSocket:
+       port: 5432
+     initialDelaySeconds: 10
+     periodSeconds: 5
+```
